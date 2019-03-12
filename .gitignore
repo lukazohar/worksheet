@@ -1,0 +1,45 @@
+node_modules/
+
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+workSheet/dist/
+workSheet/tmp/
+workSheet/out-tsc/
+
+# dependencies
+workSheet/node_modules/
+
+# profiling files
+workSheet/chrome-profiler-events.json
+workSheet/speed-measure-plugin.json
+
+# IDEs and editors
+workSheet/.idea
+workSheet/.project
+workSheet/.classpath
+workSheet/.c9/
+workSheet/*.launch
+workSheet/.settings/
+workSheet/*.sublime-workspace
+
+# IDE - VSCode
+workSheet/.vscode/*
+workSheet/!.vscode/settings.json
+workSheet/!.vscode/tasks.json
+workSheet/!.vscode/launch.json
+workSheet/!.vscode/extensions.json
+
+# misc
+workSheet/.sass-cache
+workSheet/connect.lock
+workSheet/coverage/
+workSheet/libpeerconnection.log
+workSheet/npm-debug.log
+workSheet/yarn-error.log
+workSheet/testem.log
+workSheet/typings/
+
+# System Files
+workSheet/.DS_Store
+workSheet/Thumbs.db

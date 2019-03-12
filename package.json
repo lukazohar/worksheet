@@ -1,0 +1,27 @@
+{
+  "name": "worksheet",
+  "version": "1.0.0",
+  "description": "Work sheets app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app"
+  },
+  "dependencies": {
+    "@types/jquery": "^3.3.29",
+    "angular2-materialize": "^15.1.10",
+    "bcryptjs": "*",
+    "body-parser": "*",
+    "cors": "*",
+    "express": "*",
+    "hammerjs": "^2.0.8",
+    "jquery": "^2.2.4",
+    "jsonwebtoken": "*",
+    "materialize-css": "^1.0.0",
+    "mongoose": "*",
+    "passport": "*",
+    "passport-jwt": "*"
+  },
+  "author": "Luka Žohar",
+  "license": "ISC"
+}

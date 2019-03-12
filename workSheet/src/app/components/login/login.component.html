@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row">
+      <form [formGroup]="loginForm" class="col s12" id="reg-form" (submit)="loginUser()">
+          <div class="row">
+              <div class="input-field col s6">
+                  <input formControlName="username" id="username" type="text" class="validate" required>
+                  <label for="username">Username</label>
+              </div>
+              <div class="input-field col s6">
+                  <input formControlName="password" id="password" type="password" required>
+                  <label for="password">Password</label>
+              </div>
+          </div>
+          <div class="row">
+              <div class="input-field col s6">
+                  <button class="waves-effect waves-light btn-large" type="submit">Login<i class="material-icons right">done</i></button>
+              </div>
+          </div>
+      </form>
+  </div>  
+</div>
