@@ -1,3 +1,43 @@
-<p>
-  profile works!
-</p>
+<div class="container">
+        <a class="btn-floating btn-large waves-effect waves-light right blue" (click)="changeEdit()"><i class="material-icons">settings</i></a>
+        <div *ngIf="!edit else editTemp">
+            <ul class="collection" (click)="changeEdit()">
+                <li class="collection-item"><b>First Name:</b> {{ userData.userProfile.firstName }} </li>
+                <li class="collection-item"><b>Last Name:</b> {{ userData.userProfile.lastName }} </li>
+                <li class="collection-item"><b>Username:</b> {{ userData.userProfile.username }} </li>
+                <li class="collection-item"><b>Email:</b> {{ userData.userProfile.email }} </li>
+            </ul>
+        </div>
+        <ng-template #editTemp>
+            <form [formGroup]="profileForm">
+                <ul class="collection">
+                    <div class="row">
+                        <div class="collection-item">
+                            <b class="col s2">First Name:</b>
+                            <input class="col s10" type="text" formControlName="firstName" name="firstName" id="firstName">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="collection-item">
+                            <b class="col s2">Last Name:</b>
+                            <input class="col s10" type="text" formControlName="lastName" name="lastName" id="lastName">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="collection-item">
+                            <b class="col s2">Username:</b>
+                            <input class="col s10" type="text" formControlName="username" name="username" id="username">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="collection-item">
+                            <b class="col s2">Email:</b>
+                            <input class="col s10" type="email" formControlName="email" name="email" id="email">
+                        </div>
+                    </div>
+                    <a class="btn-floating btn-large waves-effect waves-light right red" (click)="deleteUser()"><i class="material-icons">delete</i></a>
+                    <a class="btn-floating btn-large waves-effect waves-light right green" (click)="updateUser()"><i class="material-icons">save</i></a>
+                </ul>
+            </form>
+        </ng-template>
+    </div>

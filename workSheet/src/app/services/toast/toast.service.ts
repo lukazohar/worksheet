@@ -8,19 +8,19 @@ export class ToastService {
 
   constructor() { }
 
-  default(text: any, duration = 2000): void {
+  default(text: any, duration = 3000): void {
     toast(text, duration, 'rounded');
   }
 
-  success(text: any, duration = 2000): void {
+  success(text: any, duration = 3000): void {
     toast(text, duration, 'rounded green lighten-1');
   }
 
-  warning(text: any, duration = 2000): void {
+  warning(text: any, duration = 3000): void {
     toast(text, duration, 'rounded yellow lighten-2 black-text');
   }
 
-  error(text: any, duration = 2000): void {
+  error(text: any, duration = 3000): void {
     toast(text, duration, 'rounded red lighten-2 white-text');
   }
 }

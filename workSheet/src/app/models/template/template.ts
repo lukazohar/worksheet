@@ -5,5 +5,5 @@ export interface ITemplate {
     template_description: string;
     template_created: string;
     template_modified: string;
-    template_content: Array<ITemplateItem>;
+    template_content: Array<any>;
 }

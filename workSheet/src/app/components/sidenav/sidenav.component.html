@@ -10,6 +10,7 @@
       <div *ngIf="loggedIn(); else notLoggedIn">
         <li *ngIf="loggedIn()"><a routerLinkActive="active" routerLink="/worksheets"><i class="material-icons right">format_list_bulleted</i>My Sheets</a></li>
         <li *ngIf="loggedIn()"><a routerLink="/add-worksheet"><i class="material-icons right">note_add</i>Add Sheet</a></li>
+        <li *ngIf="loggedIn()"><a routerLink="/add-template"><i class="material-icons right">add_to_photos</i>New Temp</a></li>
         <li *ngIf="loggedIn()"><a routerLink="/profile"><i class="material-icons right">person</i>Profile</a></li>
         <li *ngIf="loggedIn()"><a (click)="logoutUser()"><i class="material-icons right">exit_to_app</i>Logout</a></li>
       </div>
