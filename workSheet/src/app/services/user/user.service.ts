@@ -23,6 +23,6 @@ export class UserService {
   }
 
   updateUser() {
-    alert('Test');
+    alert('Test update');
   }
 }

@@ -6,7 +6,8 @@
 <div class="row">
   <div class="col">
     <!-- Dropdown Trigger -->
-    <a materialize="dropdown" class='dropdown-button btn-floating btn-large waves-effect waves-light' href='#' data-activates='dropdown1'><i class="material-icons">add</i></a>
+    <a materialize="dropdown" class="dropdown-button btn-floating btn-large waves-effect waves-light blue lighten-2" href='#'
+      data-activates='dropdown1'><i class="material-icons">add</i></a>
     <!-- Dropdown Structure -->
     <ul id='dropdown1' class='dropdown-content'>
       <li (click)="addHeader()"><a><i class="material-icons">remove</i>Header</a></li>
@@ -19,52 +20,80 @@
 </div>
 <div class="row">
   <div class="col center">
-    <ul>
-      <li *ngFor="let item of templateForm.value; let i=index">
-        <div class="item">
-          <!-- Header -->
-          <div *ngIf="item.type == 'header'">
-            <div class="inputElement">
-              <div class="input-field col s12">
-                <hr>
-                <label for="">Header</label>
-                <input [(ngModel)]="templateForm.controls[i].value.value" placeholder="Header" id="fieldHeader" type="text" class="validate">
-              </div>
-            </div>
+    <form [formGroup]="templateForm" (ngSubmit)="addTemplate()">
+      <ul>
+        <li>
+          <div class="input-field col s12">
+            <label for="">Title</label>
+            <input formControlName="title" placeholder="Header" id="fieldHeader" type="text" class="validate">
           </div>
-          <!-- Multiple inputs -->
-          <div *ngIf="item.type == 'inputFields'">
-            <div class="inputElement">
-              <div class="input-field col">
-                <hr>
-                <label for="">Fields header</label>
-                <input [(ngModel)]="templateForm.controls[i].value.header" placeholder="Group header" id="fieldHeader" type="text" class="validate">
-                <ul>
-                  <li *ngFor="let inputField of templateForm.controls[i].value.inputs; let y=index">
-                    <div class="input-group">
-                      <input [(ngModel)]="templateForm.controls[i].value.inputs[y].header" placeholder="Header" id="fieldHeader" type="text" class="validate col s4">
-                      <input disabled placeholder="Value" id="fieldHeader" type="text" class="validate col s4 offset-s1">
+        </li>
+        <li>
+          <div class="input-field col s12">
+            <label for="">Description</label>
+            <input formControlName="description" placeholder="Description" id="fieldHeader" type="text" class="validate">
+          </div>
+        </li>
+        <li *ngFor="let item of templateForm.controls.items.controls; index as i">
+          <div formArrayName="items">
+            <form [formGroup]="item">
+              <div [ngSwitch]="item.value.type">
+                <!-- Header -->
+                <div *ngSwitchCase="'header'">
+                  <div class="inputElement">
+                    <div class="input-field col s12">
+                      <hr>
+                      <label for="">Header</label>
+                      <input formControlName="value" placeholder="Header" id="fieldHeader" type="text" class="validate">
                     </div>
-                  </li>
-                  <a (click)="addInputField(i)" class="btn-floating btn-small waves-effect waves-light"><i class="small material-icons">add</i></a>
-                </ul>
+                  </div>
+                </div>
+                <!-- Multiple inputs -->
+                <div *ngSwitchCase="'inputFields'">
+                  <div class="inputElement">
+                    <div class="input-field col">
+                      <hr>
+                      <label for="">Fields header</label>
+                      <input formControlName="header" placeholder="Group header" id="fieldHeader" type="text" class="validate">
+                      <ul>
+                        <li *ngFor="let inputField of templateForm.controls.items.controls[i].controls.inputs.controls; index as y">
+                          <div formArrayName="inputs">
+                            <form [formGroup]="inputField">
+                              <div class="input-group">
+                                <input formControlName="header" placeholder="Header" id="fieldHeader" type="text" class="validate col s4">
+                                <input disabled placeholder="Value" id="fieldHeader" type="text" class="validate col s4 offset-s1">
+                              </div>
+                            </form>
+                          </div>
+                        </li>
+                        <a (click)="addInputField(i)" class="btn-floating btn-small waves-effect waves-light"><i class="small material-icons">add</i></a>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <!-- Table -->
+                <div *ngSwitchCase="'table'">
+
+                </div>
+                <!-- List -->
+                <div *ngSwitchCase="'list'">
+
+                </div>
+                <!-- Checkboxes -->
+                <div *ngSwitchCase="'checkboxes'">
+
+                </div>
               </div>
-            </div>
+              </form>
           </div>
-          <!-- Table -->
-          <div *ngIf="item.type == 'table'">
-
-          </div>
-          <!-- List -->
-          <div *ngIf="item.type == 'list'">
-
-          </div>
-          <!-- Checkboxes -->
-          <div *ngIf="item.type == 'checkboxes'">
-
-          </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+        <input type="submit" value="Add Template" class="btn btn-small waves-effect waves-light blue lighten-2">
+      </ul>
+    </form>
   </div>
 </div>
+
+<pre>
+  {{ templateForm.value | json }}
+</pre>
+<p> {{ templateForm.valid }} </p>

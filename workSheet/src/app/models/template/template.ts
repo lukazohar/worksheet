@@ -1,9 +1,8 @@
 import { ITemplateItem } from './template-item';
+import { FormArray, FormControl } from '@angular/forms';
 
 export interface ITemplate {
-    template_name: string;
-    template_description: string;
-    template_created: string;
-    template_modified: string;
-    template_content: Array<any>;
+    title: string;
+    description: string;
+    items: [];
 }

@@ -5,6 +5,8 @@ require('../config/passport')(passport);
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
+const Template = require('../models/template');
+
 const config = require('../config/database');
 
 // Register
@@ -102,6 +104,7 @@ router.route('/profile')
     })
     // Deletes user account
     .delete(passport.authenticate('jwt', {session: false}), (req, res) => {
+        console.log('Delete');
         User.deleteUser(req.user._id, (err, user) => {
             if(err) throw err;
             if(!user) res.json({
@@ -114,5 +117,27 @@ router.route('/profile')
             });
         });
     })
+
+router.route('/template')
+    .get(passport.authenticate('jwt', {session: false}, (req, res) => {
+        res.send('Request get recieved ')
+    }))
+    .post(passport.authenticate('jwt', {session: false}), (req, res) => {
+        let template = {
+            userTemplates: [ req.body ]
+        };
+        let userID = req.user._id;
+        let templateTitle = req.body.title;
+        Template.addTemplate(template, userID, (err, template) => {
+            if(err) res.json({ success: false, msg: 'Adding template failed: ' + err })
+            res.json({ success: true, msg: templateTitle + ' added' });
+        });
+    })
+    .put(passport.authenticate('jwt', {session: false}, (req, res) => {
+        res.send('Request put recieved ')
+    }))
+    .delete(passport.authenticate('jwt', {session: false}, (req, res) => {
+        res.send('Request delete recieved ')
+    }))
 
 module.exports = router;

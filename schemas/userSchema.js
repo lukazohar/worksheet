@@ -30,19 +30,9 @@ const UserSchema = Schema({
     ],
     userTemplates: [
         {
-            templateName: { type: String },
-            templateDescription: { type: String, default: '' },
-            templateCreated: { type: Date, default: Date.now() },
-            templateModified: { type: Date, default: Date.now() },
-            templateContent: [
-                {
-                    templateItemType: { type: String },
-                    templateItemRow: { type: Number },
-                    templateItemColumn: { type: Number },
-                    templateItemContent: { type: String },
-                    templateItemDatatype: { type: String },
-                }
-            ]
+            title: { type: String },
+            description: { type: String },
+            items: { type: Array }
         }
     ]
 });

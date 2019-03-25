@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, FormArray } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
+import { ITemplate } from 'src/app/models/template/template';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,12 @@ export class TemplateService {
     private http: HttpClient
   ) { }
 
-  addTemplate(template: FormArray): Observable<ISuccessMsgResponse> {
-    return this.http.post<ISuccessMsgResponse>(this.rootURL, template.value);
+  addTemplate(template: ITemplate): Observable<ISuccessMsgResponse> {
+    return this.http.post<ISuccessMsgResponse>(this.rootURL + 'template', template, {
+      headers: new HttpHeaders({
+        'Authorization': localStorage.getItem('token')
+      })
+    });
   }
 
   updateTemplate(): void {
@@ -29,16 +34,17 @@ export class TemplateService {
   }
 
  // Functions adding values to existing templates
-  addHeader(template: FormArray): FormArray {
-    template.push(new FormGroup({
+  addHeader(items: FormArray): FormArray {
+    items.push(new FormGroup({
       type: new FormControl('header'),
       value: new FormControl('')
     }));
-    return template;
+    return items;
   }
 
-  addInputFields(template: FormArray): FormArray {
-    template.push(new FormGroup({
+  addInputFields(items: FormArray): FormArray {
+    // @ts-ignore
+    items.push(new FormGroup({
       type: new FormControl('inputFields'),
       header: new FormControl(''),
       inputs: new FormArray([
@@ -48,40 +54,47 @@ export class TemplateService {
         })
       ])
     }));
-    return template;
+    return items;
   }
-  addInputField(template: FormArray, index1: number): FormArray {
+  addInputField(items: FormArray, index1: number): FormArray {
     // @ts-ignore
-    template.controls[index1].controls.inputs.push(new FormGroup({
+    const inputHeader = items.controls[index1].value.header;
+    // @ts-ignore
+    items.controls[index1].controls.inputs.push(new FormGroup({
       header: new FormControl(''),
       value: new FormControl('')
     }));
-    return template;
+    // @ts-ignore
+    items.controls[index1].value.header = inputHeader;
+    return items;
   }
 
-  addTable(template: FormArray): FormArray {
-    template.push(new FormGroup({
+  addTable(items: FormArray): FormArray {
+    // @ts-ignore
+    items.push(new FormGroup({
       type: new FormControl('table'),
       header: new FormControl('')
     }));
-    return template;
+    return items;
   }
   addTableCell(): void {
   }
 
-  addList(template: FormArray): FormArray {
-    template.push(new FormGroup({
+  addList(items: FormArray): FormArray {
+    // @ts-ignore
+    items.push(new FormGroup({
       type: new FormControl('list'),
       header: new FormControl('')
     }));
-    return template;
+    return items;
   }
 
-  addCheckboxes(template: FormArray): FormArray {
-    template.push(new FormGroup({
+  addCheckboxes(items: FormArray): FormArray {
+    // @ts-ignore
+    items.push(new FormGroup({
       type: new FormControl('checkboxes'),
       header: new FormControl('')
     }));
-    return template;
+    return items;
   }
 }
