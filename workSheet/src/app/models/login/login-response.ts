@@ -1,6 +1,6 @@
 import { ISheet } from '../sheet/sheet';
 import { IProfile } from '../profile/profile';
-import { ITemplateItem } from '../template/template-item';
+import { ITemplate } from '../template/template';
 
 export interface ILoginResponse {
     _id: string;
@@ -9,6 +9,6 @@ export interface ILoginResponse {
     userData: {
         userProfile: IProfile;
         userSheets: Array<ISheet>;
-        userTemplates: Array<ITemplateItem>;
+        userTemplates: Array<ITemplate>;
     };
 }

@@ -1,8 +1,8 @@
-import { ITemplateItem } from './template-item';
-import { FormArray, FormControl } from '@angular/forms';
+import { IHeader } from './templateItems/header/header';
+import { IInputFields } from './templateItems/inputFields/input-fields';
 
 export interface ITemplate {
     title: string;
     description: string;
-    items: [];
+    items: Array < IHeader | IInputFields >;
 }

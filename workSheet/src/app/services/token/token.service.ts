@@ -10,8 +10,8 @@ export class TokenService {
     private jwtHelperService: JwtHelperService
   ) { }
 
-  getToken(): void {
-    localStorage.getItem('token');
+  getToken(): string {
+    return localStorage.getItem('token');
   }
 
   setToken(token: string): void {

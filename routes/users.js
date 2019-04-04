@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const Template = require('../models/template');
+const Sheet = require('../models/sheet');
 
 const config = require('../config/database');
 
@@ -127,17 +128,43 @@ router.route('/template')
             userTemplates: [ req.body ]
         };
         let userID = req.user._id;
-        let templateTitle = req.body.title;
         Template.addTemplate(template, userID, (err, template) => {
-            if(err) res.json({ success: false, msg: 'Adding template failed: ' + err })
-            res.json({ success: true, msg: templateTitle + ' added' });
+            if(err) res.json({ success: false, msg: 'Adding template failed: ${err}' });
+            res.json({ success: true, msg: template.title + ' added', data: template });
         });
     })
     .put(passport.authenticate('jwt', {session: false}, (req, res) => {
-        res.send('Request put recieved ')
+        res.send('Request put recieved ');
     }))
     .delete(passport.authenticate('jwt', {session: false}, (req, res) => {
-        res.send('Request delete recieved ')
+        res.send('Request delete recieved ');
+    }))
+
+
+
+router.route('/sheet')
+    .get(passport.authenticate('jwt', {session: false}, (req, res) => {
+        console.log('Get sheet dela');
+        res.end();
+    }))
+    .post(passport.authenticate('jwt', {session: false}), (req, res) => {
+        let sheet = {
+            userSheets: [ req.body ]
+        };
+        let userID = req.user._id;
+        Sheet.addSheet(sheet, userID, (err, newsheet) => {
+            if(err) res.json({ success: false, msg: 'Adding sheet failed' });
+            res.json({ success: true, msg: newsheet.title + ' added', data: newsheet });
+        });
+    })
+    .put(passport.authenticate('jwt', {session: false}, (req, res) => {
+       console.log('Put sheet dela');
+       res.end();
+    }))
+    .delete(passport.authenticate('jwt', {session: false}, (req, res) => {
+        //const sheetID = req.params;
+        console.log(req.params)
+        res.end();
     }))
 
 module.exports = router;

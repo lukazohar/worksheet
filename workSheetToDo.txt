@@ -25,3 +25,5 @@ Stvari za uredit pr WokrSheet:
 - na vseh spremenljivkah odstrani _
 - težava v addTemplate, naredi da da template ki je v spremnljivki item.type v *ngIf
 - pri css-u spremeni classe iz npr. inputField v input-field
+- validatorji pri add-template
+- odstrani // @ts-ignore

@@ -1,3 +1,28 @@
-<p>
-  myworksheet works!
-</p>
+<div class="row">
+  <h1>My Sheets</h1>
+  <div class="sort">
+    <a materialize="dropdown" class='dropdown-button btn blue-grey lighten-5 black-text' href='#' data-activates='dropdown1'> {{ sortType }} </a>
+    <!-- Dropdown Structure -->
+    <ul id='dropdown1' class='dropdown-content'>
+      <li *ngFor="let sort of sortTypes; index as i">
+        <a> {{ sort }} </a>
+      </li>
+    </ul>
+  </div>
+  <ul>
+    <li *ngFor="let sheet of sheets; index as i">
+      <div class="col s12 m12 l12 sheet">
+        <a class="waves-effect waves-light btn-floating right squared"><i class="material-icons left">arrow_drop_down</i></a>
+        <p> {{ sheet.title }} </p>
+        <a materialize="dropdown" class='dropdown-button btn blue-grey lighten-5 black-text' href='#' data-activates='dropdown2'> {{ sheet.status }} </a>
+        <!-- Dropdown Structure -->
+        <ul id='dropdown2' class='dropdown-content'>
+          <li *ngFor="let status of statusTypes; index as i">
+            <a> {{ status }} </a>
+          </li>
+        </ul>
+        <p> {{ sheet.description }} </p>
+      </div>
+    </li>
+  </ul>
+</div>

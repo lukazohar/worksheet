@@ -7,32 +7,28 @@ const UserSchema = Schema({
         email: { type: String, require: true },
         firstName: { type: String, default: '' },
         lastName: { type: String, default: '' },
-        userCreated: { type: String, default: Date.now() },
-        userModified: { type: String, default: Date.now() },
+        created: { type: Date, default: Date.now() },
+        modified: { type: Date, default: Date.now() },
         password: { type: String, require: true }
     },
     userSheets: [
         {
-            sheetName: { type: String },
-            sheetDescription: { type: String, default: '' },
-            sheetCreated: { type: Date, default: Date.now() },
-            sheetModified: { type: String, default: Date.now() },
+            templateTitle: { type: String },
+            title: { type: String },
+            description: { type: String, default: '' },
+            created: { type: Date, default: Date.now() },
+            modified: { type: Date, default: Date.now() },
             status: { type: String, default: 'Not started yet' },
-            statusChanged: { type: Date, default: Date.now() },
-            sheetContent: {
-                itemType: { type: String },
-                itemRow: { type: Number },
-                itemColumn: { type: Number },
-                itemContent: { type: String, default: '' },
-                itemDatatype: { type: String },
-            }
+            items: { type: Array }
         }
     ],
     userTemplates: [
         {
             title: { type: String },
             description: { type: String },
-            items: { type: Array }
+            items: { type: Array },
+            created: { type: Date, default: Date.now() },
+            modified: { type: Date, default: Date.now() }
         }
     ]
 });

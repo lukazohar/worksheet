@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
 import { ITemplate } from 'src/app/models/template/template';
+import { TokenService } from '../token/token.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,23 +15,47 @@ export class TemplateService {
   template: FormArray;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private token: TokenService
   ) { }
 
-  addTemplate(template: ITemplate): Observable<ISuccessMsgResponse> {
-    return this.http.post<ISuccessMsgResponse>(this.rootURL + 'template', template, {
+  getTemplate(id: number): Observable<ITemplate> {
+    return this.http.get<ITemplate>('${this.rootURL}template?id=${id}', {
       headers: new HttpHeaders({
-        'Authorization': localStorage.getItem('token')
+        'Authorization': this.token.getToken()
+      })
+    });
+  }
+  getTemplates(): Observable<ITemplate[]> {
+    return this.http.get<ITemplate[]>('${this.rootURL}template', {
+      headers: new HttpHeaders({
+        'Authorization': this.token.getToken()
       })
     });
   }
 
-  updateTemplate(): void {
-
+  addTemplate(template: ITemplate): Observable<ISuccessMsgResponse> {
+    return this.http.post<ISuccessMsgResponse>(this.rootURL + 'template', template, {
+      headers: new HttpHeaders({
+        'Authorization': this.token.getToken()
+      })
+    });
   }
 
-  deleteTemplate(): void {
+  updateTemplate(): Observable<ISuccessMsgResponse> {
+    return this.http.put<ISuccessMsgResponse>('${this.rootURL}template', {
+      header: new HttpHeaders({
+        'Authorization': this.token.getToken()
+      })
+    });
+  }
 
+  deleteTemplate(id: number): Observable<ISuccessMsgResponse> {
+    return this.http.delete<ISuccessMsgResponse>('${this.rootURL}template?id=${id}', {
+      headers: new HttpHeaders({
+        'Authorization': this.token.getToken()
+      })
+    });
   }
 
  // Functions adding values to existing templates

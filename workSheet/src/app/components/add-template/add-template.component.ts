@@ -18,8 +18,6 @@ export class AddTemplateComponent implements OnInit {
 
   get items(): FormArray { return this.templateForm.get('items') as FormArray; }
   set items(test: FormArray) { this.templateForm.setControl('items', test); }
-  // Vrniti mora formarray inputs
-  // get inputs(): FormArray { return this.templateForm.get('header') as FormArray; }
   inputs(index: number): FormArray {
     return this.templateForm.controls.items[index];
   }
@@ -63,6 +61,9 @@ export class AddTemplateComponent implements OnInit {
         (res) => {
           if (res.success === true) {
             this.toast.success(res.msg);
+            const user = JSON.parse(localStorage.getItem('userData'));
+            user.userTemplates.push(res.data);
+            localStorage.setItem('userData', JSON.stringify(user));
           } else {
             this.toast.error(res.msg);
           }
