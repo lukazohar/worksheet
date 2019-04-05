@@ -10,7 +10,7 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 })
 export class AddTemplateComponent implements OnInit {
 
-  private templateForm = new FormGroup({
+  templateForm = new FormGroup({
     title: new FormControl(),
     description: new FormControl(),
     items: new FormArray([])

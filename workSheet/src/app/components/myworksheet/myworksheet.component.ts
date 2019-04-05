@@ -8,11 +8,11 @@ import { ISheet } from 'src/app/models/sheet/sheet';
 })
 export class MyworksheetComponent implements OnInit {
 
-  private sheets: Array<ISheet> = JSON.parse(localStorage.getItem('userData')).userSheets;
-  private statusTypes: Array<string> = ['Not started yet', 'On hold', 'Finished'];
+  sheets: Array<ISheet> = JSON.parse(localStorage.getItem('userData')).userSheets;
+  statusTypes: Array<string> = ['Not started yet', 'On hold', 'Finished'];
 
-  private sortTypes: Array<string> = ['Date of adding', 'Priority', 'Date of last change'];
-  private sortType = 'Sort by';
+  sortTypes: Array<string> = ['Date of adding', 'Priority', 'Date of last change'];
+  sortType = 'Sort by';
 
   constructor() { }
 

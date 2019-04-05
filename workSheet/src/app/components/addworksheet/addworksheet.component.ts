@@ -12,13 +12,13 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 })
 export class AddworksheetComponent implements OnInit {
 
-  private templates: Array<ITemplate> = JSON.parse(localStorage.getItem('userData')).userTemplates;
-  private sheetInitialized = false;
-  private templateTitles: Array<string> = this.templates.map((template) => {
+  templates: Array<ITemplate> = JSON.parse(localStorage.getItem('userData')).userTemplates;
+  sheetInitialized = false;
+  templateTitles: Array<string> = this.templates.map((template) => {
     return template.title;
   });
-  private sheetForm: FormGroup;
-  private templateTitle: string;
+  sheetForm: FormGroup;
+  templateTitle: string;
 
   get items(): FormArray { return this.sheetForm.get('items') as FormArray; }
   set items(test: FormArray) { this.sheetForm.setControl('items', test); }
