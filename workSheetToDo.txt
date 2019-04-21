@@ -1,4 +1,4 @@
-Stvari za uredit pr WokrSheet:
+Stvari za uredit pr WorkSheet :
 - polepšaj stran, stil, CSS,...
 - pri odgovoru s strežnika zrihtaj obvestila (èe je 404 naredi to, èe je 200 naredi to, èe je zašèiteno naredi to,...)
 - retry, error, razne stvari pri PIPE, rxjs funkcije pri http
@@ -27,3 +27,15 @@ Stvari za uredit pr WokrSheet:
 - pri css-u spremeni classe iz npr. inputField v input-field
 - validatorji pri add-template
 - odstrani // @ts-ignore
+- pri add.template description prva vrstica ostane nevidna èe greš v novo vrstico
+- v styles.css daj h1 na 40px in odstrani pri komponentah
+- validacija pri formah
+- pri zbrisanju sheetov dodaj koš, kjer se hranijo zbrisani sheeti. Tam daj da zbrišeš za zmeraj
+- poštimaj CORS
+- pri sheetih naredi razvršèanje
+- ko vraèaš sheet, vrni samo id. Isto pri template
+- vse toaste daj èisto na konc funkcije
+- daj primerne ikone
+- spiši primere http requestov na backend
+- pri pošiljanju maila daj mail na novi domeni (worksheet.com al kaj)
+- mail ne dela

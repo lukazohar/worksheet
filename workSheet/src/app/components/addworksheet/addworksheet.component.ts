@@ -4,6 +4,8 @@ import { SheetService } from 'src/app/services/sheet/sheet.service';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-addworksheet',
@@ -25,7 +27,8 @@ export class AddworksheetComponent implements OnInit {
 
   constructor(
     private toast: ToastService,
-    private sheetService: SheetService
+    private sheetService: SheetService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -58,12 +61,13 @@ export class AddworksheetComponent implements OnInit {
 
   addSheet(): void {
     this.sheetService.addSheet(this.sheetForm.value).subscribe(
-      (res) => {
+      (res: ISuccessMsgResponse) => {
         if (res.success === true) {
           const user = JSON.parse(localStorage.getItem('userData'));
           user.userSheets.push(res.data);
           localStorage.setItem('userData', JSON.stringify(user));
           this.toast.success(res.msg);
+          this.router.navigate(['worksheets']);
         } else {
           this.toast.error(res.msg);
         }

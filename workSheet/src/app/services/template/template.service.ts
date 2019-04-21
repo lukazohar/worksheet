@@ -11,7 +11,7 @@ import { TokenService } from '../token/token.service';
 })
 export class TemplateService {
 
-  rootURL = 'http://localhost:3000/users/';
+  ULR = 'http://localhost:3000/templates/';
   template: FormArray;
 
   constructor(
@@ -20,14 +20,14 @@ export class TemplateService {
   ) { }
 
   getTemplate(id: number): Observable<ITemplate> {
-    return this.http.get<ITemplate>('${this.rootURL}template?id=${id}', {
+    return this.http.get<ITemplate>('${this.ULR}template?id=${id}', {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
     });
   }
   getTemplates(): Observable<ITemplate[]> {
-    return this.http.get<ITemplate[]>('${this.rootURL}template', {
+    return this.http.get<ITemplate[]>('${this.ULR}template', {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
@@ -35,7 +35,7 @@ export class TemplateService {
   }
 
   addTemplate(template: ITemplate): Observable<ISuccessMsgResponse> {
-    return this.http.post<ISuccessMsgResponse>(this.rootURL + 'template', template, {
+    return this.http.post<ISuccessMsgResponse>(this.ULR + 'template', template, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
@@ -43,7 +43,7 @@ export class TemplateService {
   }
 
   updateTemplate(): Observable<ISuccessMsgResponse> {
-    return this.http.put<ISuccessMsgResponse>('${this.rootURL}template', {
+    return this.http.put<ISuccessMsgResponse>('${this.ULR}template', {
       header: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
@@ -51,14 +51,16 @@ export class TemplateService {
   }
 
   deleteTemplate(id: number): Observable<ISuccessMsgResponse> {
-    return this.http.delete<ISuccessMsgResponse>('${this.rootURL}template?id=${id}', {
+    return this.http.delete<ISuccessMsgResponse>('${this.ULR}template?id=${id}', {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
     });
   }
 
- // Functions adding values to existing templates
+  //
+  // Functions adding values to existing templates
+  //
   addHeader(items: FormArray): FormArray {
     items.push(new FormGroup({
       type: new FormControl('header'),

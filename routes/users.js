@@ -3,12 +3,10 @@ const router = express.Router();
 const passport = require('passport');
 require('../config/passport')(passport);
 const jwt = require('jsonwebtoken');
+const config = require('../config/database');
 
 const User = require('../models/user');
-const Template = require('../models/template');
-const Sheet = require('../models/sheet');
 
-const config = require('../config/database');
 
 // Register
 router.post('/register', (req, res, next) => {
@@ -29,9 +27,15 @@ router.post('/register', (req, res, next) => {
             // Calls addUser method for adding new user
             User.addUser(newUser, (err, user)  => {
                 if (err) {
-                    res.json({success: false, msg: 'Failed to register user, ' + err});
+                    res.json({
+                        success: false,
+                        msg: 'Failed to register user, ' + err
+                    });
                 } else{
-                    res.json({success: true, msg: 'Successfully added user, ' + user._id}); 
+                    res.json({
+                        success: true,
+                        msg: 'Successfully added user, ' + user._id
+                    }); 
                 }
             });
         } else {
@@ -39,6 +43,8 @@ router.post('/register', (req, res, next) => {
         }
     })
 });
+
+
 
 // Authenticate
 router.post('/authenticate', (req, res, next) => {
@@ -48,7 +54,10 @@ router.post('/authenticate', (req, res, next) => {
     User.getUserByUsername(username, (err, user) => {
         if(err) throw err;
         if(!user) {
-            return res.json({success: false, msg: "User doesn't exist"});
+            return res.json({
+                success: false,
+                msg: "User doesn't exist"
+            });
         }
 
         User.comparePasswords(password, user.userProfile.password, (err, isMatch)  => {
@@ -72,29 +81,77 @@ router.post('/authenticate', (req, res, next) => {
                     }
                 })
             } else {
-                return res.json({success: false, msg: 'Wrong password'});
+                return res.json({
+                    success: false, msg: 'Wrong password'
+                });
             }            
         })
     })
 });
 
+// Checks if username is available. Username for check comes through as first URL parameter
+router.get('/username', passport.authenticate('jwt', {session: false}), (req, res) => {
+    User.isUsernameAvailable(req.user._id, req.query.username, (err, isAvailable) => {
+        if(err) throw err;
+        if(isAvailable) {
+            res.json({
+                success: true,
+                msg: 'Username is available'
+            })
+        } else {
+            res.json({
+                success: false,
+                msg: 'Username is already taken'
+            })
+        }
+    })
+})
+
+// Checks if email is available. Email for check comes through as first URL parameter
+router.get('/email', passport.authenticate('jwt', {session: false}), (req, res) => {
+    User.isUsernameAvailable(req.user._id, req.query.email, (err, isAvailable) => {
+        if(err) throw err;
+        if(isAvailable) {
+            res.json({
+                success: true,
+                msg: 'Email is available'
+            })
+        } else {
+            res.json({
+                success: false,
+                msg: 'Email is already taken'
+            })
+        }
+    })
+})
+
+// Profile
 router.route('/profile')
     // Send user account
     .get(passport.authenticate('jwt', {session: false}), (req, res) => {
-        res.json({user: req.user});
+        res.json({
+            user: req.user
+        });
     })
     // Updates user account
     .put(passport.authenticate('jwt', {session: false}), (req, res) => {
         const username = req.body.userProfile.username;
         const email = req.body.userProfile.email;
-        const id = req.user._id;
+        const userID = req.user._id;
 
-        User.areUsernameAndEmailAvailable(username, email, id, (err, isAvailable) => {
+        User.isUsernameAvailable(userID, username, (err, isAvailable) => {
+            if(err) throw err;
+            if(isAvailable) {
+                console.log('Username available');
+            }
+        })
+
+        User.areUsernameAndEmailAvailable(username, email, userID, (err, isAvailable) => {
             if(err) throw err;
             if(isAvailable.success) {
                 // If username and email are available, if updates user profile
                 const updatedUser = req.body;
-                User.updateUser(id, updatedUser, (err, updatedUserAndSuccess) => {
+                User.updateUser(userID, updatedUser, (err, updatedUserAndSuccess) => {
                     if(err) throw err;
                     res.json(updatedUserAndSuccess);
                 });
@@ -105,7 +162,6 @@ router.route('/profile')
     })
     // Deletes user account
     .delete(passport.authenticate('jwt', {session: false}), (req, res) => {
-        console.log('Delete');
         User.deleteUser(req.user._id, (err, user) => {
             if(err) throw err;
             if(!user) res.json({
@@ -114,57 +170,19 @@ router.route('/profile')
             })
             if(user) res.json({
                 success: true,
-                msg: "User deleted"
+                msg: `User ${user.userProfile.username} delete`
             });
         });
     })
 
-router.route('/template')
-    .get(passport.authenticate('jwt', {session: false}, (req, res) => {
-        res.send('Request get recieved ')
-    }))
-    .post(passport.authenticate('jwt', {session: false}), (req, res) => {
-        let template = {
-            userTemplates: [ req.body ]
-        };
-        let userID = req.user._id;
-        Template.addTemplate(template, userID, (err, template) => {
-            if(err) res.json({ success: false, msg: 'Adding template failed: ${err}' });
-            res.json({ success: true, msg: template.title + ' added', data: template });
-        });
+
+// User forgets password, sets new one and sends it to email
+router.get('/resetPass', (req, res) => {
+    User.resetPassword(req.params.id, (err, status) => {
+        if (err) throw err;
     })
-    .put(passport.authenticate('jwt', {session: false}, (req, res) => {
-        res.send('Request put recieved ');
-    }))
-    .delete(passport.authenticate('jwt', {session: false}, (req, res) => {
-        res.send('Request delete recieved ');
-    }))
+    res.end();
+})
 
-
-
-router.route('/sheet')
-    .get(passport.authenticate('jwt', {session: false}, (req, res) => {
-        console.log('Get sheet dela');
-        res.end();
-    }))
-    .post(passport.authenticate('jwt', {session: false}), (req, res) => {
-        let sheet = {
-            userSheets: [ req.body ]
-        };
-        let userID = req.user._id;
-        Sheet.addSheet(sheet, userID, (err, newsheet) => {
-            if(err) res.json({ success: false, msg: 'Adding sheet failed' });
-            res.json({ success: true, msg: newsheet.title + ' added', data: newsheet });
-        });
-    })
-    .put(passport.authenticate('jwt', {session: false}, (req, res) => {
-       console.log('Put sheet dela');
-       res.end();
-    }))
-    .delete(passport.authenticate('jwt', {session: false}, (req, res) => {
-        //const sheetID = req.params;
-        console.log(req.params)
-        res.end();
-    }))
 
 module.exports = router;

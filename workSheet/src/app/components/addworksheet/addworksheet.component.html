@@ -29,8 +29,8 @@
         </li>
         <li>
           <div class="input-field col s12">
-            <label for="">Description</label>
-            <input formControlName="description" placeholder="" id="description" type="text" class="validate">
+            <textarea formControlName="description" id="searchbar" class="materialize-textarea"></textarea>
+            <label for="searchbar">Description</label>
           </div>
         </li>
         <li *ngFor="let item of sheetForm.controls.items.controls; index as i">

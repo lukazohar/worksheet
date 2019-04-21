@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const UserSchema = require('../schemas/userSchema');
+const ObjectId = mongoose.Types.ObjectId;
 
 const User = mongoose.model('User', UserSchema.UserSchema);
 
@@ -18,15 +19,15 @@ module.exports.addSheet = function(newSheet, userID, callback) {
 }
 
 module.exports.updateSheet = function(sheetID, updatedSheet, callback) {
-    User.findByIdAndUpdate(sheetID, {$pull: {"userSheets": {_id: ObjectId(sheetID)}}}, {new: true}, (err, newUser) => {
+    User.findByIdAndUpdate(sheetID, updatedSheet, {new: true}, (err, newUser) => {
         if(err) throw err;
         callback(null, newUser);
     })
 }
 
-module.exports.deleteSheet = function(sheetID, callback) {
-    User.findByIdAndUpdate(sheetID, {$pull: {"userSheets": {_id: ObjectId(sheetID)}}}, {new: true}, (err, newUser) => {
+module.exports.deleteSheet = function(userID, sheetID, callback) {
+    User.findByIdAndUpdate(userID, {$pull: {"userSheets": {_id: ObjectId(sheetID)}}}, {new: true}, (err, updatedSheets) => {
         if(err) throw err;
-        callback(null, newUser);
+        callback(null, updatedSheets);
     })
 }

@@ -36,6 +36,7 @@ export class ProfileComponent implements OnInit {
 
   createFormGroup(): void {
     this.profileForm = new FormGroup({
+      _id: new FormControl(localStorage.getItem('userData')),
       firstName: new FormControl(this.userData.userProfile.firstName),
       lastName: new FormControl(this.userData.userProfile.lastName),
       username: new FormControl(this.userData.userProfile.username),
@@ -52,16 +53,28 @@ export class ProfileComponent implements OnInit {
   }
 
   updateUser(): void {
-    alert('Test');
+    this.userService.updateUser(this.profileForm.value).subscribe(
+      (res: ISuccessMsgResponse) => {
+        if (res.success) {
+          this.toast.success(res.msg);
+        } else {
+          this.toast.error(res.msg);
+          console.log('User eror updating');
+        }
+      },
+      err => {
+        console.error(err);
+      }
+    );
   }
 
   deleteUser(): void {
     this.userService.deleteUser().subscribe(
       (res: ISuccessMsgResponse) => {
         if (res.success) {
-          this.toast.success(res.msg);
           localStorage.clear();
           this.router.navigate(['register']);
+          this.toast.success(res.msg);
         } else {
           this.toast.error(res.msg);
         }
@@ -71,6 +84,41 @@ export class ProfileComponent implements OnInit {
         this.toast.error('Error deleting user');
       }
     );
+  }
+
+  checkForUsernameAvailable(username: string): boolean {
+    let isAvailable: boolean;
+    this.userService.checkUsernameAvailable(username).subscribe(
+      (res: ISuccessMsgResponse) => {
+        if (res.success) {
+          isAvailable = true;
+        } else {
+          isAvailable = false;
+        }
+      },
+      err => {
+        console.error(err);
+      }
+    );
+    console.log('username is ' + isAvailable);
+    return isAvailable;
+  }
+  checkForEmailUsername(email: string): boolean {
+    let isAvailable: boolean;
+    this.userService.checkEmailAvailable(email).subscribe(
+      (res: ISuccessMsgResponse) => {
+        if (res.success) {
+          isAvailable = true;
+        } else {
+          isAvailable = false;
+        }
+      },
+      err => {
+        console.error(err);
+      }
+    );
+    console.log('email is: ' + isAvailable);
+    return isAvailable;
   }
 
 }

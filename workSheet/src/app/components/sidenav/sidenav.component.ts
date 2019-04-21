@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 import { TokenService } from 'src/app/services/token/token.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidenav',
@@ -27,7 +28,8 @@ export class SidenavComponent implements OnInit {
   constructor(
     private tokenService: TokenService,
     private authService: AuthService,
-    private toast: ToastService
+    private toast: ToastService,
+    private route: Router
   ) { }
 
   ngOnInit() {
@@ -50,4 +52,5 @@ export class SidenavComponent implements OnInit {
     this.authService.logoutUser();
     this.toast.warning('Logged out');
   }
+
 }

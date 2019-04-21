@@ -9,9 +9,36 @@
   <nav class="show-on-sml-and-up">
     <ul id="slide-out" class="side-nav fixed" id="sidenav">
       <div *ngIf="loggedIn(); else notLoggedIn">
-        <li *ngIf="loggedIn()"><a routerLinkActive="active" routerLink="/worksheets"><i class="material-icons right">format_list_bulleted</i>My Sheets</a></li>
-        <li *ngIf="loggedIn()"><a routerLink="/add-worksheet"><i class="material-icons right">note_add</i>Add Sheet</a></li>
-        <li *ngIf="loggedIn()"><a routerLink="/add-template"><i class="material-icons right">add_to_photos</i>New Temp</a></li>
+        <!-- Sheet submenu -->
+        <li class="white">
+          <ul class="collapsible collapsible-accordion">
+            <li>
+              <a class="collapsible-header waves-effect waves-blue"><i class="material-icons right">event_note</i>Sheet<i class="material-icons right">arrow_drop_down</i></a>
+              <div class="collapsible-body">
+                <ul>
+                  <li><a class="waves-effect waves-blue" routerLink="/worksheets"><i class="material-icons right">note</i>My Sheets</a></li>
+                  <li><a class="waves-effect waves-blue" routerLink="/add-worksheet"><i class="material-icons right">note_add</i>Add Sheet</a></li>
+                  <li><div class="divider"></div></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <!-- Template submenu -->
+        <li class="white">
+          <ul class="collapsible collapsible-accordion">
+            <li>
+              <a class="collapsible-header waves-effect waves-blue"><i class="material-icons right">insert_drive_file</i>Temp<i class="material-icons right">arrow_drop_down</i></a>
+              <div class="collapsible-body">
+                <ul>
+                  <li><a class="waves-effect waves-blue" routerLink="/templates"><i class="material-icons right">note</i>My Templates</a></li>
+                  <li><a class="waves-effect waves-blue" routerLink="/add-template"><i class="material-icons right">add_to_photos</i>Add Template</a></li>
+                  <li><div class="divider"></div></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+          </li>
         <li *ngIf="loggedIn()"><a routerLink="/profile"><i class="material-icons right">person</i>Profile</a></li>
         <li *ngIf="loggedIn()"><a (click)="logoutUser()"><i class="material-icons right">exit_to_app</i>Logout</a></li>
       </div>

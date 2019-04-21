@@ -1,0 +1,47 @@
+<div class="row">
+  <h1>My Templates</h1>
+  <div class="sort">
+    <a materialize="dropdown" class='dropdown-button btn blue-grey lighten-5 black-text' href='#' data-activates='dropdown1'> {{ sortType }} </a>
+    <!-- Dropdown Structure -->
+    <ul id='dropdown1' class='dropdown-content'>
+      <li *ngFor="let sort of sortTypes; index as i">
+        <a> {{ sort }} </a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <nav class="search-bar">
+    <div class="nav-wrapper blue lighten-4">
+      <form>
+        <div class="input-field">
+          <input id="search" type="search">
+          <label class="label-icon search-icon" for="search"><i class="material-icons">search</i></label>
+          <i class="material-icons">close</i>
+        </div>
+      </form>
+    </div>
+  </nav>
+</div>
+<div class="row">
+  <ul>
+    <li *ngFor="let template of templates; index as i">
+      <div *ngIf="isThisExpandedTemplate(i); else isNotExpandedTemplate" class="col s12 m12 l12 template">
+        <a class="waves-effect waves-light btn-floating right squared extend-template-arrow" (click)="expandTemplate(i)"><i class="material-icons left">expand_less</i></a>
+        <a class="waves-effect waves-light btn-floating right squared extend-template-arrow blue" (click)="editTemplate(i)"><i class="material-icons left">edit</i></a>
+        <a class="waves-effect waves-light btn-floating right squared extend-template-arrow red" (click)="deleteTemplate(i)"><i class="material-icons left">delete_forever</i></a>
+        <p> {{ template.title }} </p>
+        <p> {{ template.description }} </p>
+      </div>
+      <ng-template #isNotExpandedTemplate>
+        <div class="col s12 m12 l12 template">
+          <a class="waves-effect waves-light btn-floating right squared extend-template-arrow" (click)="expandTemplate(i)"><i class="material-icons left">expand_more</i></a>
+          <a class="waves-effect waves-light btn-floating right squared extend-template-arrow blue" (click)="editTemplate(i)"><i class="material-icons left">edit</i></a>
+          <a class="waves-effect waves-light btn-floating right squared extend-template-arrow red" (click)="deleteTemplate(i)"><i class="material-icons left">delete_forever</i></a>
+          <p> {{ template.title }} </p>
+          <p> {{ template.description }} </p>
+        </div>
+      </ng-template>
+    </li>
+  </ul>
+</div>

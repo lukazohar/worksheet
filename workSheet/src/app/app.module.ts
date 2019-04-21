@@ -22,6 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ToastService } from './services/toast/toast.service';
 import { AddTemplateComponent } from './components/add-template/add-template.component';
+import { TemplatesComponent } from './components/templates/templates.component';
 
 export function tokenGetter(): string {
   return localStorage.getItem('token');
@@ -38,7 +39,8 @@ export function tokenGetter(): string {
     RegisterComponent,
     SidenavComponent,
     NavbarComponent,
-    AddTemplateComponent
+    AddTemplateComponent,
+    TemplatesComponent
   ],
   imports: [
     BrowserModule,

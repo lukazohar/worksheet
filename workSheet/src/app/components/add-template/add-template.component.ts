@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormArray, FormsModule, Validators } from '@angular/forms';
 import { TemplateService } from 'src/app/services/template/template.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { ITemplate } from 'src/app/models/template/template';
+import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
 
 @Component({
   selector: 'app-add-template',
@@ -15,6 +17,7 @@ export class AddTemplateComponent implements OnInit {
     description: new FormControl(),
     items: new FormArray([])
   });
+  addingTemplate = false;
 
   get items(): FormArray { return this.templateForm.get('items') as FormArray; }
   set items(test: FormArray) { this.templateForm.setControl('items', test); }
@@ -58,12 +61,12 @@ export class AddTemplateComponent implements OnInit {
   addTemplate(): void {
     if (this.templateForm.valid) {
       this.templateService.addTemplate(this.templateForm.value).subscribe(
-        (res) => {
+        (res: ISuccessMsgResponse) => {
           if (res.success === true) {
-            this.toast.success(res.msg);
             const user = JSON.parse(localStorage.getItem('userData'));
             user.userTemplates.push(res.data);
             localStorage.setItem('userData', JSON.stringify(user));
+            this.toast.success(res.msg);
           } else {
             this.toast.error(res.msg);
           }

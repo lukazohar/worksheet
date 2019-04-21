@@ -24,13 +24,13 @@
         <li>
           <div class="input-field col s12">
             <label for="">Title</label>
-            <input formControlName="title" placeholder="Header" id="fieldHeader" type="text" class="validate">
+            <input formControlName="title" id="fieldHeader" type="text" class="validate">
           </div>
         </li>
         <li>
           <div class="input-field col s12">
-            <label for="">Description</label>
-            <input formControlName="description" placeholder="Description" id="fieldHeader" type="text" class="validate">
+            <textarea formControlName="description" id="searchbar" class="materialize-textarea"></textarea>
+            <label for="searchbar">Description</label>
           </div>
         </li>
         <div *ngIf="templateForm.controls.items">

@@ -26,13 +26,13 @@
                     <div class="row">
                         <div class="collection-item">
                             <b class="col s2">Username:</b>
-                            <input class="col s10" type="text" formControlName="username" name="username" id="username">
+                            <input #username class="col s10" type="text" formControlName="username" name="username" id="username" (input)="checkForUsernameAvailable(username.value)">
                         </div>
                     </div>
                     <div class="row">
                         <div class="collection-item">
                             <b class="col s2">Email:</b>
-                            <input class="col s10" type="email" formControlName="email" name="email" id="email">
+                            <input #email class="col s10" type="email" formControlName="email" name="email" id="email" (input)="checkForEmailUsername(email.value)">
                         </div>
                     </div>
                     <a class="btn-floating btn-large waves-effect waves-light right red" (click)="deleteUser()"><i class="material-icons">delete</i></a>

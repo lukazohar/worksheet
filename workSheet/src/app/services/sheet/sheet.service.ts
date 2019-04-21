@@ -12,7 +12,7 @@ import { IInputFields } from 'src/app/models/template/templateItems/inputFields/
 })
 export class SheetService {
 
-  private URL = 'http://localhost:3000/users/sheet';
+  URL = 'http://localhost:3000/sheets/sheet';
 
   constructor(
     private http: HttpClient,
@@ -23,7 +23,7 @@ export class SheetService {
   //  CRUD operations
   //
   getSheet(id: number) {
-    return this.http.get('${this.rootURL}sheet?id=${id}', {
+    return this.http.get(this.URL + 'sheet?id=' + id, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
@@ -45,8 +45,12 @@ export class SheetService {
 
   }
 
-  deleteSheet() {
-
+  deleteSheet(sheetId: string): Observable<ISuccessMsgResponse> {
+    return this.http.delete<ISuccessMsgResponse>(`${this.URL}?id=${sheetId}`, {
+      headers: new HttpHeaders({
+        'Authorization': this.token.getToken()
+      })
+    });
   }
 
 

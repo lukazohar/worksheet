@@ -13,7 +13,7 @@ import { ILoginResponse } from 'src/app/models/login/login-response';
 })
 export class AuthService {
 
-  rootURL = 'http://localhost:3000/users/';
+  URL = 'http://localhost:3000/users/';
 
   constructor(
     private http: HttpClient,
@@ -22,11 +22,11 @@ export class AuthService {
   ) { }
 
   registerUser(user: IRegister): Observable<IRegisterResponse> {
-    return this.http.post<IRegisterResponse>(this.rootURL + 'register', user);
+    return this.http.post<IRegisterResponse>(this.URL + 'register', user);
   }
 
   loginUser(user: ILogin): Observable<ILoginResponse> {
-    return this.http.post<ILoginResponse>(this.rootURL + 'authenticate', user);
+    return this.http.post<ILoginResponse>(this.URL + 'authenticate', user);
   }
 
   logoutUser(): void {

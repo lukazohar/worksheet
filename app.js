@@ -36,7 +36,17 @@ app.use(cors({
     origin: 'http://localhost:4200'
 }));
 
+// Users router
 const users = require('./routes/users');
+app.use('/users', users);
+
+// Templates route
+const templates = require('./routes/templates');
+app.use('/templates', templates);
+
+// Sheets router
+const sheets = require('./routes/sheets');
+app.use('/sheets', sheets);
 
 // Passport Middleware
 app.use(passport.initialize());
@@ -44,7 +54,6 @@ app.use(passport.session());
 
 require('./config/passport');
 
-app.use('/users', users);
 
 app.get('/', (req, res) => {
     res.send('Invalid URI');
