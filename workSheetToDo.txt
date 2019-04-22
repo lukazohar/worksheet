@@ -1,41 +1,42 @@
 Stvari za uredit pr WorkSheet :
-- polepšaj stran, stil, CSS,...
-- pri odgovoru s strežnika zrihtaj obvestila (èe je 404 naredi to, èe je 200 naredi to, èe je zašèiteno naredi to,...)
+- polepï¿½aj stran, stil, CSS,...
+- pri odgovoru s streï¿½nika zrihtaj obvestila (ï¿½e je 404 naredi to, ï¿½e je 200 naredi to, ï¿½e je zaï¿½ï¿½iteno naredi to,...)
 - retry, error, razne stvari pri PIPE, rxjs funkcije pri http
-- zrihtaj route, zdej je fiksirani na 'lukazohi', neka fora je z @Input da dobiš podatke iz druge komponente, ker se sidenav naloži preden dobiš username
+- zrihtaj route, zdej je fiksirani na 'lukazohi', neka fora je z @Input da dobiï¿½ podatke iz druge komponente, ker se sidenav naloï¿½i preden dobiï¿½ username
 - animacije
 - tam ko je podatkovni tip ANY, popravi v primerne
-- ko posodobiš user-ja, je problem z username (èe je drugaèen username ne posodobi)
-- ko se uporabnik registrira, probaj na vsako sekundo/2 èe je username/email že zaseden. Isto ko spreminja username/email
-- pobriši importe, ki niso v uporabi. V angularju in nodu
+- ko posodobiï¿½ user-ja, je problem z username (ï¿½e je drugaï¿½en username ne posodobi)
+- ko se uporabnik registrira, probaj na vsako sekundo/2 ï¿½e je username/email ï¿½e zaseden. Isto ko spreminja username/email
+- pobriï¿½i importe, ki niso v uporabi. V angularju in nodu
 - uredi kodo (predsledke,...) - tslint ftw
 - preveri statuse odgovorov
 - komentiraj stvari
 - preveri veljavnost stvari v formah
 - popravi validatorje pri registraciji
-- pri expressu preveri, èe si povsod dau err id preveru èe obstaja
+- pri expressu preveri, ï¿½e si povsod dau err id preveru ï¿½e obstaja
 - Express - tam ko je error, vrni response da je server error al kaj takega
-- èe user pozabi geslo in username, na email pošlje potrdilo za ponovno vnašanje username-a
+- ï¿½e user pozabi geslo in username, na email poï¿½lje potrdilo za ponovno vnaï¿½anje username-a
 - ? naredi realtime podatkovno bazo
 - razporedi importe po skupinah
 - update user
 - naredi how to za uporabo strani
 - token zrihtaj v cookiu
-- razširi sidenav
+- razï¿½iri sidenav
 - na vseh spremenljivkah odstrani _
-- težava v addTemplate, naredi da da template ki je v spremnljivki item.type v *ngIf
+- teï¿½ava v addTemplate, naredi da da template ki je v spremnljivki item.type v *ngIf
 - pri css-u spremeni classe iz npr. inputField v input-field
 - validatorji pri add-template
 - odstrani // @ts-ignore
-- pri add.template description prva vrstica ostane nevidna èe greš v novo vrstico
+- pri add.template description prva vrstica ostane nevidna ï¿½e greï¿½ v novo vrstico
 - v styles.css daj h1 na 40px in odstrani pri komponentah
 - validacija pri formah
-- pri zbrisanju sheetov dodaj koš, kjer se hranijo zbrisani sheeti. Tam daj da zbrišeš za zmeraj
-- poštimaj CORS
-- pri sheetih naredi razvršèanje
-- ko vraèaš sheet, vrni samo id. Isto pri template
-- vse toaste daj èisto na konc funkcije
+- pri zbrisanju sheetov dodaj koï¿½, kjer se hranijo zbrisani sheeti. Tam daj da zbriï¿½eï¿½ za zmeraj
+- poï¿½timaj CORS
+- pri sheetih naredi razvrï¿½ï¿½anje
+- ko vraï¿½aï¿½ sheet, vrni samo id. Isto pri template
+- vse toaste daj ï¿½isto na konc funkcije
 - daj primerne ikone
-- spiši primere http requestov na backend
-- pri pošiljanju maila daj mail na novi domeni (worksheet.com al kaj)
+- spiï¿½i primere http requestov na backend
+- pri poï¿½iljanju maila daj mail na novi domeni (worksheet.com al kaj)
 - mail ne dela
+- pri api-ju zrihtaj da se queryji po mongoosu

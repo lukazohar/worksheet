@@ -26,7 +26,7 @@ module.exports.updateSheet = function(sheetID, updatedSheet, callback) {
 }
 
 module.exports.deleteSheet = function(userID, sheetID, callback) {
-    User.findByIdAndUpdate(userID, {$pull: {"userSheets": {_id: ObjectId(sheetID)}}}, {new: true}, (err, updatedSheets) => {
+    User.findByIdAndDelete(userID, {$pull: {"userSheets": {_id: ObjectId(sheetID)}}}, {new: true}, (err, updatedSheets) => {
         if(err) throw err;
         callback(null, updatedSheets);
     })

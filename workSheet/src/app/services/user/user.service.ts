@@ -26,25 +26,11 @@ export class UserService {
   }
 
   updateUser(updatedProfile: IProfile): Observable<ISuccessMsgResponse> {
-    return this.http.put<ISuccessMsgResponse>(this.URL + 'sad', updatedProfile, {
+    return this.http.put<ISuccessMsgResponse>(this.URL, updatedProfile, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
     });
   }
 
-  checkUsernameAvailable(username: string): Observable<ISuccessMsgResponse> {
-    return this.http.get<ISuccessMsgResponse>('http://localhost:3000/users/username?username=' + username, {
-      headers: new HttpHeaders({
-        'Authorization': this.token.getToken()
-      })
-    });
-  }
-  checkEmailAvailable(email: string): Observable<ISuccessMsgResponse> {
-    return this.http.get<ISuccessMsgResponse>('http://localhost:3000/users/email?email=' + email, {
-      headers: new HttpHeaders({
-        'Authorization': this.token.getToken()
-      })
-    });
-  }
 }

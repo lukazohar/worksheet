@@ -90,8 +90,8 @@ router.post('/authenticate', (req, res, next) => {
 });
 
 // Checks if username is available. Username for check comes through as first URL parameter
-router.get('/username', passport.authenticate('jwt', {session: false}), (req, res) => {
-    User.isUsernameAvailable(req.user._id, req.query.username, (err, isAvailable) => {
+router.get('/usernameAvailability', passport.authenticate('jwt', {session: false}), (req, res) => {
+    User.isUsernameAvailable(req.user._id = 0, req.query.username, (err, isAvailable) => {
         if(err) throw err;
         if(isAvailable) {
             res.json({
@@ -108,8 +108,8 @@ router.get('/username', passport.authenticate('jwt', {session: false}), (req, re
 })
 
 // Checks if email is available. Email for check comes through as first URL parameter
-router.get('/email', passport.authenticate('jwt', {session: false}), (req, res) => {
-    User.isUsernameAvailable(req.user._id, req.query.email, (err, isAvailable) => {
+router.get('/emailAvailability', passport.authenticate('jwt', {session: false}), (req, res) => {
+    User.isEmailAvailable(req.user._id = 0, req.query.email, (err, isAvailable) => {
         if(err) throw err;
         if(isAvailable) {
             res.json({
@@ -135,30 +135,7 @@ router.route('/profile')
     })
     // Updates user account
     .put(passport.authenticate('jwt', {session: false}), (req, res) => {
-        const username = req.body.userProfile.username;
-        const email = req.body.userProfile.email;
-        const userID = req.user._id;
-
-        User.isUsernameAvailable(userID, username, (err, isAvailable) => {
-            if(err) throw err;
-            if(isAvailable) {
-                console.log('Username available');
-            }
-        })
-
-        User.areUsernameAndEmailAvailable(username, email, userID, (err, isAvailable) => {
-            if(err) throw err;
-            if(isAvailable.success) {
-                // If username and email are available, if updates user profile
-                const updatedUser = req.body;
-                User.updateUser(userID, updatedUser, (err, updatedUserAndSuccess) => {
-                    if(err) throw err;
-                    res.json(updatedUserAndSuccess);
-                });
-            } else {
-                res.json(isAvailable);
-            }
-        });
+        res.send('Building on it');
     })
     // Deletes user account
     .delete(passport.authenticate('jwt', {session: false}), (req, res) => {
@@ -170,7 +147,7 @@ router.route('/profile')
             })
             if(user) res.json({
                 success: true,
-                msg: `User ${user.userProfile.username} delete`
+                msg: `User ${user.userProfile.username} deleted`
             });
         });
     })

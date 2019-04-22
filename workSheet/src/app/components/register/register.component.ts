@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { toast } from 'angular2-materialize';
 import { ToastService } from 'src/app/services/toast/toast.service';
 
 @Component({
@@ -13,6 +12,11 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
+  firstName: FormControl;
+  lastName: FormControl;
+  username: FormControl;
+  email: FormControl;
+  password: FormControl;
 
   constructor(
     private router: Router,
@@ -21,17 +25,46 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.createFormControls();
     this.createFormGroup();
   }
 
-  createFormGroup() {
+  // Creates controls with validators
+  createFormControls(): void {
+    this.firstName = new FormControl('', [
+      Validators.minLength(3),
+      Validators.maxLength(100),
+      Validators.pattern('[a-zA-Ž ]*')
+    ]);
+    this.lastName = new FormControl('', [
+      Validators.minLength(3),
+      Validators.maxLength(100),
+      Validators.pattern('[a-zA-Ž ]*')
+    ]);
+    this.username = new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(20),
+      Validators.pattern('[[a-z0-9_-]*')
+    ]);
+    this.email = new FormControl('', [
+      Validators.required,
+      Validators.email
+    ]);
+    this.password = new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/)
+    ]);
+  }
+  // Creates group with previously made controls
+  createFormGroup(): void {
     this.registerForm = new FormGroup({
-      firstName: new FormControl(''),
-      lastName: new FormControl(''),
-      username: new FormControl('', [ Validators.required, Validators.minLength(3) ]),
-      email: new FormControl('', [Validators.required, Validators.email ]),
-      // tslint:disable-next-line:max-line-length
-      password: new FormControl('', [ Validators.required, Validators.min(8) ])
+      firstName: this.firstName,
+      lastName: this.lastName,
+      username: this.username,
+      email: this.email,
+      password: this.password
     });
   }
 

@@ -1,35 +1,35 @@
 <div class="container">
-    <div class="row">
-      <form [formGroup]="registerForm" class="col s12" id="reg-form" (ngSubmit)="addNewUser()" novalidate>
-        <div class="row">
-          <div class="input-field col s6">
-            <input formControlName="firstName" id="first_name" type="text">
-            <label for="first_name">First Name</label>
-          </div>
-          <div class="input-field col s6">
-            <input formControlName="lastName" id="lastName" type="text">
-            <label for="last_name">Last Name</label>
-          </div>
+  <div class="row">
+    <form [formGroup]="registerForm" class="col s12" id="reg-form" (ngSubmit)="addNewUser()" novalidate>
+      <div class="row">
+        <div class="input-field col s6">
+          <input formControlName="firstName" id="first_name" type="text">
+          <label for="first_name">First Name</label>
         </div>
-        <div class="row">
-          <div class="input-field col s6">
-            <input formControlName="username" id="username" type="text">
-            <label for="username">Username</label>
-          </div>
-          <div class="input-field col s6">
-            <input formControlName="email" id="email" type="email">
-            <label for="email">Email</label>
-          </div>
+        <div class="input-field col s6">
+          <input formControlName="lastName" id="lastName" type="text">
+          <label for="last_name">Last Name</label>
         </div>
-        <div class="row">
-          <div class="input-field col s6">
-            <input formControlName="password" id="password" type="password">
-            <label for="password">Password</label>
-          </div>
-          <div class="input-field col s6">
-            <input type="submit" value="Register" class="waves-effect waves-light btn-large"> <!-- <i class="material-icons right">done</i> -->
-          </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input formControlName="username" id="username" type="text">
+          <label for="username">Username</label>
         </div>
-      </form>
-    </div>  
+        <div class="input-field col s6">
+          <input formControlName="email" id="email" type="email">
+          <label for="email">Email</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input formControlName="password" id="password" type="password">
+          <label for="password">Password</label>
+        </div>
+        <div class="input-field col s6">
+          <input type="submit" value="Register" class="waves-effect waves-light btn-large">
+        </div>
+      </div>
+    </form>
   </div>
+</div>

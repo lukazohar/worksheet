@@ -36,50 +36,72 @@ module.exports.comparePasswords = function (candidatePassword, hash, callback) {
     })
 }
 
+module.exports.updateUser = function(userID, updatedUser, callback) {
+    console.log(userID);
+    console.log(updatedUser);
+    User.findByIdAndUpdate(userID, updatedUser, {new: true}, (err, newUser) => {
+        if(err) throw err;
+        const user = {
+            success: true,
+            userProfile: newUser.userProfile
+        };
+        callback(null, user);
+    });
+}
+
 // Returns true if username is available, false if it isn't. Id for excluding documents is optional
 module.exports.isUsernameAvailable = function(userID = 0, username, callback) {
     if (userID !== 0) {
-        User.countDocuments({"userProfile.username": username}).where({"_id": {"$ne": userID}}).exec((err, num) => {
-            if(err) throw err;
-            console.log(num);
-            if(num > 0) {
-                callback(null, false);
-            } else {
-                callback(null, true);
-            }
-        })
+        User.countDocuments()
+            .where(_id).ne(ObjectId(userID))
+            .where("userProfile.username").equals(username)
+            .exec((err, num) => {
+                if(err) throw err;
+                if(num > 0) {
+                    callback(null, false);
+                } else {
+                    callback(null, true);
+                }
+            });
     } else {
-        User.countDocuments({"userProfile.username": username}).exec((err, num) => {
-            if(err) throw err;
-            if(num > 0) {
-                callback(null, false);
-            } else {
-                callback(null, true);
-            }
-        })
+        User.countDocuments()
+            .where("userProfile.username").equals(username)
+            .exec((err, num) => {
+                if(err) throw err;
+                if(num > 0) {
+                    callback(null, false);
+                } else {
+                    callback(null, true);
+                }
+            });
     }
 }
 
 // Returns true if email is available, false if it isn't. Id for excluding documents is optional
 module.exports.isEmailAvailable = function(userID = 0, email, callback) {
     if (userID !== 0) {
-        User.countDocuments({"userProfile.email": email}).where({"_id": {"$ne": userID}}).exec((err, num) => {
-            if(err) throw err;
-            if(num > 0) {
-                callback(null, false);
-            } else {
-                callback(null, true);
-            }
-        })
+        User.countDocuments()
+            .where(_id).ne(ObjectId(userID))
+            .where("userProfile.email").equals(email)
+            .exec((err, num) => {
+                if(err) throw err;
+                if(num > 0) {
+                    callback(null, false);
+                } else {
+                    callback(null, true);
+                }
+            });
     } else {
-        User.countDocuments({"userProfile.email": email}).exec((err, num) => {
-            if(err) throw err;
-            if(num > 0) {
-                callback(null, false);
-            } else {
-                callback(null, true);
-            }
-        })
+        User.countDocuments()
+            .where("userProfile.email").equals(email)
+            .exec((err, num) => {
+                if(err) throw err;
+                if(num > 0) {
+                    callback(null, false);
+                } else {
+                    callback(null, true);
+                }
+            });
     }
 }
 
@@ -116,26 +138,10 @@ module.exports.areUsernameAndEmailAvailable = function(username, email, userID =
     });
 }
 
-module.exports.updateUser = function(userID, updatedUser, callback) {
-    var options = {
-        new: true
-    };
-    console.log(updatedUser.userProfile);
-    User.findByIdAndUpdate(userID, updatedUser, options, (err, userAll) => {
-        if(err) throw err;
-        const user = {
-            success: true,
-            userProfile: userAll.userProfile
-        };
-        callback(null, user);
-    });
-}
-
 module.exports.deleteUser = function (userID, callback) {
-    User.findByIdAndRemove(userID, {new: true}, (err, idk) => {
+    User.findByIdAndRemove(userID, {new: true}, (err, deletedUser) => {
         if(err) throw err;
-        console.log(idk);
-        callback(null, idk);
+        callback(null, deletedUser);
     })
 }
 

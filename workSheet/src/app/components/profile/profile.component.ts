@@ -1,5 +1,6 @@
+import { CredentialsAvailabilityService } from './../../services/credentialsAvailability/credentials-availability.service';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { Router } from '@angular/router';
 import { IUserModel } from 'src/app/models/user-model';
@@ -15,28 +16,27 @@ export class ProfileComponent implements OnInit {
 
   userData: IUserModel = JSON.parse(localStorage.getItem('userData'));
   edit = false;
-  originalValues = {
-    username: null,
-    email: null
-  };
+  usernameAvailabilityQuery: any;
+  emailAvailabilityQuery: any;
+
+  usernameAvailable: boolean;
+  emailAvailable: boolean;
 
   profileForm: FormGroup;
 
   constructor(
     private toast: ToastService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private credentialsAvailabilityService: CredentialsAvailabilityService
   ) { }
 
   ngOnInit() {
     this.createFormGroup();
-    this.originalValues.username = this.userData.userProfile.username;
-    this.originalValues.email = this.userData.userProfile.email;
   }
 
   createFormGroup(): void {
     this.profileForm = new FormGroup({
-      _id: new FormControl(localStorage.getItem('userData')),
       firstName: new FormControl(this.userData.userProfile.firstName),
       lastName: new FormControl(this.userData.userProfile.lastName),
       username: new FormControl(this.userData.userProfile.username),
@@ -52,22 +52,25 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  // Updates use with value of profileForm
   updateUser(): void {
-    this.userService.updateUser(this.profileForm.value).subscribe(
-      (res: ISuccessMsgResponse) => {
-        if (res.success) {
-          this.toast.success(res.msg);
-        } else {
-          this.toast.error(res.msg);
-          console.log('User eror updating');
+    if (this.usernameAvailable && this.emailAvailable) {
+      this.userService.updateUser(this.profileForm.value).subscribe(
+        (res: ISuccessMsgResponse) => {
+          if (res.success) {
+            this.toast.success(res.msg);
+          } else {
+            this.toast.error(res.msg);
+          }
+        },
+        err => {
+          console.error(err);
         }
-      },
-      err => {
-        console.error(err);
-      }
-    );
+      );
+    }
   }
 
+  // Deletes user, user ID comes with token
   deleteUser(): void {
     this.userService.deleteUser().subscribe(
       (res: ISuccessMsgResponse) => {
@@ -86,39 +89,21 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  checkForUsernameAvailable(username: string): boolean {
-    let isAvailable: boolean;
-    this.userService.checkUsernameAvailable(username).subscribe(
-      (res: ISuccessMsgResponse) => {
-        if (res.success) {
-          isAvailable = true;
-        } else {
-          isAvailable = false;
-        }
-      },
-      err => {
-        console.error(err);
-      }
-    );
-    console.log('username is ' + isAvailable);
-    return isAvailable;
+  // Checks for availability of username given in first parameter every second that input has been changed last time
+  checkForUsernameAvailable(username: string): void {
+    this.usernameAvailable = this.credentialsAvailabilityService.checkForUsernameAvailability(username);
+    console.log(this.usernameAvailable);
+    console.log(this.emailAvailable);
   }
-  checkForEmailUsername(email: string): boolean {
-    let isAvailable: boolean;
-    this.userService.checkEmailAvailable(email).subscribe(
-      (res: ISuccessMsgResponse) => {
-        if (res.success) {
-          isAvailable = true;
-        } else {
-          isAvailable = false;
-        }
-      },
-      err => {
-        console.error(err);
-      }
-    );
-    console.log('email is: ' + isAvailable);
-    return isAvailable;
+
+  // Checks for availability of email given in first parameter every second that input has been changed last time
+  checkForEmailUsername(email: string): void {
+    this.emailAvailable = this.credentialsAvailabilityService.checkForEmailAvailability(email);
+  }
+
+  test() {
+    console.log('Username availbale ' + this.usernameAvailable);
+    console.log('Email available ' + this.emailAvailable);
   }
 
 }
