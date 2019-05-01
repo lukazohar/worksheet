@@ -35,23 +35,23 @@ export class TemplateService {
   }
 
   addTemplate(template: ITemplate): Observable<ISuccessMsgResponse> {
-    return this.http.post<ISuccessMsgResponse>(this.ULR + 'template', template, {
+    return this.http.post<ISuccessMsgResponse>(`${this.ULR}template`, template, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
     });
   }
 
-  updateTemplate(): Observable<ISuccessMsgResponse> {
-    return this.http.put<ISuccessMsgResponse>('${this.ULR}template', {
-      header: new HttpHeaders({
+  updateTemplate(updatedTemplate: ITemplate): Observable<ISuccessMsgResponse> {
+    return this.http.put<ISuccessMsgResponse>(`${this.ULR}template`, updatedTemplate, {
+      headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
     });
   }
 
-  deleteTemplate(id: number): Observable<ISuccessMsgResponse> {
-    return this.http.delete<ISuccessMsgResponse>('${this.ULR}template?id=${id}', {
+  deleteTemplate(templateId: string): Observable<ISuccessMsgResponse> {
+    return this.http.delete<ISuccessMsgResponse>(`${this.ULR}template?templateId=${templateId}`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })

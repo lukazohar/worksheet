@@ -37,8 +37,6 @@ module.exports.comparePasswords = function (candidatePassword, hash, callback) {
 }
 
 module.exports.updateUser = function(userID, updatedUser, callback) {
-    console.log(userID);
-    console.log(updatedUser);
     User.findByIdAndUpdate(userID, updatedUser, {new: true}, (err, newUser) => {
         if(err) throw err;
         const user = {
@@ -160,10 +158,10 @@ module.exports.resetPassword = async function(userID, callback) {
         }
     });
     const mailInfo = {
-        from: '"Luka Žohar" <luka.zohi@test.com>',
-        to: "t1402036@nwytg.net",
-        subject: 'Send email for node test',
-        text: 'Test succeded, pass: ' + newPassword
+        from: '',
+        to: "",
+        subject: '',
+        text: ': ' + newPassword
     };
     let info = await transporter.sendMail(mailInfo);
 }

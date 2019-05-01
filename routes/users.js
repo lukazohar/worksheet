@@ -94,15 +94,9 @@ router.get('/usernameAvailability', passport.authenticate('jwt', {session: false
     User.isUsernameAvailable(req.user._id = 0, req.query.username, (err, isAvailable) => {
         if(err) throw err;
         if(isAvailable) {
-            res.json({
-                success: true,
-                msg: 'Username is available'
-            })
+            res.send(true)
         } else {
-            res.json({
-                success: false,
-                msg: 'Username is already taken'
-            })
+            res.send(false)
         }
     })
 })

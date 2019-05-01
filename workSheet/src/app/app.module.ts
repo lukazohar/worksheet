@@ -54,6 +54,7 @@ export function tokenGetter(): string {
         blacklistedRoutes: ['example.com/examplebadroute/']
       }
     }),
+    FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     FormsModule

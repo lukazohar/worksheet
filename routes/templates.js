@@ -27,11 +27,41 @@ router.route('/template')
             });
         });
     })
-    .put(passport.authenticate('jwt', {session: false}, (req, res) => {
-        res.send('Request put recieved ');
-    }))
-    .delete(passport.authenticate('jwt', {session: false}, (req, res) => {
-        res.send('Request delete recieved ');
-    }))
+    .put(passport.authenticate('jwt', {session: false}), (req, res) => {
+        Template.updateTemplate(req.user._id, req.body._id, req.body, (err, modifiedStatus) => {
+            if(err) throw err;
+            const templateTitle = req.body.title;
+            if(modifiedStatus.n === 0) {
+                res.json({
+                    success: false,
+                    msg: templateTitle + " doesn't exist"
+                });
+            }
+            if(( modifiedStatus.n === 1 && modifiedStatus.nModified === 1 ) || ( modifiedStatus.n === 1 && modifiedStatus.nModified === 0 )) {
+                res.json({
+                    success: true,
+                    msg: templateTitle + ' updated'
+                });
+            }
+        })
+    })
+    .delete(passport.authenticate('jwt', {session: false}), (req, res) => {
+        Template.deleteTemplate(req.user._id, req.query.templateId, (err, updatedUser) => {
+            if(err) throw err;
+            if(!updatedUser) {
+                res.json({
+                    success: false,
+                    msg: "Template doesn't exist"
+                });
+            }
+            if(updatedUser) {
+                res.json({
+                    success: true,
+                    msg: 'Template deleted',
+                    data: updatedUser.userTemplates
+                });
+            }
+        });
+    })
 
 module.exports = router;

@@ -22,6 +22,7 @@ export class SheetService {
   //
   //  CRUD operations
   //
+
   getSheet(id: number) {
     return this.http.get(this.URL + 'sheet?id=' + id, {
       headers: new HttpHeaders({
@@ -57,8 +58,8 @@ export class SheetService {
   //
   // Functions for setup of sheet
   //
+
   addHeader(items: FormArray, value: string): FormArray {
-    console.log(value);
     items.push(new FormGroup({
       type: new FormControl('header'),
       value: new FormControl(value)
