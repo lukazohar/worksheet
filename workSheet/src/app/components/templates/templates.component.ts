@@ -25,6 +25,10 @@ export class TemplatesComponent implements OnInit {
   expandedTemplateForm: FormGroup;
   expandedTemplateFormIndex: number;
 
+  inputs(index: number): FormArray {
+    return this.expandedTemplateForm.controls.items[index];
+  }
+
   constructor(
     private templateService: TemplateService,
     private toast: ToastService,
@@ -36,35 +40,69 @@ export class TemplatesComponent implements OnInit {
   }
 
   setupTemplate(): void {
-    const template: ITemplate = this.templates[this.expandedTemplateFormIndex];
-    this.expandedTemplateForm = new FormGroup({
-      _id: new FormControl(),
-      modified: new FormControl(),
-      created: new FormControl(),
-      title: new FormControl( [ Validators.required, Validators.maxLength(255) ] ),
-      description: new FormControl( [ Validators.maxLength(1000) ] ),
-      items: new FormArray([])
-    });
-    this.expandedTemplateForm.reset();
-    this.expandedTemplateForm.controls._id.setValue(template._id);
-    this.expandedTemplateForm.controls.modified.setValue(template.modified);
-    this.expandedTemplateForm.controls.created.setValue(template.created);
-    this.expandedTemplateForm.controls.title.setValue(template.title);
-    this.expandedTemplateForm.controls.description.setValue(template.description);
-    for (let i = 0; i < template.items.length; i++) {
-      const type = template.items[i].type;
-      if (type === 'header') {
-        // @ts-ignore
-        this.items = this.sheetService.addHeader(this.items, template.items[i].value);
-      } else if (type === 'inputFields') {
-        // @ts-ignore
-        this.items = this.sheetService.addInputFields(this.items, template.items[i], i);
+    if (this.expandedTemplateFormIndex > -1) {
+      const template: ITemplate = this.templates[this.expandedTemplateFormIndex];
+      this.expandedTemplateForm = new FormGroup({
+        _id: new FormControl(),
+        modified: new FormControl(),
+        created: new FormControl(),
+        title: new FormControl( [ Validators.required, Validators.maxLength(255) ] ),
+        description: new FormControl( [ Validators.maxLength(1000) ] ),
+        items: new FormArray([])
+      });
+      this.expandedTemplateForm.reset();
+      this.expandedTemplateForm.controls._id.setValue(template._id);
+      this.expandedTemplateForm.controls.modified.setValue(template.modified);
+      this.expandedTemplateForm.controls.created.setValue(template.created);
+      this.expandedTemplateForm.controls.title.setValue(template.title);
+      this.expandedTemplateForm.controls.description.setValue(template.description);
+      for (let i = 0; i < template.items.length; i++) {
+        const type = template.items[i].type;
+        if (type === 'header') {
+          // @ts-ignore
+          this.items = this.templateService.addHeader(this.items, template.items[i].value);
+        } else if (type === 'inputFields') {
+          // @ts-ignore
+          this.items = this.templateService.addInputFields(this.items, template.items[i], i);
+        }
       }
     }
   }
 
+  removeItem(index: number): void {
+    this.items = this.templateService.removeItem(this.items, index);
+  }
+
+  addHeader(): void {
+    this.items = this.templateService.addHeader(this.items);
+  }
+
+  addInputFields(): void {
+    this.items = this.templateService.addInputFields(this.items);
+  }
+  addInputField(index1: number): void {
+    this.items = this.templateService.addInputField(this.items, index1);
+  }
+  removeInputField(index1: number, index2: number): void {
+    this.items = this.templateService.removeInputField(this.items, index1, index2);
+  }
+
+  addTable(): void {
+    this.items = this.templateService.addTable(this.items);
+  }
+  addTableCell(): void {
+  }
+
+  addList(): void {
+    this.items = this.templateService.addList(this.items);
+  }
+
+  addCheckboxes(): void {
+    this.items = this.templateService.addCheckboxes(this.items);
+  }
+
   expandTemplate(templateIndex: number): void {
-    this.expandedTemplateFormIndex =  templateIndex;
+    this.expandedTemplateFormIndex = templateIndex;
     this.setupTemplate();
   }
   closeTemplate(): void {
@@ -77,40 +115,42 @@ export class TemplatesComponent implements OnInit {
   }
 
   updateTemplate(): void {
-    this.templateService.updateTemplate(this.expandedTemplateForm.value).subscribe(
-      (res: ISuccessMsgResponse) => {
-        if (res.success) {
-          // @ts-ignore
-          this.templates[this.expandedTemplateFormIndex] = this.expandedTemplateForm.value;
-          const user: IUserModel = JSON.parse(localStorage.getItem('userData'));
-          user.userTemplates = this.templates;
-          localStorage.setItem('userData', JSON.stringify(user));
-          this.setupTemplate();
-          this.toast.success(this.templates[this.expandedTemplateFormIndex].title + ' updated');
-        } else {
-          this.toast.error(res.msg);
+    if (JSON.stringify(this.expandedTemplateForm.value) !== JSON.stringify(this.templates[this.expandedTemplateFormIndex])) {
+      this.templateService.updateTemplate(this.expandedTemplateForm.value).subscribe(
+        (res: ISuccessMsgResponse) => {
+          if (res.success) {
+            // @ts-ignore
+            this.toast.success(this.templates[this.expandedTemplateFormIndex].title + ' updated');
+            this.templates[this.expandedTemplateFormIndex] = this.expandedTemplateForm.value;
+            const user: IUserModel = JSON.parse(localStorage.getItem('userData'));
+            user.userTemplates = this.templates;
+            localStorage.setItem('userData', JSON.stringify(user));
+            this.expandedTemplateFormIndex = -1;
+            this.setupTemplate();
+          } else {
+            this.toast.error(res.msg);
+          }
         }
-      }
-    );
+      );
+    } else {
+      this.toast.warning(`Template isn't changed`);
+    }
   }
 
   deleteTemplate(templateIndex: number): void {
     this.templateService.deleteTemplate(this.templates[templateIndex]._id).subscribe(
       (res: ISuccessMsgResponse) => {
         if (res.success) {
+          this.toast.success(this.templates[templateIndex].title + ' deleted');
           if (templateIndex === this.expandedTemplateFormIndex) {
             this.expandedTemplateFormIndex = null;
           }
-          // @ts-ignore
           const user: IUserModel = JSON.parse(localStorage.getItem('userData'));
           // @ts-ignore
           user.userTemplates = res.data;
           localStorage.setItem('userData', JSON.stringify(user));
           // @ts-ignore
           this.templates = user.userTemplates;
-
-
-          this.toast.success(res.msg);
         } else {
           this.toast.error(res.msg);
         }

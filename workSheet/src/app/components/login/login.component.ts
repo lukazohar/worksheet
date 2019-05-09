@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ILoginResponse } from 'src/app/models/login/login-response';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { IUserModel } from 'src/app/models/user-model';
 
 @Component({
   selector: 'app-login',
@@ -53,7 +54,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  saveData(token: string, userData: any, _id: string) {
+  saveData(token: string, userData: IUserModel, _id: string) {
     localStorage.setItem('userData', JSON.stringify(userData));
     localStorage.setItem('userID', _id);
     localStorage.setItem('token', token);

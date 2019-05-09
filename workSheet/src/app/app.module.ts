@@ -13,7 +13,6 @@ import { LoginComponent } from './components/login/login.component';
 import { MyworksheetComponent } from './components/myworksheet/myworksheet.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
-import { SidenavComponent } from './components/sidenav/sidenav.component';
 
 import { AuthService } from './services/auth/auth.service';
 import { UserService } from './services/user/user.service';
@@ -23,6 +22,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { ToastService } from './services/toast/toast.service';
 import { AddTemplateComponent } from './components/add-template/add-template.component';
 import { TemplatesComponent } from './components/templates/templates.component';
+import { UserValidator } from './validators/user/user.validator';
 
 export function tokenGetter(): string {
   return localStorage.getItem('token');
@@ -37,7 +37,6 @@ export function tokenGetter(): string {
     MyworksheetComponent,
     ProfileComponent,
     RegisterComponent,
-    SidenavComponent,
     NavbarComponent,
     AddTemplateComponent,
     TemplatesComponent
@@ -56,14 +55,14 @@ export function tokenGetter(): string {
     }),
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
-    FormsModule
+    BrowserAnimationsModule
   ],
   providers: [
     AuthService,
     TokenService,
     UserService,
-    ToastService
+    ToastService,
+    UserValidator
   ],
   bootstrap: [AppComponent]
 })

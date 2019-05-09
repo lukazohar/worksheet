@@ -4,6 +4,7 @@ import { TemplateService } from 'src/app/services/template/template.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { ITemplate } from 'src/app/models/template/template';
 import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-template',
@@ -27,10 +28,15 @@ export class AddTemplateComponent implements OnInit {
 
   constructor(
     private templateService: TemplateService,
-    private toast: ToastService
+    private toast: ToastService,
+    private router: Router
   ) { }
 
   ngOnInit() {
+  }
+
+  removeItem(index: number): void {
+    this.items = this.templateService.removeItem(this.items, index);
   }
 
   addHeader(): void {
@@ -42,6 +48,9 @@ export class AddTemplateComponent implements OnInit {
   }
   addInputField(index1: number): void {
     this.items = this.templateService.addInputField(this.items, index1);
+  }
+  removeInputField(index1: number, index2: number): void {
+    this.items = this.templateService.removeInputField(this.items, index1, index2);
   }
 
   addTable(): void {
@@ -67,6 +76,7 @@ export class AddTemplateComponent implements OnInit {
             user.userTemplates.push(res.data);
             localStorage.setItem('userData', JSON.stringify(user));
             this.toast.success(res.msg);
+            this.router.navigate(['/templates']);
           } else {
             this.toast.error(res.msg);
           }

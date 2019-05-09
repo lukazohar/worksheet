@@ -8,7 +8,6 @@
 - ko posodobi� user-ja, je problem z username (�e je druga�en username ne posodobi)
 - ko se uporabnik registrira, probaj na vsako sekundo/2 �e je username/email �e zaseden. Isto ko spreminja username/email
 - pobri�i importe, ki niso v uporabi. V angularju in nodu
-- uredi kodo (predsledke,...) - tslint ftw
 - preveri statuse odgovorov
 - komentiraj stvari
 - preveri veljavnost stvari v formah
@@ -42,3 +41,5 @@
 - pri api-ju zrihtaj da se queryji po mongoosu
 - popravi // @ts-ignore
 - pri CRUD v nod-u, popravi da ni query in updatan object v isti vrstici (naredi 2 spremenljivki)
+- validacija pri node-u
+- pri prijavi je odziv iz strežnika napačen

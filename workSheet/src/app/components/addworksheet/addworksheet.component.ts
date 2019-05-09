@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ITemplate } from 'src/app/models/template/template';
 import { SheetService } from 'src/app/services/sheet/sheet.service';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import { map } from 'rxjs/operators';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
 import { Router } from '@angular/router';

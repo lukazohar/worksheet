@@ -1,4 +1,5 @@
-import { ISheetItem } from './sheet-item';
+import { IHeader } from '../template/templateItems/header/header';
+import { IInputFields } from '../template/templateItems/inputFields/input-fields';
 
 export interface ISheet {
     _id: string;
@@ -8,5 +9,5 @@ export interface ISheet {
     modified: string;
     status: string;
     statusChanged: string;
-    content: Array<ISheetItem>;
+    items: Array<IHeader | IInputFields>;
 }

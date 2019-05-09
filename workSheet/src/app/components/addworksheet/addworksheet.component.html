@@ -16,7 +16,7 @@
 </div>
 
 <div class="row" *ngIf="sheetInitialized; else noTemplateSelected">
-  <p> {{ templateTitle }} </p>
+  <h2> <b>Template:</b>  {{ templateTitle }} </h2>
   <div class="col center">
     <form [formGroup]="sheetForm" (ngSubmit)="addSheet()">
       <ul>
@@ -92,10 +92,3 @@
 <ng-template #noTemplateSelected>
   <p>Select template from dropdown</p>
 </ng-template>
-  
-
-
-
-<pre>
-  {{ sheetForm.value | json }}
-</pre>

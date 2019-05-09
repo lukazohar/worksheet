@@ -1,30 +1,66 @@
 <div class="container">
+  <div class="row center-align">
+    <h1>Register</h1>
+  </div>
   <div class="row">
     <form [formGroup]="registerForm" class="col s12" id="reg-form" (ngSubmit)="addNewUser()" novalidate>
       <div class="row">
         <div class="input-field col s6">
           <input formControlName="firstName" id="first_name" type="text">
           <label for="first_name">First Name</label>
+          <ul *ngIf="firstName.dirty" class="validation">
+            <li *ngIf="firstName.errors?.minlength" class="collection-item error">Too short</li>
+            <li *ngIf="firstName.errors?.maxlength" class="collection-item error">Too long</li>
+            <li *ngIf="firstName.errors?.pattern" class="collection-item error">Can contain: small and big letters</li>
+            <li *ngIf="!firstName.pristine && firstName.errors?.required" class="collection-item pending">Required</li>
+          </ul>
         </div>
         <div class="input-field col s6">
           <input formControlName="lastName" id="lastName" type="text">
           <label for="last_name">Last Name</label>
+          <ul *ngIf="lastName.dirty" class="validation">
+            <li *ngIf="lastName.errors?.minlength" class="collection-item error">Too short</li>
+            <li *ngIf="lastName.errors?.maxlength" class="collection-item error">Too long</li>
+            <li *ngIf="lastName.errors?.pattern" class="collection-item error">Can contain: small and big letters</li>
+            <li *ngIf="!lastName.pristine && lastName.errors?.required" class="collection-item pending">Required</li>
+          </ul>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s6">
           <input formControlName="username" id="username" type="text">
           <label for="username">Username</label>
+          <ul *ngIf="username.dirty" class="validation">
+            <li *ngIf="!username.errors?.usernameExists && !username.errors && !username.pending" class="collection-item success">Available</li>
+            <li *ngIf="username.errors?.usernameExists" class="collection-item error">Unavailable</li>
+            <li *ngIf="username.pending" class="collection-item pending">Checking availability</li>
+            <li *ngIf="username.errors?.minlength" class="collection-item error">Too short</li>
+            <li *ngIf="username.errors?.maxlength" class="collection-item error">Too long</li>
+            <li *ngIf="username.errors?.pattern" class="collection-item error">Can contain big or small letters, symbols - and _</li>
+            <li *ngIf="!username.pristine && username.errors?.required" class="collection-item pending">Required</li>
+          </ul>
         </div>
         <div class="input-field col s6">
           <input formControlName="email" id="email" type="email">
           <label for="email">Email</label>
+          <ul *ngIf="email.dirty" class="validation">
+            <li *ngIf="!email.errors?.emailExists && !email.errors && !email.pending" class="collection-item success">Available</li>
+            <li *ngIf="email.errors?.emailExists" class="collection-item error">Unavailable</li>
+            <li *ngIf="email.pending" class="collection-item pending">Checking availability</li>
+            <li *ngIf="email.errors?.email" class="collection-item error">Invalid email</li>
+            <li *ngIf="!email.pristine && email.errors?.required" class="collection-item pending">Required</li>
+          </ul>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s6">
           <input formControlName="password" id="password" type="password">
           <label for="password">Password</label>
+          <ul *ngIf="password.dirty" class="validation">
+            <li *ngIf="!password.pristine && password.errors?.required" class="collection-item pending">Required</li>
+            <li *ngIf="password.errors?.minlength" class="collection-item error">Too short</li>
+            <li *ngIf="password.errors?.pattern" class="collection-item error">Must contain: small and big letter and number</li>
+          </ul>
         </div>
         <div class="input-field col s6">
           <input type="submit" value="Register" class="waves-effect waves-light btn-large">
@@ -33,5 +69,3 @@
     </form>
   </div>
 </div>
-
-{{ username.valid }}

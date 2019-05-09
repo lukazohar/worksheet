@@ -21,8 +21,12 @@ router.post('/register', (req, res, next) => {
             password: req.body.password
         }
     });
+    // Preveri če je forma pravilna
     User.areUsernameAndEmailAvailable(newUser.userProfile.username, newUser.userProfile.email, null, (err, isAvailable) => {
-        if(err) throw err;
+        if(err) {
+            console.error(err);
+            return res.json({ success: false, msg: 'Server error' }).status(500);
+        }
         if(isAvailable.success) {
             // Calls addUser method for adding new user
             User.addUser(newUser, (err, user)  => {
@@ -30,16 +34,19 @@ router.post('/register', (req, res, next) => {
                     res.json({
                         success: false,
                         msg: 'Failed to register user, ' + err
-                    });
+                    }).status(500);
                 } else{
                     res.json({
                         success: true,
                         msg: 'Successfully added user, ' + user._id
-                    }); 
+                    }).status(201); 
                 }
             });
         } else {
-            res.send(isAvailable);
+            return res.json({
+                success: false,
+                msg: isAvailable.msg
+            }).status(400);
         }
     })
 });
@@ -52,16 +59,22 @@ router.post('/authenticate', (req, res, next) => {
     const password = req.body.password;
 
     User.getUserByUsername(username, (err, user) => {
-        if(err) throw err;
+        if(err) {
+            console.error(err);
+            return res.json({ success: false, msg: 'Server error' }).status(500);
+        }
         if(!user) {
             return res.json({
                 success: false,
                 msg: "User doesn't exist"
-            });
+            }).status(400);
         }
 
         User.comparePasswords(password, user.userProfile.password, (err, isMatch)  => {
-            if(err) throw err;
+            if(err) {
+                console.error(err);
+                return res.json({ success: false, msg: 'Server error' }).status(500);
+            }
             if (isMatch) {
                 const token = jwt.sign(user.toJSON(), config.secret, {
                     expiresIn: 1209600 // 1 week
@@ -70,7 +83,7 @@ router.post('/authenticate', (req, res, next) => {
                 var userProfile = user.userProfile;
                 userProfile.password = undefined;
 
-                res.json({
+                return res.json({
                     _id: user._id,
                     success: true,
                     token: 'JWT ' + token,
@@ -79,80 +92,87 @@ router.post('/authenticate', (req, res, next) => {
                         userSheets: user.userSheets,
                         userTemplates: user.userTemplates
                     }
-                })
+                }).status(200)
             } else {
                 return res.json({
                     success: false, msg: 'Wrong password'
-                });
+                }).status(400);
             }            
         })
     })
 });
 
 // Checks if username is available. Username for check comes through as first URL parameter
-router.get('/usernameAvailability', passport.authenticate('jwt', {session: false}), (req, res) => {
-    User.isUsernameAvailable(req.user._id = 0, req.query.username, (err, isAvailable) => {
-        if(err) throw err;
+router.get('/usernameAvailability', (req, res) => {
+    User.isUsernameAvailable(0, req.query.username, (err, isAvailable) => {
+        if(err) {
+            console.error(err);
+            return res.json({ success: false, msg: 'Server error' }).status(500);
+        }
         if(isAvailable) {
-            res.send(true)
+            return res.send(true).status(200);
         } else {
-            res.send(false)
+            return res.send(false).status(400);
         }
     })
 })
 
 // Checks if email is available. Email for check comes through as first URL parameter
-router.get('/emailAvailability', passport.authenticate('jwt', {session: false}), (req, res) => {
-    User.isEmailAvailable(req.user._id = 0, req.query.email, (err, isAvailable) => {
-        if(err) throw err;
-        if(isAvailable) {
-            res.json({
-                success: true,
-                msg: 'Email is available'
-            })
-        } else {
-            res.json({
-                success: false,
-                msg: 'Email is already taken'
-            })
+router.get('/emailAvailability', (req, res) => {
+    User.isEmailAvailable(0, req.query.email, (err, isAvailable) => {
+        if(err) {
+            console.error(err);
+            return res.json({ success: false, msg: 'Server error' }).status(500);
         }
-    })
+        if(isAvailable) {
+            return res.send(true).status(200);
+        } else {
+            return res.send(false).status(400);
+        }
+    });
 })
 
 // Profile
 router.route('/profile')
     // Send user account
     .get(passport.authenticate('jwt', {session: false}), (req, res) => {
-        res.json({
+        return res.json({
             user: req.user
-        });
+        }).status(200);
     })
     // Updates user account
     .put(passport.authenticate('jwt', {session: false}), (req, res) => {
-        res.send('Building on it');
+        return res.send('Building on it').status(501);
     })
     // Deletes user account
     .delete(passport.authenticate('jwt', {session: false}), (req, res) => {
         User.deleteUser(req.user._id, (err, user) => {
-            if(err) throw err;
-            if(!user) res.json({
-                success: false,
-                msg: "User doesn't exist"
-            })
-            if(user) res.json({
-                success: true,
-                msg: `User ${user.userProfile.username} deleted`
-            });
+            if(err) {
+                console.error(err);
+                return res.json({ success: false, msg: 'Server error' }).status(500);
+            }
+            if(!user) {
+                return res.json({
+                    success: false,
+                    msg: "User doesn't exist"
+                }).status(400);
+            }
+            if(user) {
+                return res.json({
+                    success: true,
+                    msg: `User ${user.userProfile.username} deleted`
+                }).status(200);
+            }
         });
     })
 
 
 // User forgets password, sets new one and sends it to email
 router.get('/resetPass', (req, res) => {
-    User.resetPassword(req.params.id, (err, status) => {
-        if (err) throw err;
-    })
-    res.end();
+    return res.json({
+        success: false,
+        msg: 'Not implemented'
+    }).status(501);
 })
 
 

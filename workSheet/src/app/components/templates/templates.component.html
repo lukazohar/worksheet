@@ -9,6 +9,7 @@
       </li>
     </ul>
   </div>
+  <a routerLink="/add-template" class="btn btn-small waves-effect waves-light blue lighten-2 left">Add new template</a>
 </div>
 <div class="row">
   <nav class="search-bar">
@@ -28,7 +29,21 @@
     <li *ngFor="let template of templates; index as i">
       <div *ngIf="isThisExpandedTemplate(i); else isNotExpandedTemplate" class="col s12 m12 l12 template">
           <a class="waves-effect waves-light btn-floating right squared extend-template-arrow" (click)="closeTemplate()"><i class="material-icons left">expand_less</i></a>
-          <a class="waves-effect waves-light btn-floating right squared extend-template-arrow red" (click)="deleteTemplate(i)"><i class="material-icons left">delete_forever</i></a>
+          <a class="waves-effect waves-light btn-floating right squared extend-template-arrow red" (click)="deleteTemplate(i)"><i class="material-icons left">delete_forever</i></a>  
+          <div class="row">
+            <div class="col">
+              <!-- Dropdown Trigger -->
+              <a materialize="dropdown" class="dropdown-button btn-floating btn-large waves-effect waves-light blue lighten-2" href='#' data-activates='dropdown2'><i class="material-icons">add</i></a>
+              <!-- Dropdown Structure -->
+              <ul id='dropdown2' class='dropdown-content'>
+                <li (click)="addHeader()"><a><i class="material-icons">remove</i>Header</a></li>
+                <li (click)="addInputFields()"><a><i class="material-icons"></i>Input fields</a></li>
+                <li (click)="addTable()"><a><i class="material-icons">grid_on</i>Table</a></li>
+                <li (click)="addList()"><a><i class="material-icons">format_list_bulleted</i>List</a></li>
+                <li (click)="addCheckboxes()"><a><i class="material-icons">check_box</i>Checkboxes</a></li>
+              </ul>
+            </div>
+          </div>
           <div class="row">
             <div class="col center">
               <form [formGroup]="expandedTemplateForm" (ngSubmit)="updateTemplate()">
@@ -52,6 +67,7 @@
                           <!-- Header -->
                           <div *ngSwitchCase="'header'">
                             <div class="inputElement">
+                              <a (click)="removeItem(i)" class="btn-floating red lighten-1 remove-btn-top"><i class="small material-icons white-text">remove</i></a>
                               <div class="input-field col s12">
                                 <hr>
                                 <label for="">Header</label>
@@ -62,6 +78,7 @@
                           <!-- Multiple inputs -->
                           <div *ngSwitchCase="'inputFields'">
                             <div class="inputElement">
+                              <a (click)="removeItem(i)" class="btn-floating red lighten-1 remove-btn-top"><i class="small material-icons white-text">remove</i></a>
                               <div class="input-field col">
                                 <hr>
                                 <input formControlName="header" placeholder="Group header" id="fieldHeader" type="text" class="validate">
@@ -72,6 +89,8 @@
                                         <div class="input-group">
                                           <input formControlName="header" placeholder="Header" id="fieldHeader" type="text" class="validate col s4">
                                           <input formControlName="value" placeholder="Value" id="fieldHeader" type="text" class="validate col s4 offset-s1">
+                                          <a *ngIf="y > 0" (click)="removeInputField(i, y)" class="btn-floating red lighten-1 remove-btn"><i class="small material-icons white-text">remove</i></a>
+                                          <a *ngIf="y == 0" (click)="addInputField(i)" class="btn-floating btn-small waves-effect waves-light"><i class="small material-icons">add</i></a>
                                         </div>
                                       </form>
                                     </div>
@@ -100,7 +119,7 @@
                 </ul>
               </form>
             </div>
-            </div>
+          </div>
       </div>
       <ng-template #isNotExpandedTemplate>
         <div class="col s12 m12 l12 template">

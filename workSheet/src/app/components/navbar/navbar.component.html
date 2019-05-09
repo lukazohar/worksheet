@@ -1,5 +1,55 @@
 <nav class="blue lighten-2">
-  <div class="nav-wrapper">
-    <a routerLink="/worksheets" class="brand-logo center">Firm Logo</a>
+  <div class="row">
+    <div class="menu-icon left-align">
+      <a materialize="sideNav" [materializeParams]="sidenavParams" [materializeActions]="sidenavActions" data-activates="sidenav" class="btn-flat transparent"><i class="large menu material-icons">menu</i></a>
+      <a routerLink="/worksheets" class="brand-logo center">WorkSheet</a>
+    </div>
   </div>
 </nav>
+
+<div class="navbar">
+  <div class="show-on-med-and-up">
+    <ul id="slide-out" class="side-nav fixed" id="sidenav">
+      <div [hidden]="!loggedIn()">
+        <!-- Sheet submenu -->
+        <li class="white">
+          <ul class="collapsible collapsible-accordion">
+            <li>
+              <a class="collapsible-header waves-effect waves-blue"><i class="material-icons right">event_note</i>Sheet<i class="material-icons right">arrow_drop_down</i></a>
+              <div class="collapsible-body">
+                <ul>
+                  <li><a class="waves-effect waves-blue" routerLink="/worksheets"><i class="material-icons right">note</i>My Sheets</a></li>
+                  <li><a class="waves-effect waves-blue" routerLink="/add-worksheet"><i class="material-icons right">note_add</i>Add Sheet</a></li>
+                  <li><div class="divider"></div></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <!-- Template submenu -->
+        <li class="white">
+          <ul class="collapsible collapsible-accordion">
+            <li>
+              <a class="collapsible-header waves-effect waves-blue"><i class="material-icons right">insert_drive_file</i>Template<i class="material-icons right">arrow_drop_down</i></a>
+              <div class="collapsible-body">
+                <ul>
+                  <li><a class="waves-effect waves-blue" routerLink="/templates"><i class="material-icons right">note</i>My Templates</a></li>
+                  <li><a class="waves-effect waves-blue" routerLink="/add-template"><i class="material-icons right">add_to_photos</i>Add Template</a></li>
+                  <li><div class="divider"></div></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+          </li>
+        <li><a routerLink="/profile"><i class="material-icons right">person</i>Profile</a></li>
+        <li><a (click)="logoutUser()"><i class="material-icons right">exit_to_app</i>Logout</a></li>
+      </div>
+      <div class="not-logged-in" [hidden]="loggedIn()">
+        <li><a routerLink="login"><i class="material-icons right">vpn_key</i>Login</a></li>
+        <li><a routerLink="register"><i class="material-icons right">person_add</i>Register</a></li>
+      </div>
+    </ul> 
+    <a materialize="sideNav" [materializeParams]="[{edge:'left'}]" href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a>
+    <a materialize="sideNav" [materializeParams]="[{edge:'left'}]" href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a>
+  </div>    
+</div>

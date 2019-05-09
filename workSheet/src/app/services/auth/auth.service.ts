@@ -6,8 +6,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IRegisterResponse } from 'src/app/models/register/register-response';
 import { IRegister } from 'src/app/models/register/register';
 import { ILogin } from 'src/app/models/login/login';
+
+import { delay } from 'rxjs/operators';
 import { ILoginResponse } from 'src/app/models/login/login-response';
-import { FormControl } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -35,12 +36,14 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  isUsernameAvailable(username: string): Observable<boolean> {
-    return this.http.get<boolean>(`${this.URL}usernameAvailability?username=${username}`, {
+  isEmailAvailable(email: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.URL}emailAvailability?email=${email}`, {
       headers: new HttpHeaders({
         'Authorization': this.tokenService.getToken()
       })
-    });
+    }).pipe(
+      delay(1000)
+    );
   }
 
 }

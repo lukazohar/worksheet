@@ -1,14 +1,8 @@
-import { ISheet } from '../sheet/sheet';
-import { IProfile } from '../profile/profile';
-import { ITemplate } from '../template/template';
+import { IUserModel } from '../user-model';
 
 export interface ILoginResponse {
     _id: string;
     success: boolean;
     token: string;
-    userData: {
-        userProfile: IProfile;
-        userSheets: Array<ISheet>;
-        userTemplates: Array<ITemplate>;
-    };
+    userData: IUserModel;
 }

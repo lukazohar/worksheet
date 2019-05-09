@@ -18,16 +18,16 @@ module.exports.addSheet = function(newSheet, userID, callback) {
     })
 }
 
-module.exports.updateSheet = function(sheetID, updatedSheet, callback) {
-    User.findByIdAndUpdate(sheetID, updatedSheet, {new: true}, (err, newUser) => {
+module.exports.updateSheet = function(userId, sheetId, editedSheet, callback) {
+    User.updateOne({_id: ObjectId(userId), "userSheets._id": ObjectId(sheetId)}, {$set: {"userSheets.$": editedSheet}}, {new: true}, (err, modifiedStatus) => {
         if(err) throw err;
-        callback(null, newUser);
-    })
+        callback(null, modifiedStatus);
+    });
 }
 
-module.exports.deleteSheet = function(userID, sheetID, callback) {
-    User.findByIdAndDelete(userID, {$pull: {"userSheets": {_id: ObjectId(sheetID)}}}, {new: true}, (err, updatedSheets) => {
+module.exports.deleteSheet = function(userId, sheetId, callback) {
+    User.findByIdAndUpdate(userId, {$pull: {"userSheets": {_id: ObjectId(sheetId)}}}, {new: true}, (err, newUser) => {
         if(err) throw err;
-        callback(null, updatedSheets);
-    })
+        callback(null, newUser.userSheets);
+    });
 }
