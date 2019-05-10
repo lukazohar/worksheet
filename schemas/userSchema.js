@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const moment = require('moment');
 
 const UserSchema = Schema({
     userProfile: {
@@ -7,8 +8,8 @@ const UserSchema = Schema({
         email: { type: String, require: true },
         firstName: { type: String, default: '' },
         lastName: { type: String, default: '' },
-        created: { type: Date, default: Date.now() },
-        modified: { type: Date, default: Date.now() },
+        created: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
+        modified: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
         password: { type: String, require: true }
     },
     userSheets: [
@@ -16,8 +17,8 @@ const UserSchema = Schema({
             templateTitle: { type: String },
             title: { type: String },
             description: { type: String, default: '' },
-            created: { type: Date, default: Date.now() },
-            modified: { type: Date, default: Date.now() },
+            created: { type: Date, default: moment().format('DD.MM.YYYY HH:mm') },
+            modified: { type: Date, default: moment().format('DD.MM.YYYY HH:mm') },
             status: { type: String, default: 'Not started yet' },
             items: { type: Array }
         }
@@ -27,8 +28,8 @@ const UserSchema = Schema({
             title: { type: String },
             description: { type: String },
             items: { type: Array },
-            created: { type: Date, default: Date.now() },
-            modified: { type: Date, default: Date.now() }
+            created: { type: Date, default: moment().format('DD.MM.YYYY HH:mm') },
+            modified: { type: Date, default: moment().format('DD.MM.YYYY HH:mm') }
         }
     ]
 });

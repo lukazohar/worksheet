@@ -65,6 +65,7 @@ export class RegisterComponent implements OnInit {
       Validators.required,
       Validators.minLength(8),
       Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/)
+      // password-validator packet instead of pattern and stuff
     ]);
   }
   // Creates group with previously made controls

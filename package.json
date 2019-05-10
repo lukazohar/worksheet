@@ -19,6 +19,7 @@
     "jquery": "^2.2.4",
     "jsonwebtoken": "*",
     "materialize-css": "^1.0.0",
+    "moment": "^2.24.0",
     "mongoose": "*",
     "nodemailer": "^6.1.0",
     "passport": "*",

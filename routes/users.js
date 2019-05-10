@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 require('../config/passport')(passport);
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
 const config = require('../config/database');
 
 const User = require('../models/user');
@@ -10,14 +11,15 @@ const User = require('../models/user');
 
 // Register
 router.post('/register', (req, res, next) => {
+    console.log(moment().format());
     let newUser = new User({
         userProfile: {
             username: req.body.username,
             email: req.body.email,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            userCreated: Date.now(),
-            userModified: Date.now(),
+            userCreated: moment()/* .format('DD-MM-YYYYTHH:mm:ss') */,
+            userModified: moment().format('DD.MM.YYYY:MM:SS'),
             password: req.body.password
         }
     });

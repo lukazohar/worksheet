@@ -17,6 +17,14 @@ export class UserService {
     private token: TokenService
   ) { }
 
+  getUser() {
+
+  }
+
+  addUser() {
+
+  }
+
   deleteUser(): Observable<ISuccessMsgResponse> {
     return this.http.delete<ISuccessMsgResponse>(this.URL, {
       headers: new HttpHeaders({
