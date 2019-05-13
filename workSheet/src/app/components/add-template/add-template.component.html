@@ -19,7 +19,7 @@
 </div>
 <div class="row">
   <div class="col center">
-    <form [formGroup]="templateForm" (ngSubmit)="addTemplate()">
+    <form [formGroup]="templateForm" (ngSubmit)="addTemplate()" novalidate>
       <ul>
         <li>
           <div class="input-field col s12">
@@ -36,11 +36,12 @@
         <div *ngIf="templateForm.controls.items">
           <li *ngFor="let item of templateForm.controls.items.controls; index as i">
             <div formArrayName="items">
-              <form [formGroup]="item">
+              <form [formGroup]="item" novalidate>
                 <div [ngSwitch]="item.value.type">
                   <!-- Header -->
                   <div *ngSwitchCase="'header'">
                     <div class="inputElement">
+                      <a (click)="removeItem(i)" class="btn-floating red lighten-1 remove-btn-top"><i class="small material-icons white-text">remove</i></a>
                       <div class="input-field col s12">
                         <hr>
                         <label for="">Header</label>
@@ -51,6 +52,7 @@
                   <!-- Multiple inputs -->
                   <div *ngSwitchCase="'inputFields'">
                     <div class="inputElement">
+                      <a (click)="removeItem(i)" class="btn-floating red lighten-1 remove-btn-top"><i class="small material-icons white-text">remove</i></a>
                       <div class="input-field col">
                         <hr>
                         <label for="">Fields header</label>
@@ -58,15 +60,16 @@
                         <ul>
                           <li *ngFor="let inputField of templateForm.controls.items.controls[i].controls.inputs.controls; index as y">
                             <div formArrayName="inputs">
-                              <form [formGroup]="inputField">
+                              <form [formGroup]="inputField" novalidate>
                                 <div class="input-group">
                                   <input formControlName="header" placeholder="Header" id="fieldHeader" type="text" class="validate col s4">
                                   <input disabled placeholder="Value" id="fieldHeader" type="text" class="validate col s4 offset-s1">
+                                  <a *ngIf="y > 0" (click)="removeInputField(i, y)" class="btn-floating red lighten-1 remove-btn"><i class="small material-icons white-text">remove</i></a>
+                                  <a *ngIf="y == 0" (click)="addInputField(i)" class="btn-floating btn-small waves-effect waves-light"><i class="small material-icons">add</i></a>
                                 </div>
                               </form>
                             </div>
                           </li>
-                          <a (click)="addInputField(i)" class="btn-floating btn-small waves-effect waves-light"><i class="small material-icons">add</i></a>
                         </ul>
                       </div>
                     </div>
@@ -93,8 +96,3 @@
     </form>
   </div>
 </div>
-
-<pre>
-  {{ templateForm.value | json }}
-</pre>
-<p> {{ templateForm.valid }} </p>

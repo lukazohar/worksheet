@@ -34,8 +34,8 @@ module.exports.addSheet = function(newSheet, userID, callback) {
 module.exports.updateSheet = function(sheetID, updatedSheet, callback) {
     User.findByIdAndUpdate(sheetID, updatedSheet, {new: true}, (err, newUser) => {
         if(err) throw err;
-        callback(null, newUser);
-    })
+        callback(null, modifiedStatus);
+    });
 }
 
 // Pulls sheet from userSheets array at index of sheetID
@@ -43,6 +43,6 @@ module.exports.updateSheet = function(sheetID, updatedSheet, callback) {
 module.exports.deleteSheet = function(userID, sheetID, callback) {
     User.findByIdAndDelete(userID, {$pull: {"userSheets": {_id: ObjectId(sheetID)}}}, {new: true}, (err, updatedSheets) => {
         if(err) throw err;
-        callback(null, updatedSheets);
-    })
+        callback(null, newUser.userSheets);
+    });
 }

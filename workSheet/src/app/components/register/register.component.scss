@@ -1,0 +1,28 @@
+h1 {
+    font-size: 40px;
+}
+
+.success {
+    padding: 5px;
+    color: green;
+    border: dashed green 1px;
+    margin: 2px;
+}
+
+.error {
+    padding: 5px;
+    color: red;
+    border: 1px dashed red;   
+    margin: 2px;
+}
+
+.pending {
+    padding: 5px;
+    color: rgb(185, 185, 20);
+    border: 1px dashed  rgb(185, 185, 20); 
+    margin: 2px;
+}
+
+.validation {
+    margin-top: -20 px;
+}

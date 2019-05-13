@@ -4,7 +4,7 @@ import { TokenService } from '../token/token.service';
 import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
 import { ISheet } from 'src/app/models/sheet/sheet';
 import { Observable } from 'rxjs';
-import { FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormArray, FormGroup, FormControl } from '@angular/forms';
 import { IInputFields } from 'src/app/models/template/templateItems/inputFields/input-fields';
 
 @Injectable({
@@ -22,6 +22,7 @@ export class SheetService {
   //
   //  CRUD operations
   //
+
   getSheet(id: number) {
     return this.http.get(this.URL + 'sheet?id=' + id, {
       headers: new HttpHeaders({
@@ -41,12 +42,16 @@ export class SheetService {
     });
   }
 
-  editSheet() {
-
+  updateSheet(updatedSheet: ISheet): Observable<ISuccessMsgResponse> {
+    return this.http.put<ISuccessMsgResponse>(`${this.URL}`, updatedSheet, {
+      headers: new HttpHeaders({
+        'Authorization': this.token.getToken()
+      })
+    });
   }
 
   deleteSheet(sheetId: string): Observable<ISuccessMsgResponse> {
-    return this.http.delete<ISuccessMsgResponse>(`${this.URL}?id=${sheetId}`, {
+    return this.http.delete<ISuccessMsgResponse>(`${this.URL}?sheetId=${sheetId}`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
@@ -57,29 +62,41 @@ export class SheetService {
   //
   // Functions for setup of sheet
   //
-  addHeader(items: FormArray, value: string): FormArray {
-    console.log(value);
+
+  addHeader(items: FormArray, headerValue: string): FormArray {
     items.push(new FormGroup({
       type: new FormControl('header'),
-      value: new FormControl(value)
+      value: new FormControl(headerValue)
     }));
     return items;
   }
 
-  addInputFields(items: FormArray, inputField: IInputFields, index: number): FormArray {
-    // @ts-ignore
+  addInputFields(items: FormArray, inputFields: IInputFields, index: number): FormArray {
     items.push(new FormGroup({
       type: new FormControl('inputFields'),
-      header: new FormControl({value: inputField.header, disabled: true}),
+      header: new FormControl(inputFields.header),
       inputs: new FormArray([])
     }));
-    for (let i = 0; i < inputField.inputs.length; i++) {
+    for (let i = 0; i < inputFields.inputs.length; i++) {
       // @ts-ignore
       items.controls[index].controls.inputs.push(new FormGroup({
-        header: new FormControl(inputField.inputs[i].header),
-        value: new FormControl()
+        header: new FormControl(inputFields.inputs[i].header),
+        value: new FormControl(inputFields.inputs[i].value)
       }));
     }
+    return items;
+  }
+
+  addInputField(items: FormArray, index1: number): FormArray {
+    // @ts-ignore
+    const inputHeader = items.controls[index1].value.header;
+    // @ts-ignore
+    items.controls[index1].controls.inputs.push(new FormGroup({
+      header: new FormControl(''),
+      value: new FormControl('')
+    }));
+    // @ts-ignore
+    items.controls[index1].value.header = inputHeader;
     return items;
   }
 

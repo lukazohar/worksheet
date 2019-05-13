@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { UserValidator } from 'src/app/validators/user/user.validator';
 
 @Component({
   selector: 'app-register',
@@ -21,8 +22,10 @@ export class RegisterComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private toast: ToastService
+    private toast: ToastService,
+    private userValidator: UserValidator
   ) { }
+
 
   ngOnInit() {
     this.createFormControls();
@@ -32,29 +35,37 @@ export class RegisterComponent implements OnInit {
   // Creates controls with validators
   createFormControls(): void {
     this.firstName = new FormControl('', [
-      Validators.minLength(3),
+      Validators.minLength(2),
       Validators.maxLength(100),
-      Validators.pattern('[a-zA-Ž ]*')
+      Validators.pattern('[a-žA-Ž ]*'),
+      Validators.required
     ]);
     this.lastName = new FormControl('', [
-      Validators.minLength(3),
+      Validators.minLength(2),
       Validators.maxLength(100),
-      Validators.pattern('[a-zA-Ž ]*')
+      Validators.pattern('[a-žA-Ž ]*'),
+      Validators.required
     ]);
     this.username = new FormControl('', [
       Validators.required,
       Validators.minLength(3),
-      Validators.maxLength(20),
-      Validators.pattern('[[a-z0-9_-]*')
-    ]);
+      Validators.maxLength(100),
+      Validators.pattern('[[a-žA-Ž0-9_-]*')
+    ], [
+      this.userValidator.validateUsernameAvailability()
+    ]
+    );
     this.email = new FormControl('', [
       Validators.required,
       Validators.email
+    ], [
+      this.userValidator.validateEmailAvailability()
     ]);
     this.password = new FormControl('', [
       Validators.required,
       Validators.minLength(8),
       Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/)
+      // password-validator packet instead of pattern and stuff
     ]);
   }
   // Creates group with previously made controls
@@ -86,7 +97,19 @@ export class RegisterComponent implements OnInit {
         }
       );
     } else {
-      this.toast.warning('Invalid form');
+      if (this.username.errors.usernameExists) {
+        this.toast.warning('Username is taken');
+      } else if (this.email.errors.emailExists) {
+        this.toast.warning('Email is taken');
+      } else {
+        this.generateErrors();
+        this.toast.warning('Invalid form');
+      }
     }
   }
+
+  generateErrors(): void {
+
+  }
+
 }

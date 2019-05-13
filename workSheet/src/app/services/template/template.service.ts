@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
 import { ITemplate } from 'src/app/models/template/template';
 import { TokenService } from '../token/token.service';
+import { IInputFields } from 'src/app/models/template/templateItems/inputFields/input-fields';
 
 @Injectable({
   providedIn: 'root'
@@ -35,23 +36,23 @@ export class TemplateService {
   }
 
   addTemplate(template: ITemplate): Observable<ISuccessMsgResponse> {
-    return this.http.post<ISuccessMsgResponse>(this.ULR + 'template', template, {
+    return this.http.post<ISuccessMsgResponse>(`${this.ULR}template`, template, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
     });
   }
 
-  updateTemplate(): Observable<ISuccessMsgResponse> {
-    return this.http.put<ISuccessMsgResponse>('${this.ULR}template', {
-      header: new HttpHeaders({
+  updateTemplate(updatedTemplate: ITemplate): Observable<ISuccessMsgResponse> {
+    return this.http.put<ISuccessMsgResponse>(`${this.ULR}template`, updatedTemplate, {
+      headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
     });
   }
 
-  deleteTemplate(id: number): Observable<ISuccessMsgResponse> {
-    return this.http.delete<ISuccessMsgResponse>('${this.ULR}template?id=${id}', {
+  deleteTemplate(templateId: string): Observable<ISuccessMsgResponse> {
+    return this.http.delete<ISuccessMsgResponse>(`${this.ULR}template?templateId=${templateId}`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
@@ -61,26 +62,45 @@ export class TemplateService {
   //
   // Functions adding values to existing templates
   //
-  addHeader(items: FormArray): FormArray {
+  removeItem(items: FormArray, itemIndex: number): FormArray {
+    items.removeAt(itemIndex);
+    return items;
+  }
+
+  addHeader(items: FormArray, value?: string): FormArray {
     items.push(new FormGroup({
       type: new FormControl('header'),
-      value: new FormControl('')
+      value: new FormControl(value)
     }));
     return items;
   }
 
-  addInputFields(items: FormArray): FormArray {
-    // @ts-ignore
-    items.push(new FormGroup({
-      type: new FormControl('inputFields'),
-      header: new FormControl(''),
-      inputs: new FormArray([
-        new FormGroup({
-          header: new FormControl(''),
-          value: new FormControl('')
-        })
-      ])
-    }));
+  addInputFields(items: FormArray, inputFields?: IInputFields, index?: number): FormArray {
+    if (inputFields !== undefined) {
+      items.push(new FormGroup({
+        type: new FormControl('inputFields'),
+        header: new FormControl(inputFields.header),
+        inputs: new FormArray([])
+      }));
+      for (let i = 0; i < inputFields.inputs.length; i++) {
+        // @ts-ignore
+        items.controls[index].controls.inputs.push(new FormGroup({
+          header: new FormControl(inputFields.inputs[i].header),
+          value: new FormControl({ value: '', disabled: true })
+        }));
+      }
+    } else {
+      items.push(new FormGroup({
+        type: new FormControl('inputFields'),
+        header: new FormControl(),
+        inputs: new FormArray([
+          new FormGroup({
+            header: new FormControl(''),
+            value: new FormControl({ value: '', disabled: true })
+          })
+        ])
+      }));
+    }
     return items;
   }
   addInputField(items: FormArray, index1: number): FormArray {
@@ -89,10 +109,15 @@ export class TemplateService {
     // @ts-ignore
     items.controls[index1].controls.inputs.push(new FormGroup({
       header: new FormControl(''),
-      value: new FormControl('')
+      value: new FormControl({ value: null, disabled: true })
     }));
     // @ts-ignore
     items.controls[index1].value.header = inputHeader;
+    return items;
+  }
+  removeInputField(items: FormArray, itemIndex: number, fieldIndex: number): FormArray {
+    // @ts-ignore
+    items.controls[itemIndex].controls.inputs.removeAt(fieldIndex);
     return items;
   }
 

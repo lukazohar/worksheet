@@ -1,4 +1,4 @@
-Stvari za uredit pr WorkSheet :
+﻿Stvari za uredit pr WorkSheet :
 - polep�aj stran, stil, CSS,...
 - pri odgovoru s stre�nika zrihtaj obvestila (�e je 404 naredi to, �e je 200 naredi to, �e je za��iteno naredi to,...)
 - retry, error, razne stvari pri PIPE, rxjs funkcije pri http
@@ -8,7 +8,6 @@ Stvari za uredit pr WorkSheet :
 - ko posodobi� user-ja, je problem z username (�e je druga�en username ne posodobi)
 - ko se uporabnik registrira, probaj na vsako sekundo/2 �e je username/email �e zaseden. Isto ko spreminja username/email
 - pobri�i importe, ki niso v uporabi. V angularju in nodu
-- uredi kodo (predsledke,...) - tslint ftw
 - preveri statuse odgovorov
 - komentiraj stvari
 - preveri veljavnost stvari v formah
@@ -40,3 +39,7 @@ Stvari za uredit pr WorkSheet :
 - pri po�iljanju maila daj mail na novi domeni (worksheet.com al kaj)
 - mail ne dela
 - pri api-ju zrihtaj da se queryji po mongoosu
+- popravi // @ts-ignore
+- pri CRUD v nod-u, popravi da ni query in updatan object v isti vrstici (naredi 2 spremenljivki)
+- validacija pri node-u
+- pri prijavi je odziv iz strežnika napačen
