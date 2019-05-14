@@ -78,7 +78,7 @@ router.route('/template')
                 return res.json({
                     success: true,
                     msg: 'Template deleted',
-                    data: updatedUser.userTemplates
+                    data: updatedUser.templates
                 }).status(200);
             }
         });

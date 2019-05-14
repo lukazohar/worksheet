@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class AddworksheetComponent implements OnInit {
 
   // Extracts data of user from local storage
-  templates: Array<ITemplate> = JSON.parse(localStorage.getItem('userData')).userTemplates;
+  templates: Array<ITemplate> = JSON.parse(localStorage.getItem('userData')).templates;
   sheetInitialized = false;
   // Maps only titles of templates from all templates, so user can select from which template he wants to created sheet
   templateTitles: Array<string> = this.templates.map((template) => {
@@ -45,12 +45,14 @@ export class AddworksheetComponent implements OnInit {
       templateTitle: new FormControl(),
       title: new FormControl(),
       description: new FormControl(),
-      items: new FormArray([])
+      items: new FormArray([]),
+      status: new FormControl()
     });
     this.sheetForm.reset();
     this.templateTitle = template.title;
     // Sets title of tempalte selected in form
     this.sheetForm.controls.templateTitle.setValue(template.title);
+    this.sheetForm.controls.status.setValue('Not started yet');
     // Loops through all inputs in sheet
     for (let i = 0; i < template.items.length; i++) {
       const type = template.items[i].type;
@@ -76,7 +78,7 @@ export class AddworksheetComponent implements OnInit {
           // If sheet is added, it updated user data is local storage
           if (res.success === true) {
             const user = JSON.parse(localStorage.getItem('userData'));
-            user.userSheets.push(res.data);
+            user.sheets.push(res.data);
             localStorage.setItem('userData', JSON.stringify(user));
             this.toast.success(res.msg);
             // Navigates to worksheets route

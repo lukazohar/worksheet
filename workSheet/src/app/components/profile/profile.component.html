@@ -2,10 +2,10 @@
         <a class="btn-floating btn-large waves-effect waves-light right blue" (click)="changeEdit()"><i class="material-icons">settings</i></a>
         <div *ngIf="!edit else editTemp">
             <ul class="collection" (click)="changeEdit()">
-                <li class="collection-item"><b>First Name:</b> {{ userData.userProfile.firstName }} </li>
-                <li class="collection-item"><b>Last Name:</b> {{ userData.userProfile.lastName }} </li>
-                <li class="collection-item"><b>Username:</b> {{ userData.userProfile.username }} </li>
-                <li class="collection-item"><b>Email:</b> {{ userData.userProfile.email }} </li>
+                <li class="collection-item"><b>First Name:</b> {{ profile.firstName }} </li>
+                <li class="collection-item"><b>Last Name:</b> {{ profile.lastName }} </li>
+                <li class="collection-item"><b>Username:</b> {{ profile.username }} </li>
+                <li class="collection-item"><b>Email:</b> {{ profile.email }} </li>
             </ul>
         </div>
         <ng-template #editTemp>

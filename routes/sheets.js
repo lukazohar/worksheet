@@ -15,9 +15,9 @@ router.route('/sheet')
     }))
     .post(passport.authenticate('jwt', {session: false}), (req, res) => {
         // Extracts sheet object from HTTP body and userID
-        let sheet = req.body;
-        let userID = req.user._id;
-        Sheet.addSheet(sheet, userID, (err, newsheet) => {
+        let editedSheet = req.body;
+        const userID = req.user._id;
+        Sheet.addSheet(userID, editedSheet, (err, newsheet) => {
             if(err) {
                 console.error(err);
                 return res.json({ success: false, msg: 'Server error' }).status(500);
@@ -82,7 +82,7 @@ router.route('/sheet')
                 }).status(400);
             }
             if(updatedSheets) {
-                // Responds with 200 OK if sheet is deleted with sheets remaining in array
+                // Responds with 200 OK if sheet is deleted and remaining sheets in array
                 return res.json({
                     success: true,
                     msg: 'Sheet deleted',

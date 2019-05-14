@@ -88,7 +88,7 @@ export class AddTemplateComponent implements OnInit {
           if (res.success === true) {
             // If template is created on backend, it saves that template and saves it to local storage
             const user = JSON.parse(localStorage.getItem('userData'));
-            user.userTemplates.push(res.data);
+            user.templates.push(res.data);
             localStorage.setItem('userData', JSON.stringify(user));
             this.toast.success(res.msg);
             // Navigates to templates component

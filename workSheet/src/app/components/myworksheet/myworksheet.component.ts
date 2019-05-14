@@ -5,6 +5,7 @@ import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { IUserModel } from 'src/app/models/user-model';
+import * as jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-myworksheet',
@@ -14,10 +15,11 @@ import { IUserModel } from 'src/app/models/user-model';
 export class MyworksheetComponent implements OnInit {
 
   // Gets all sheets from local storage
-  sheets: Array<ISheet> = JSON.parse(localStorage.getItem('userData')).userSheets;
+  sheets: Array<ISheet> = JSON.parse(localStorage.getItem('userData')).sheets;
 
   // Status types
   statusTypes: Array<string> = ['Not started yet', 'On hold', 'Finished'];
+  status: string;
 
   // Gets items array from expanded sheet form
   get items(): FormArray { return this.expandedSheetForm.get('items') as FormArray; }
@@ -29,7 +31,7 @@ export class MyworksheetComponent implements OnInit {
 
   // Sort types
   sortTypes: Array<string> = ['Date of adding', 'Priority', 'Date of last change'];
-  // Cureent type
+  // Current type
   sortType = 'Sort by';
 
   // Returns inputs from items at index
@@ -45,6 +47,12 @@ export class MyworksheetComponent implements OnInit {
   ngOnInit() {
   }
 
+  downloadPDF() {
+    const doc = new jsPDF();
+    doc.addHTML(document.body, 15, 15, { 'width': 190 });
+    doc.save('sheet.pdf');
+  }
+
   setupSheet(): void {
     // If any sheet is selected, it setups it
     if (this.expandedSheetFormIndex > -1) {
@@ -56,9 +64,11 @@ export class MyworksheetComponent implements OnInit {
         created: new FormControl(),
         title: new FormControl( [ Validators.required, Validators.maxLength(255) ] ),
         description: new FormControl( [ Validators.maxLength(1000) ] ),
-        items: new FormArray([])
+        items: new FormArray([]),
+        status: new FormControl(sheet.status)
       });
       this.expandedSheetForm.reset();
+      this.status = sheet.status;
       // Sets values
       this.expandedSheetForm.controls._id.setValue(sheet._id);
       this.expandedSheetForm.controls.modified.setValue(sheet.modified);
@@ -108,7 +118,7 @@ export class MyworksheetComponent implements OnInit {
             this.toast.success(this.sheets[this.expandedSheetFormIndex].title + ' updated');
             this.sheets[this.expandedSheetFormIndex] = this.expandedSheetForm.value;
             const user: IUserModel = JSON.parse(localStorage.getItem('userData'));
-            user.userSheets = this.sheets;
+            user.sheets = this.sheets;
             localStorage.setItem('userData', JSON.stringify(user));
             this.expandedSheetFormIndex = -1;
             this.setupSheet();
@@ -134,7 +144,7 @@ export class MyworksheetComponent implements OnInit {
           }
           const user: IUserModel = JSON.parse(localStorage.getItem('userData'));
           // @ts-ignore
-          user.userSheets = res.data;
+          user.sheets = res.data;
           localStorage.setItem('userData', JSON.stringify(user));
           // @ts-ignore
           this.sheets = res.data;

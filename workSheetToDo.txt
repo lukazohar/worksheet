@@ -30,7 +30,7 @@
 - spi�i primere http requestov na backend
 - pri po�iljanju maila daj mail na novi domeni (worksheet.com al kaj)
 - mail ne dela
-- pri api-ju zrihtaj da se queryji po mongoosu
+- pri api-ju zrihtaj da so queryji po mongoosu
 - popravi // @ts-ignore
 - pri CRUD v nod-u, popravi da ni query in updatan object v isti vrstici (naredi 2 spremenljivki)
 - validacija pri node-u

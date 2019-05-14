@@ -13,7 +13,7 @@ const User = require('../models/user');
 router.post('/register', (req, res, next) => {
     // Initializes user with sent data and date
     let newUser = new User({
-        userProfile: {
+        profile: {
             username: req.body.username,
             email: req.body.email,
             firstName: req.body.firstName,
@@ -24,7 +24,7 @@ router.post('/register', (req, res, next) => {
         }
     });
     // Checks if username and email are available
-    User.areUsernameAndEmailAvailable(newUser.userProfile.username, newUser.userProfile.email, null, (err, isAvailable) => {
+    User.areUsernameAndEmailAvailable(newUser.profile.username, newUser.profile.email, null, (err, isAvailable) => {
         if(err) {
             console.error(err);
             return res.json({ success: false, msg: 'Server error' }).status(500);
@@ -77,7 +77,7 @@ router.post('/authenticate', (req, res, next) => {
             }).status(400);
         }
         // If it exists, it compares given and hashed password in found user
-        User.comparePasswords(password, user.userProfile.password, (err, isMatch)  => {
+        User.comparePasswords(password, user.profile.password, (err, isMatch)  => {
             if(err) {
                 console.error(err);
                 return res.json({ success: false, msg: 'Server error' }).status(500);
@@ -88,17 +88,17 @@ router.post('/authenticate', (req, res, next) => {
                     expiresIn: 1209600 // 2 weeks
                 });
                 // Deletes password hash for safety
-                var userProfile = user.userProfile;
-                userProfile.password = undefined;
+                var profile = user.profile;
+                profile.password = undefined;
                 // Responds with status 200 OK with data of user and created token
                 return res.json({
                     _id: user._id,
                     success: true,
                     token: 'JWT ' + token,
                     userData: {
-                        userProfile: userProfile,
-                        userSheets: user.userSheets,
-                        userTemplates: user.userTemplates
+                        profile: profile,
+                        sheets: user.sheets,
+                        templates: user.templates
                     }
                 }).status(200)
             } else {
@@ -115,7 +115,7 @@ router.post('/authenticate', (req, res, next) => {
 // Checks if username is available. Username for checking comes through as first URL parameter
 router.get('/usernameAvailability', (req, res) => {
     // TODO dodaj da če uporabnik da not še userID
-    User.isUsernameAvailable(req.query.username, (err, isAvailable) => {
+    User.isUsernameAvailable(req.query.username, 0, (err, isAvailable) => {
         if(err) {
             console.error(err);
             return res.json({ success: false, msg: 'Server error' }).status(500);
@@ -132,7 +132,7 @@ router.get('/usernameAvailability', (req, res) => {
 
 // Checks if email is available. Email for check comes through as first URL parameter
 router.get('/emailAvailability', (req, res) => {
-    User.isEmailAvailable(0, req.query.email, (err, isAvailable) => {
+    User.isEmailAvailable(req.query.email, 0, (err, isAvailable) => {
         if(err) {
             console.error(err);
             return res.json({ success: false, msg: 'Server error' }).status(500);
@@ -179,7 +179,7 @@ router.route('/profile')
                 // Returns 200 OK if user is deleted
                 return res.json({
                     success: true,
-                    msg: `User ${user.userProfile.username} deleted`
+                    msg: `User ${user.profile.username} deleted`
                 }).status(200);
             }
         });

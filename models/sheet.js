@@ -22,27 +22,27 @@ module.exports.getSheet = function(sheetID, userID = 0, callback) {
 
 // Pushes new sheet to user with userID
 // Returns newly created sheet
-module.exports.addSheet = function(newSheet, userID, callback) {
-    User.findByIdAndUpdate(userID, {$push: {"userSheets": userSheets}}, { new: true }, (err, newUser) => {
+module.exports.addSheet = function(userID, newSheet, callback) {
+    User.findByIdAndUpdate(userID, {$push: {"sheets": newSheet}}, { new: true }, (err, newUser) => {
         if(err) throw err;
-        callback(null, newUser.userSheets[newUser.userSheets.length - 1]);
-    })
+        callback(null, newUser.sheets[newUser.sheets.length - 1]);
+    });
 }
 
 // Updates sheet at sheetID with updatedShet
 // Returns updated user
-module.exports.updateSheet = function(sheetID, updatedSheet, callback) {
-    User.findByIdAndUpdate(sheetID, updatedSheet, {new: true}, (err, newUser) => {
+module.exports.updateSheet = function(userID, sheetID, editedSheet, callback) {
+    User.updateOne({_id: ObjectId(userID), "sheets._id": ObjectId(sheetID)}, {$set: {"sheets.$": editedSheet}}, {new: true}, (err, modifiedStatus) => {
         if(err) throw err;
         callback(null, modifiedStatus);
     });
 }
 
-// Pulls sheet from userSheets array at index of sheetID
+// Pulls sheet from sheets array at index of sheetID
 // Returns updates sheets
 module.exports.deleteSheet = function(userID, sheetID, callback) {
-    User.findByIdAndDelete(userID, {$pull: {"userSheets": {_id: ObjectId(sheetID)}}}, {new: true}, (err, updatedSheets) => {
+    User.findByIdAndUpdate(userID, {$pull: {"sheets": {_id: ObjectId(sheetID)}}}, {new: true}, (err, updatedUser) => {
         if(err) throw err;
-        callback(null, newUser.userSheets);
+        callback(null, updatedUser.sheets);
     });
 }

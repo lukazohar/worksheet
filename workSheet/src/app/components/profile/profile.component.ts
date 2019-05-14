@@ -15,7 +15,7 @@ import { IProfile } from 'src/app/models/profile/profile';
 export class ProfileComponent implements OnInit {
 
   // Gets profile of user from local storage
-  userProfile: IProfile = JSON.parse(localStorage.getItem('userData')).userProfile;
+  profile: IProfile = JSON.parse(localStorage.getItem('userData')).profile;
   edit = false;
   usernameAvailabilityQuery: any;
   emailAvailabilityQuery: any;
@@ -39,10 +39,10 @@ export class ProfileComponent implements OnInit {
   // Created profile from with user data from profile
   createFormGroup(): void {
     this.profileForm = new FormGroup({
-      firstName: new FormControl(this.userProfile.firstName),
-      lastName: new FormControl(this.userProfile.lastName),
-      username: new FormControl(this.userProfile.username),
-      email: new FormControl(this.userProfile.email)
+      firstName: new FormControl(this.profile.firstName),
+      lastName: new FormControl(this.profile.lastName),
+      username: new FormControl(this.profile.username),
+      email: new FormControl(this.profile.email)
     });
   }
 

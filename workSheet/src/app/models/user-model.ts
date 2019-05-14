@@ -4,7 +4,7 @@ import { ITemplate } from './template/template';
 
 export interface IUserModel {
     _id: string;
-    userProfile: IProfile;
-    userSheets: Array<ISheet>;
-    userTemplates: Array<ITemplate>;
+    profile: IProfile;
+    sheets: Array<ISheet>;
+    templates: Array<ITemplate>;
 }

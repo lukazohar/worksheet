@@ -15,7 +15,7 @@ import { IUserModel } from 'src/app/models/user-model';
 export class TemplatesComponent implements OnInit {
 
   // Extracts templates from local storage
-  templates: Array<ITemplate> = JSON.parse(localStorage.getItem('userData')).userTemplates;
+  templates: Array<ITemplate> = JSON.parse(localStorage.getItem('userData')).templates;
 
   // Types of sort
   sortTypes: Array<string> = ['Date of adding', 'Priority', 'Date of last change'];
@@ -68,7 +68,7 @@ export class TemplatesComponent implements OnInit {
       for (let i = 0; i < template.items.length; i++) {
         const type = template.items[i].type;
         if (type === 'header') {
-          // If type of item is header, it adds header
+          // If item.type is header, it adds header
           // @ts-ignore
           this.items = this.templateService.addHeader(this.items, template.items[i].value);
         } else if (type === 'inputFields') {
@@ -152,7 +152,7 @@ export class TemplatesComponent implements OnInit {
               // Updates value in local storage
               this.templates[this.expandedTemplateFormIndex] = this.expandedTemplateForm.value;
               const user: IUserModel = JSON.parse(localStorage.getItem('userData'));
-              user.userTemplates = this.templates;
+              user.templates = this.templates;
               localStorage.setItem('userData', JSON.stringify(user));
               this.expandedTemplateFormIndex = -1;
               this.setupTemplate();
@@ -185,10 +185,10 @@ export class TemplatesComponent implements OnInit {
           // Updates array of templates in local storage
           const user: IUserModel = JSON.parse(localStorage.getItem('userData'));
           // @ts-ignore
-          user.userTemplates = res.data;
+          user.templates = res.data;
           localStorage.setItem('userData', JSON.stringify(user));
           // @ts-ignore
-          this.templates = user.userTemplates;
+          this.templates = user.templates;
         } else {
           // Informs user that deleting failed
           this.toast.error(res.msg);

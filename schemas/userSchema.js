@@ -4,7 +4,7 @@ const moment = require('moment');
 
 // User schema
 const UserSchema = Schema({
-    userProfile: {
+    profile: {
         username: { type: String, require: true },
         email: { type: String, require: true },
         firstName: { type: String, default: '' },
@@ -13,7 +13,7 @@ const UserSchema = Schema({
         modified: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
         password: { type: String, require: true }
     },
-    userSheets: [
+    sheets: [
         {
             templateTitle: { type: String },
             title: { type: String },
@@ -24,7 +24,7 @@ const UserSchema = Schema({
             items: { type: Array }
         }
     ],
-    userTemplates: [
+    templates: [
         {
             title: { type: String },
             description: { type: String },

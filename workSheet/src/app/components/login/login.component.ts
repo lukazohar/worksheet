@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
     // Saves token
     localStorage.setItem('token', token);
     // Saves username
-    localStorage.setItem('username', userData.userProfile.username);
+    localStorage.setItem('username', userData.profile.username);
   }
 
 }

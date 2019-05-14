@@ -4,6 +4,7 @@ const config = require('../config/database');
 const UserSchema = require('../schemas/userSchema');
 const passGen = require('generate-password');
 const nodeMailer = require('nodemailer');
+const ObjectId = mongoose.Types.ObjectId
 
 const User = module.exports = mongoose.model('User', UserSchema.UserSchema);
 
@@ -14,16 +15,16 @@ module.exports.getUserById = function (id, callback) {
 
 // Finds user by username and returns it
 module.exports.getUserByUsername = function (username, callback) {
-    User.findOne({"userProfile.username": username}, callback);
+    User.findOne({"profile.username": username}, callback);
 };
 
 // Adds user with hashed and salted password to database
 module.exports.addUser = function (newUser, callback) {
     bcrypt.genSalt(10, (err, salt) => {
         if (err) throw err;
-        bcrypt.hash(newUser.userProfile.password, salt, (err, hash) => {
+        bcrypt.hash(newUser.profile.password, salt, (err, hash) => {
             if(err) throw err;
-            newUser.userProfile.password = hash;
+            newUser.profile.password = hash;
             newUser.save();
             callback(null, newUser);
         })
@@ -38,13 +39,13 @@ module.exports.comparePasswords = function (candidatePassword, hash, callback) {
     })
 }
 
-// Updates userProfile and returns updated user
+// Updates profile and returns updated user
 module.exports.updateUser = function(userID, updatedUser, callback) {
     User.findByIdAndUpdate(userID, updatedUser, {new: true}, (err, newUser) => {
         if(err) throw err;
         const user = {
             success: true,
-            userProfile: newUser.userProfile
+            profile: newUser.profile
         };
         callback(null, user);
     });
@@ -53,11 +54,11 @@ module.exports.updateUser = function(userID, updatedUser, callback) {
 // Returns true if username is available, false if it isn't
 // If userID is given, it searches only in that document (faster), otherwise in all documents
 // Returns true if there's no document with given username, otherwise false
-module.exports.isUsernameAvailable = function(userID = 0, username, callback) {
+module.exports.isUsernameAvailable = function(username, userID = 0, callback) {
     if (userID !== 0) {
         User.countDocuments()
-            .where(_id).ne(ObjectId(userID))
-            .where("userProfile.username").equals(username)
+            .where("_id").ne(ObjectId(userID))
+            .where("profile.username").equals(username)
             .exec((err, num) => {
                 if(err) throw err;
                 if(num > 0) {
@@ -68,7 +69,7 @@ module.exports.isUsernameAvailable = function(userID = 0, username, callback) {
             });
     } else {
         User.countDocuments()
-            .where("userProfile.username").equals(username)
+            .where("profile.username").equals(username)
             .exec((err, num) => {
                 if(err) throw err;
                 if(num > 0) {
@@ -83,11 +84,11 @@ module.exports.isUsernameAvailable = function(userID = 0, username, callback) {
 // Returns true if email is available, false if it isn't
 // If userID is given, it searches only in that document (faster), otherwise in all documents
 // Returns true if there's no document with given email, otherwise false
-module.exports.isEmailAvailable = function(userID = 0, email, callback) {
+module.exports.isEmailAvailable = function(email, userID = 0, callback) {
     if (userID !== 0) {
         User.countDocuments()
-            .where(_id).ne(ObjectId(userID))
-            .where("userProfile.email").equals(email)
+            .where("_id").ne(ObjectId(userID))
+            .where("profile.email").equals(email)
             .exec((err, num) => {
                 if(err) throw err;
                 if(num > 0) {
@@ -98,7 +99,7 @@ module.exports.isEmailAvailable = function(userID = 0, email, callback) {
             });
     } else {
         User.countDocuments()
-            .where("userProfile.email").equals(email)
+            .where("profile.email").equals(email)
             .exec((err, num) => {
                 if(err) throw err;
                 if(num > 0) {
@@ -115,8 +116,8 @@ module.exports.isEmailAvailable = function(userID = 0, email, callback) {
 module.exports.areUsernameAndEmailAvailable = function(username, email, userID = 0, callback) {
     // Function returns: - success status and - message
     // Counts documents, where username already exists
-    User.countDocuments({"userProfile.username": username})
-        .where(_id)
+    User.countDocuments({"profile.username": username})
+        .where("_id")
         .ne(userID)
         .exec((err, num) => {
             if(err) throw err;
@@ -128,8 +129,8 @@ module.exports.areUsernameAndEmailAvailable = function(username, email, userID =
             }
             if(num == 0) {
                 // Counts documents, where email already exists
-                User.countDocuments({"userProfile.email": email})
-                    .where(_id)
+                User.countDocuments({"profile.email": email})
+                    .where("_id")
                     .ne(userID)
                     .exec((err, num) => {
                         if(err) throw err;
