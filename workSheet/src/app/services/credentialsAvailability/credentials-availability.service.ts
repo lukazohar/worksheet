@@ -17,6 +17,7 @@ export class CredentialsAvailabilityService {
   usernameAvailabilityQuery: any;
   emailAvailabilityQuery: any;
 
+  // Calls username availability on backend with username in parameters
   private checkForUsernameAvailable(username: string): Observable<ISuccessMsgResponse> {
     return this.http.get<ISuccessMsgResponse>(`http://localhost:3000/users/usernameAvailability?username=${username}`, {
       headers: new HttpHeaders({
@@ -24,6 +25,7 @@ export class CredentialsAvailabilityService {
       })
     });
   }
+  // Calls email availability on backend with email in parameters
   private checkForEmailAvailable(email: string): Observable<ISuccessMsgResponse> {
     return this.http.get<ISuccessMsgResponse>(`http://localhost:3000/users/emailAvailability?email=${email}`, {
       headers: new HttpHeaders({
@@ -50,10 +52,6 @@ export class CredentialsAvailabilityService {
     );
     return isAvailable;
   }
-  /*
-  clearUsernameAvailabilityQuery(): void {
-    clearTimeout(this.usernameAvailabilityQuery);
-  } */
 
 
   // Checks for email availability every second
@@ -75,9 +73,6 @@ export class CredentialsAvailabilityService {
     );
     return isAvailable;
   }
-  /*
-  // Clears query if there's if user changed new email in HTML
-  clearEmailAvailabilityQuery(): void {
-    clearTimeout(this.emailAvailabilityQuery);
-  } */
+
 }
+

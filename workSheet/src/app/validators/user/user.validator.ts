@@ -50,15 +50,17 @@ export class UserValidator {
         }
       ));
   }
-  // Returns object if email is unavailable, or null if it's available
+  // Returns object with message if email is unavailable, null if it's available
   validateEmailAvailability(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<{ [key: string]: any } | null > => {
       return this.isEmailAvailable(control.value)
         .pipe(
           map(res => {
+            // Returns null (is valid) if is email is available
             if (res) {
               return null;
             } else {
+            // Returns object with message if email is taken
               return { 'emailExists': true };
             }
           })

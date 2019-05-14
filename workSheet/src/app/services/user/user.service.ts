@@ -25,6 +25,7 @@ export class UserService {
 
   }
 
+  // Deletes user my calling DELETE on route
   deleteUser(): Observable<ISuccessMsgResponse> {
     return this.http.delete<ISuccessMsgResponse>(this.URL, {
       headers: new HttpHeaders({
@@ -33,6 +34,7 @@ export class UserService {
     });
   }
 
+  // Updates user with given data
   updateUser(updatedProfile: IProfile): Observable<ISuccessMsgResponse> {
     return this.http.put<ISuccessMsgResponse>(this.URL, updatedProfile, {
       headers: new HttpHeaders({

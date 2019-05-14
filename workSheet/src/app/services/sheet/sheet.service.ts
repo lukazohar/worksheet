@@ -19,10 +19,7 @@ export class SheetService {
     private token: TokenService
   ) { }
 
-  //
-  //  CRUD operations
-  //
-
+  // Gets sheet with id in parameter from backend
   getSheet(id: number) {
     return this.http.get(this.URL + 'sheet?id=' + id, {
       headers: new HttpHeaders({
@@ -30,10 +27,12 @@ export class SheetService {
       })
     });
   }
+  // Returns all sheets from backend
   getSheets() {
     return this.http.get(this.URL);
   }
 
+  // Adds sheet to user
   addSheet(sheet: ISheet): Observable<ISuccessMsgResponse> {
     return this.http.post<ISuccessMsgResponse>(this.URL, sheet, {
       headers: new HttpHeaders({
@@ -42,6 +41,7 @@ export class SheetService {
     });
   }
 
+  // Updates sheet with given data
   updateSheet(updatedSheet: ISheet): Observable<ISuccessMsgResponse> {
     return this.http.put<ISuccessMsgResponse>(`${this.URL}`, updatedSheet, {
       headers: new HttpHeaders({
@@ -50,6 +50,7 @@ export class SheetService {
     });
   }
 
+  // Delets sheet with id in parameters
   deleteSheet(sheetId: string): Observable<ISuccessMsgResponse> {
     return this.http.delete<ISuccessMsgResponse>(`${this.URL}?sheetId=${sheetId}`, {
       headers: new HttpHeaders({
@@ -63,6 +64,7 @@ export class SheetService {
   // Functions for setup of sheet
   //
 
+  // Pushes new header formGroup to array of items with value
   addHeader(items: FormArray, headerValue: string): FormArray {
     items.push(new FormGroup({
       type: new FormControl('header'),
@@ -71,12 +73,14 @@ export class SheetService {
     return items;
   }
 
+  // Pushes new inputFields formGroup to array of items with values
   addInputFields(items: FormArray, inputFields: IInputFields, index: number): FormArray {
     items.push(new FormGroup({
       type: new FormControl('inputFields'),
       header: new FormControl(inputFields.header),
       inputs: new FormArray([])
     }));
+    // Loops through array of inputs in group of inputs and ads form group and values
     for (let i = 0; i < inputFields.inputs.length; i++) {
       // @ts-ignore
       items.controls[index].controls.inputs.push(new FormGroup({
@@ -87,6 +91,7 @@ export class SheetService {
     return items;
   }
 
+  // Adds single input field with value to array of inputs
   addInputField(items: FormArray, index1: number): FormArray {
     // @ts-ignore
     const inputHeader = items.controls[index1].value.header;

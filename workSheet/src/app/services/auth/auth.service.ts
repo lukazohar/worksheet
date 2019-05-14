@@ -15,6 +15,7 @@ import { ILoginResponse } from 'src/app/models/login/login-response';
 })
 export class AuthService {
 
+  // API route to manage user
   URL = 'http://localhost:3000/users/';
 
   constructor(
@@ -23,19 +24,25 @@ export class AuthService {
     private router: Router
   ) { }
 
+  // Calls register user with register data
   registerUser(user: IRegister): Observable<IRegisterResponse> {
     return this.http.post<IRegisterResponse>(this.URL + 'register', user);
   }
 
+  // Call login user with user credentials
+  // Returns observable of ILogin
   loginUser(user: ILogin): Observable<ILoginResponse> {
     return this.http.post<ILoginResponse>(this.URL + 'authenticate', user);
   }
 
+  // Calls token service to delete token with data
+  // Navigates browser to login route
   logoutUser(): void {
     this.tokenService.deleteTokenWithData();
     this.router.navigate(['/login']);
   }
 
+  // Calls email availability function on backend with email in paramter every 1 second
   isEmailAvailable(email: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.URL}emailAvailability?email=${email}`, {
       headers: new HttpHeaders({

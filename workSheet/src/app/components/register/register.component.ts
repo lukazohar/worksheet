@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit {
       // password-validator packet instead of pattern and stuff
     ]);
   }
-  // Creates group with previously made controls
+  // Creates group with previously made controls ad validators
   createFormGroup(): void {
     this.registerForm = new FormGroup({
       firstName: this.firstName,
@@ -98,7 +98,7 @@ export class RegisterComponent implements OnInit {
             this.toast.success('User created');
             this.router.navigate(['login']);
           } else {
-            // If user is not registered, it informs him
+            // If user is not registered, it informs user
             this.toast.warning(data.msg);
           }
         },

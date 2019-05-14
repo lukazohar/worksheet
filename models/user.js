@@ -115,33 +115,39 @@ module.exports.isEmailAvailable = function(userID = 0, email, callback) {
 module.exports.areUsernameAndEmailAvailable = function(username, email, userID = 0, callback) {
     // Function returns: - success status and - message
     // Counts documents, where username already exists
-    User.countDocuments({"userProfile.username": username}).where({"_id": {"$ne": userID}}).exec((err, num) => {
-        if(err) throw err;
-        if(num > 0) {
-            callback(null, {
-                success: false,
-                msg: "Username is already taken"
-            });
-        }
-        if(num == 0) {
-            // Counts documents, where email already exists
-            User.countDocuments({"userProfile.email": email}).where({"_id": {"$ne": userID}}).exec((err, num) => {
-                if(err) throw err;
-                if(num > 0) {
-                    callback(null, {
-                        success: false,
-                        msg: "Email is already in use"
-                    });
-                }
-                // It comes to this point if username and email are available, return success
-                if(num === 0) {
-                    callback(null, {
-                        success: true,
-                        msg: "Username and email are available"
-                    });
-                }
-            }); 
-        }
+    User.countDocuments({"userProfile.username": username})
+        .where(_id)
+        .ne(userID)
+        .exec((err, num) => {
+            if(err) throw err;
+            if(num > 0) {
+                callback(null, {
+                    success: false,
+                    msg: "Username is already taken"
+                });
+            }
+            if(num == 0) {
+                // Counts documents, where email already exists
+                User.countDocuments({"userProfile.email": email})
+                    .where(_id)
+                    .ne(userID)
+                    .exec((err, num) => {
+                        if(err) throw err;
+                        if(num > 0) {
+                            callback(null, {
+                                success: false,
+                                msg: "Email is already in use"
+                            });
+                        }
+                        // It comes to this point if username and email are available, return success
+                        if(num === 0) {
+                            callback(null, {
+                                success: true,
+                                msg: "Username and email are available"
+                            });
+                        }
+                });
+            }
     });
 }
 

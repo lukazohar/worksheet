@@ -20,21 +20,24 @@ export class TemplateService {
     private token: TokenService
   ) { }
 
+  // Returns observable of template with id in parameters
   getTemplate(id: number): Observable<ITemplate> {
-    return this.http.get<ITemplate>('${this.ULR}template?id=${id}', {
+    return this.http.get<ITemplate>(`${this.ULR}template?id=${id}`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
     });
   }
+  // Returns observable of all templates of user
   getTemplates(): Observable<ITemplate[]> {
-    return this.http.get<ITemplate[]>('${this.ULR}template', {
+    return this.http.get<ITemplate[]>(`${this.ULR}template`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
     });
   }
 
+  // Returns observable of ISuccessMsgResponse
   addTemplate(template: ITemplate): Observable<ISuccessMsgResponse> {
     return this.http.post<ISuccessMsgResponse>(`${this.ULR}template`, template, {
       headers: new HttpHeaders({
@@ -43,6 +46,7 @@ export class TemplateService {
     });
   }
 
+  // Returns observable of ISuccessMsgResponse
   updateTemplate(updatedTemplate: ITemplate): Observable<ISuccessMsgResponse> {
     return this.http.put<ISuccessMsgResponse>(`${this.ULR}template`, updatedTemplate, {
       headers: new HttpHeaders({
@@ -51,6 +55,7 @@ export class TemplateService {
     });
   }
 
+  // Returns observable of ISuccessMsgResponse
   deleteTemplate(templateId: string): Observable<ISuccessMsgResponse> {
     return this.http.delete<ISuccessMsgResponse>(`${this.ULR}template?templateId=${templateId}`, {
       headers: new HttpHeaders({
@@ -59,14 +64,13 @@ export class TemplateService {
     });
   }
 
-  //
-  // Functions adding values to existing templates
-  //
+  // Removes item with index from items array and returns it
   removeItem(items: FormArray, itemIndex: number): FormArray {
     items.removeAt(itemIndex);
     return items;
   }
 
+  // Adds header with value to array of items
   addHeader(items: FormArray, value?: string): FormArray {
     items.push(new FormGroup({
       type: new FormControl('header'),
@@ -75,13 +79,16 @@ export class TemplateService {
     return items;
   }
 
+  // Adds input fields group with values to array of items
   addInputFields(items: FormArray, inputFields?: IInputFields, index?: number): FormArray {
+    // Checks if array of inputs in inputFields is empty
     if (inputFields !== undefined) {
       items.push(new FormGroup({
         type: new FormControl('inputFields'),
         header: new FormControl(inputFields.header),
         inputs: new FormArray([])
       }));
+      // Loops through array of inputs and sets values of headers
       for (let i = 0; i < inputFields.inputs.length; i++) {
         // @ts-ignore
         items.controls[index].controls.inputs.push(new FormGroup({
@@ -103,6 +110,7 @@ export class TemplateService {
     }
     return items;
   }
+  // Adds input field with value to array of inputs
   addInputField(items: FormArray, index1: number): FormArray {
     // @ts-ignore
     const inputHeader = items.controls[index1].value.header;
@@ -115,12 +123,14 @@ export class TemplateService {
     items.controls[index1].value.header = inputHeader;
     return items;
   }
+  // Removes input field with index in paramter in array of input
   removeInputField(items: FormArray, itemIndex: number, fieldIndex: number): FormArray {
     // @ts-ignore
     items.controls[itemIndex].controls.inputs.removeAt(fieldIndex);
     return items;
   }
 
+  // Adds table
   addTable(items: FormArray): FormArray {
     // @ts-ignore
     items.push(new FormGroup({
@@ -129,9 +139,11 @@ export class TemplateService {
     }));
     return items;
   }
+  // Adds table cell
   addTableCell(): void {
   }
 
+  // Adds list
   addList(items: FormArray): FormArray {
     // @ts-ignore
     items.push(new FormGroup({
@@ -141,6 +153,7 @@ export class TemplateService {
     return items;
   }
 
+  // Adds checkboxes
   addCheckboxes(items: FormArray): FormArray {
     // @ts-ignore
     items.push(new FormGroup({
