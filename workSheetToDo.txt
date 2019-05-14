@@ -1,36 +1,28 @@
 ﻿Stvari za uredit pr WorkSheet :
+- dodaj checkboxe, liste, tabele,...
+- sidenav
+- komentiraj stvari
 - polep�aj stran, stil, CSS,...
-- pri odgovoru s stre�nika zrihtaj obvestila (�e je 404 naredi to, �e je 200 naredi to, �e je za��iteno naredi to,...)
 - retry, error, razne stvari pri PIPE, rxjs funkcije pri http
 - zrihtaj route, zdej je fiksirani na 'lukazohi', neka fora je z @Input da dobi� podatke iz druge komponente, ker se sidenav nalo�i preden dobi� username
 - animacije
 - tam ko je podatkovni tip ANY, popravi v primerne
 - ko posodobi� user-ja, je problem z username (�e je druga�en username ne posodobi)
-- ko se uporabnik registrira, probaj na vsako sekundo/2 �e je username/email �e zaseden. Isto ko spreminja username/email
 - pobri�i importe, ki niso v uporabi. V angularju in nodu
 - preveri statuse odgovorov
-- komentiraj stvari
 - preveri veljavnost stvari v formah
-- popravi validatorje pri registraciji
-- pri expressu preveri, �e si povsod dau err id preveru �e obstaja
-- Express - tam ko je error, vrni response da je server error al kaj takega
 - �e user pozabi geslo in username, na email po�lje potrdilo za ponovno vna�anje username-a
 - ? naredi realtime podatkovno bazo
 - razporedi importe po skupinah
 - update user
 - naredi how to za uporabo strani
 - token zrihtaj v cookiu
-- raz�iri sidenav
-- na vseh spremenljivkah odstrani _
-- te�ava v addTemplate, naredi da da template ki je v spremnljivki item.type v *ngIf
 - pri css-u spremeni classe iz npr. inputField v input-field
 - validatorji pri add-template
 - odstrani // @ts-ignore
 - pri add.template description prva vrstica ostane nevidna �e gre� v novo vrstico
-- v styles.css daj h1 na 40px in odstrani pri komponentah
 - validacija pri formah
 - pri zbrisanju sheetov dodaj ko�, kjer se hranijo zbrisani sheeti. Tam daj da zbri�e� za zmeraj
-- po�timaj CORS
 - pri sheetih naredi razvr��anje
 - ko vra�a� sheet, vrni samo id. Isto pri template
 - vse toaste daj �isto na konc funkcije
@@ -43,3 +35,5 @@
 - pri CRUD v nod-u, popravi da ni query in updatan object v isti vrstici (naredi 2 spremenljivki)
 - validacija pri node-u
 - pri prijavi je odziv iz strežnika napačen
+- pri urejanju profile dodaj enake validatorje kot pri registraciji
+- password iz npm namesto patterna

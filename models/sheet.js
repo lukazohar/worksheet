@@ -23,7 +23,7 @@ module.exports.getSheet = function(sheetID, userID = 0, callback) {
 // Pushes new sheet to user with userID
 // Returns newly created sheet
 module.exports.addSheet = function(newSheet, userID, callback) {
-    User.findByIdAndUpdate(userID, {$push: {"userSheets": newSheet.userSheets}}, { new: true }, (err, newUser) => {
+    User.findByIdAndUpdate(userID, {$push: {"userSheets": userSheets}}, { new: true }, (err, newUser) => {
         if(err) throw err;
         callback(null, newUser.userSheets[newUser.userSheets.length - 1]);
     })

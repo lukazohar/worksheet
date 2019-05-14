@@ -4,6 +4,7 @@ const passport = require('passport');
 require('../config/passport')(passport);
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
+const moment = require('moment');
 
 const Template = require('../models/template');
 
@@ -11,21 +12,22 @@ const Template = require('../models/template');
 // Template
 router.route('/template')
     .get(passport.authenticate('jwt', {session: false}, (req, res) => {
+        // TODO Dodaj da vrne template, z indeksom ali brez
         return res.json({
             success: false,
             msg: 'Not implemented'
         }).status(501);
     }))
     .post(passport.authenticate('jwt', {session: false}), (req, res) => {
-        let template = {
-            userTemplates: [ req.body ]
-        };
+        // 
+        let template = req.body;
         let userID = req.user._id;
         Template.addTemplate(template, userID, (err, template) => {
             if(err) {
                 console.error(err);
                 return res.json({ success: false, msg: 'Server error' }).status(500);
             }
+            // Returns with newly created template data with status 201 Created
             return res.json({
                 success: true,
                 msg: template.title + ' created',
@@ -34,19 +36,22 @@ router.route('/template')
         });
     })
     .put(passport.authenticate('jwt', {session: false}), (req, res) => {
-        req.body.modified = Date.now();
+        // Sets modified to current time
+        req.body.modified = moment().format('DD.MM.YYYY HH:mm');
         Template.updateTemplate(req.user._id, req.body._id, req.body, (err, modifiedStatus) => {
             if(err) {
                 console.error(err);
                 return res.json({ success: false, msg: 'Server error' }).status(500);
             }
             const templateTitle = req.body.title;
+            // If n is 0, template doesn't exist. Returns status 400
             if(modifiedStatus.n === 0) {
                 return res.json({
                     success: false,
                     msg: templateTitle + " doesn't exist"
                 }).status(400);
             }
+            // If template is found and is modified OR is found and not modified, it returns status 200
             if(( modifiedStatus.n === 1 && modifiedStatus.nModified === 1 ) || ( modifiedStatus.n === 1 && modifiedStatus.nModified === 0 )) {
                 return res.json({
                     success: true,
@@ -61,12 +66,14 @@ router.route('/template')
                 console.error(err);
                 return res.json({ success: false, msg: 'Server error' }).status(500);
             }
+            // If template doesn't exist, it returns status 400
             if(!updatedUser) {
                 return res.json({
                     success: false,
                     msg: "Template doesn't exist"
                 }).status(400);
             }
+            // If template is deleted, it returns 200 OK with deleted template
             if(updatedUser) {
                 return res.json({
                     success: true,

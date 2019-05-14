@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { Router } from '@angular/router';
-import { IUserModel } from 'src/app/models/user-model';
 import { UserService } from 'src/app/services/user/user.service';
 import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
+import { IProfile } from 'src/app/models/profile/profile';
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +14,8 @@ import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
 })
 export class ProfileComponent implements OnInit {
 
-  userData: IUserModel = JSON.parse(localStorage.getItem('userData'));
+  // Gets profile of user from local storage
+  userProfile: IProfile = JSON.parse(localStorage.getItem('userData')).userProfile;
   edit = false;
   usernameAvailabilityQuery: any;
   emailAvailabilityQuery: any;
@@ -35,15 +36,17 @@ export class ProfileComponent implements OnInit {
     this.createFormGroup();
   }
 
+  // Created profile from with user data from profile
   createFormGroup(): void {
     this.profileForm = new FormGroup({
-      firstName: new FormControl(this.userData.userProfile.firstName),
-      lastName: new FormControl(this.userData.userProfile.lastName),
-      username: new FormControl(this.userData.userProfile.username),
-      email: new FormControl(this.userData.userProfile.email)
+      firstName: new FormControl(this.userProfile.firstName),
+      lastName: new FormControl(this.userProfile.lastName),
+      username: new FormControl(this.userProfile.username),
+      email: new FormControl(this.userProfile.email)
     });
   }
 
+  // Changes if use if being edited
   changeEdit(): void {
     if (this.edit) {
       this.edit = false;
@@ -54,19 +57,24 @@ export class ProfileComponent implements OnInit {
 
   // Updates use with value of profileForm
   updateUser(): void {
-    if (this.usernameAvailable && this.emailAvailable) {
-      this.userService.updateUser(this.profileForm.value).subscribe(
-        (res: ISuccessMsgResponse) => {
-          if (res.success) {
-            this.toast.success(res.msg);
-          } else {
-            this.toast.error(res.msg);
+    if (this.profileForm.valid) {
+      // TODO zrihtaj urejanje profile
+      if (this.usernameAvailable && this.emailAvailable) {
+        this.userService.updateUser(this.profileForm.value).subscribe(
+          (res: ISuccessMsgResponse) => {
+            if (res.success) {
+              this.toast.success(res.msg);
+            } else {
+              this.toast.error(res.msg);
+            }
+          },
+          err => {
+            console.error(err);
           }
-        },
-        err => {
-          console.error(err);
-        }
-      );
+        );
+      }
+    } else {
+      this.toast.warning('Profile is invalid');
     }
   }
 

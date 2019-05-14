@@ -13,15 +13,19 @@ import { Router } from '@angular/router';
 })
 export class AddworksheetComponent implements OnInit {
 
+  // Extracts data of user from local storage
   templates: Array<ITemplate> = JSON.parse(localStorage.getItem('userData')).userTemplates;
   sheetInitialized = false;
+  // Maps only titles of templates from all templates, so user can select from which template he wants to created sheet
   templateTitles: Array<string> = this.templates.map((template) => {
     return template.title;
   });
-  sheetForm: FormGroup;
   templateTitle: string;
+  sheetForm: FormGroup;
 
+  // Gets items from sheet form
   get items(): FormArray { return this.sheetForm.get('items') as FormArray; }
+  // Sets items to sheet form
   set items(test: FormArray) { this.sheetForm.setControl('items', test); }
 
   constructor(
@@ -34,6 +38,7 @@ export class AddworksheetComponent implements OnInit {
     this.sheetForm = new FormGroup({});
   }
 
+  // Sets up template with data from selected template
   setupSheetWithTemplate(index: number): void {
     const template: ITemplate = this.templates[index];
     this.sheetForm = new FormGroup({
@@ -44,13 +49,18 @@ export class AddworksheetComponent implements OnInit {
     });
     this.sheetForm.reset();
     this.templateTitle = template.title;
+    // Sets title of tempalte selected in form
     this.sheetForm.controls.templateTitle.setValue(template.title);
+    // Loops through all inputs in sheet
     for (let i = 0; i < template.items.length; i++) {
       const type = template.items[i].type;
+      // If type of input is header, it calls addHeader
       if (type === 'header') {
         // @ts-ignore
         this.items = this.sheetService.addHeader(this.items, template.items[i].value);
-      } else if (type === 'inputFields') {
+      } else
+      // If type of input is inputFields, it calls addInputFields
+      if (type === 'inputFields') {
         // @ts-ignore
         this.items = this.sheetService.addInputFields(this.items, template.items[i], i);
       }
@@ -59,22 +69,29 @@ export class AddworksheetComponent implements OnInit {
   }
 
   addSheet(): void {
-    this.sheetService.addSheet(this.sheetForm.value).subscribe(
-      (res: ISuccessMsgResponse) => {
-        if (res.success === true) {
-          const user = JSON.parse(localStorage.getItem('userData'));
-          user.userSheets.push(res.data);
-          localStorage.setItem('userData', JSON.stringify(user));
-          this.toast.success(res.msg);
-          this.router.navigate(['worksheets']);
-        } else {
-          this.toast.error(res.msg);
+    // If sheet is valid, it calls sheet service
+    if (this.sheetForm.valid) {
+      this.sheetService.addSheet(this.sheetForm.value).subscribe(
+        (res: ISuccessMsgResponse) => {
+          // If sheet is added, it updated user data is local storage
+          if (res.success === true) {
+            const user = JSON.parse(localStorage.getItem('userData'));
+            user.userSheets.push(res.data);
+            localStorage.setItem('userData', JSON.stringify(user));
+            this.toast.success(res.msg);
+            // Navigates to worksheets route
+            this.router.navigate(['worksheets']);
+          } else {
+            this.toast.error(res.msg);
+          }
+        },
+        err => {
+          console.log(err);
         }
-      },
-      err => {
-        console.log(err);
-      }
-    );
+      );
+    } else {
+      this.toast.warning('Sheet is invalid');
+    }
   }
 
 }

@@ -38,6 +38,7 @@ export class NavbarComponent implements OnInit {
     this.sidenavActions.emit('sideNav');
   }
 
+  // Checks if user if logged in
   loggedIn(): boolean {
     if (this.tokenService.isTokenExpired(localStorage.getItem('token'))) {
       return false;
@@ -46,6 +47,7 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  // Calls auth service to logout user
   logoutUser() {
     this.authService.logoutUser();
     this.toast.warning('Logged out');

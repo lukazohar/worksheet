@@ -14,7 +14,7 @@ mongoose.connection.on('connected', () => {
     console.log('Connected to database ' + config.database)
 });
 
-// If theres error
+// Checks for errors
 mongoose.connection.on('error', (err) => {
     console.log('Error: ' + err)
 });
@@ -27,9 +27,6 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Server port
-const port = 3000;
 
 // Enables CORS
 app.use(cors({
@@ -52,8 +49,8 @@ app.use('/sheets', sheets);
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Imports passport
 require('./config/passport');
-
 
 app.get('/', (req, res) => {
     res.send('Invalid URI');
@@ -62,6 +59,9 @@ app.get('/', (req, res) => {
 app.get('/api'), (req, res) => {
     res.send('Welcome to my API for WorkSheet')
 }
+
+// Server port
+const port = 3000;
 
 // Start server
 app.listen(port, () => {

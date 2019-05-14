@@ -34,13 +34,17 @@ export class LoginComponent implements OnInit {
 
   loginUser() {
     if (this.loginForm.valid) {
+      // If login form is valid. it calls auth service for logging user
       this.authService.loginUser(this.loginForm.value).subscribe(
         (data: ILoginResponse) => {
           if (data.success === true) {
+            // If user credentials are correct, it calls saveData
             this.saveData(data.token, data.userData, data._id);
             this.toast.success('Successfull login');
+            // Navigates to workSheet route
             this.router.navigate(['/worksheets']);
           } else {
+            // If user credentials are invalid, it informs user
             this.toast.warning('Invalid credentials');
           }
        },
@@ -54,10 +58,15 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  saveData(token: string, userData: IUserModel, _id: string) {
+  saveData(token: string, userData: IUserModel, ID: string) {
+    // All saves are to local storage
+    // Saves all data
     localStorage.setItem('userData', JSON.stringify(userData));
-    localStorage.setItem('userID', _id);
+    // Saves user ID
+    localStorage.setItem('userID', ID);
+    // Saves token
     localStorage.setItem('token', token);
+    // Saves username
     localStorage.setItem('username', userData.userProfile.username);
   }
 

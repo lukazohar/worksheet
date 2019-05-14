@@ -7,16 +7,17 @@ const nodeMailer = require('nodemailer');
 
 const User = module.exports = mongoose.model('User', UserSchema.UserSchema);
 
-// Finds user by ID
+// Finds user by ID and returns it
 module.exports.getUserById = function (id, callback) {
     User.findById(id, callback);
 };
 
-// Finds user by username
+// Finds user by username and returns it
 module.exports.getUserByUsername = function (username, callback) {
     User.findOne({"userProfile.username": username}, callback);
 };
 
+// Adds user with hashed and salted password to database
 module.exports.addUser = function (newUser, callback) {
     bcrypt.genSalt(10, (err, salt) => {
         if (err) throw err;
@@ -29,6 +30,7 @@ module.exports.addUser = function (newUser, callback) {
     })
 };
 
+// Compares hashed and string password and returns if there's a match
 module.exports.comparePasswords = function (candidatePassword, hash, callback) {
     bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
         if (err) throw err;
@@ -36,6 +38,7 @@ module.exports.comparePasswords = function (candidatePassword, hash, callback) {
     })
 }
 
+// Updates userProfile and returns updated user
 module.exports.updateUser = function(userID, updatedUser, callback) {
     User.findByIdAndUpdate(userID, updatedUser, {new: true}, (err, newUser) => {
         if(err) throw err;
@@ -47,7 +50,9 @@ module.exports.updateUser = function(userID, updatedUser, callback) {
     });
 }
 
-// Returns true if username is available, false if it isn't. Id for excluding documents is optional
+// Returns true if username is available, false if it isn't
+// If userID is given, it searches only in that document (faster), otherwise in all documents
+// Returns true if there's no document with given username, otherwise false
 module.exports.isUsernameAvailable = function(userID = 0, username, callback) {
     if (userID !== 0) {
         User.countDocuments()
@@ -75,7 +80,9 @@ module.exports.isUsernameAvailable = function(userID = 0, username, callback) {
     }
 }
 
-// Returns true if email is available, false if it isn't. Id for excluding documents is optional
+// Returns true if email is available, false if it isn't
+// If userID is given, it searches only in that document (faster), otherwise in all documents
+// Returns true if there's no document with given email, otherwise false
 module.exports.isEmailAvailable = function(userID = 0, email, callback) {
     if (userID !== 0) {
         User.countDocuments()
@@ -103,6 +110,8 @@ module.exports.isEmailAvailable = function(userID = 0, email, callback) {
     }
 }
 
+// Counts documents with username and email equal to ones in parameters
+// Returns true if any is found, otherwise false with message which one is missing
 module.exports.areUsernameAndEmailAvailable = function(username, email, userID = 0, callback) {
     // Function returns: - success status and - message
     // Counts documents, where username already exists
@@ -136,6 +145,8 @@ module.exports.areUsernameAndEmailAvailable = function(username, email, userID =
     });
 }
 
+// Deletes document with userID
+// Returns all data of deleted user
 module.exports.deleteUser = function (userID, callback) {
     User.findByIdAndRemove(userID, {new: true}, (err, deletedUser) => {
         if(err) throw err;
@@ -143,6 +154,9 @@ module.exports.deleteUser = function (userID, callback) {
     })
 }
 
+//
+// Send email for email reseting
+//
 module.exports.resetPassword = async function(userID, callback) {
     let newPassword = passGen.generate({
         length: 10,
