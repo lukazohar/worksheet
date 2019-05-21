@@ -166,6 +166,11 @@ export class SheetComponent implements OnInit {
         // If change of status succeded on backend it sets status to updated status
         if (res.success) {
           this.sheet.status = newStatus;
+          // @ts-ignore
+          this.sheet.statusModified = res.data;
+          // @ts-ignore
+          this.sheet.modified = res.data;
+          this.updateSheetInLocalstorage(this.sheet._id, this.sheet);
           this.toast.success(res.msg);
         } else {
           this.toast.error(res.msg);
@@ -181,6 +186,10 @@ export class SheetComponent implements OnInit {
       (res: ISuccessMsgResponse) => {
         if (res.success) {
           this.sheet.priority = newPriority;
+          // @ts-ignore
+          this.sheet.priorityModified = res.data;
+          // @ts-ignore
+          this.sheet.modified = res.data;
           this.updateSheetInLocalstorage(this.sheet._id, this.sheet);
           this.toast.success(res.msg);
         } else {

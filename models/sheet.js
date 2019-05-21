@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const UserSchema = require('../schemas/userSchema');
 const ObjectId = mongoose.Types.ObjectId;
+const moment = require('moment');
 
 const User = mongoose.model('User', UserSchema.UserSchema);
 
@@ -45,4 +46,32 @@ module.exports.deleteSheet = function(userID, sheetID, callback) {
         if(err) throw err;
         callback(null, updatedUser.sheets);
     });
+}
+
+module.exports.setStatus = function(userID, sheetID, newStatus, callback) {
+    User.updateOne({$set: {
+            "sheets.$.status": newStatus,
+            "sheets.$.statusModified": moment().format('DD.MM.YYYY HH:mm')},
+            "sheets.$.modified": moment().format('DD.MM.YYYY HH:mm')
+        })
+        .where({_id: ObjectId(userID)})
+        .where({"sheets._id": ObjectId(sheetID)})
+        .exec({new: true}, (err, modifiedStatus) => {
+            if(err) throw err;
+            callback(null, modifiedStatus);
+        });
+}
+
+module.exports.setPriority = function(userID, sheetID, newPriority, callback) {
+    User.updateOne({$set: {
+            "sheets.$.priority": newPriority,
+            "sheets.$.priorityModified": moment().format('DD.MM.YYYY HH:mm'),
+            "sheets.$.modified": moment().format('DD.MM.YYYY HH:mm')
+        }})
+        .where({_id: ObjectId(userID)})
+        .where({"sheets._id": ObjectId(sheetID)})
+        .exec({new: true}, (err, modifiedStatus) => {
+            if(err) throw err;
+            callback(null, modifiedStatus);
+        });
 }

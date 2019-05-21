@@ -46,13 +46,15 @@ export class AddworksheetComponent implements OnInit {
       title: new FormControl(),
       description: new FormControl(),
       items: new FormArray([]),
-      status: new FormControl()
+      status: new FormControl(),
+      priority: new FormControl()
     });
     this.sheetForm.reset();
     this.templateTitle = template.title;
     // Sets title of tempalte selected in form
     this.sheetForm.controls.templateTitle.setValue(template.title);
-    this.sheetForm.controls.status.setValue('Not started yet');
+    this.sheetForm.controls.status.setValue('Not Started Yet');
+    this.sheetForm.controls.priority.setValue('Low');
     // Loops through all inputs in sheet
     for (let i = 0; i < template.items.length; i++) {
       const type = template.items[i].type;

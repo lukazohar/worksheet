@@ -18,9 +18,12 @@ const UserSchema = Schema({
             templateTitle: { type: String },
             title: { type: String },
             description: { type: String, default: '' },
-            created: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
-            modified: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
-            status: { type: String, default: 'Not started yet' },
+            sheetCreated: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
+            sheetModified: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
+            status: { type: String, default: 'Not Started Yet' },
+            statusModified: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
+            priority: { type: String, default: 'Low' },
+            priorityModified: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
             items: { type: Array }
         }
     ],

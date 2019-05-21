@@ -132,7 +132,6 @@ export class TemplateService {
 
   // Adds table
   addTable(items: FormArray): FormArray {
-    // @ts-ignore
     items.push(new FormGroup({
       type: new FormControl('table'),
       header: new FormControl('')
@@ -143,23 +142,28 @@ export class TemplateService {
   addTableCell(): void {
   }
 
-  // Adds list
+  // Adds list to array of items
   addList(items: FormArray): FormArray {
-    // @ts-ignore
     items.push(new FormGroup({
       type: new FormControl('list'),
-      header: new FormControl('')
+      header: new FormControl(''),
+      // Adds 1 starting row
+      rows: new FormArray([
+        new FormControl()
+      ])
     }));
     return items;
   }
 
   // Adds checkboxes
   addCheckboxes(items: FormArray): FormArray {
-    // @ts-ignore
     items.push(new FormGroup({
       type: new FormControl('checkboxes'),
-      header: new FormControl('')
+      value: new FormControl(''),
+      rows: new FormArray([ new FormControl() ])
     }));
     return items;
+  }
+  addCheckBox(items: FormArray, itemIndex: number, value: string) {
   }
 }

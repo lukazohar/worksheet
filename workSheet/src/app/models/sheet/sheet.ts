@@ -8,6 +8,8 @@ export interface ISheet {
     created: string;
     modified: string;
     status: string;
-    statusChanged: string;
+    statusModified: string;
+    priority: string;
+    priorityModified: string;
     items: Array<IHeader | IInputFields>;
 }

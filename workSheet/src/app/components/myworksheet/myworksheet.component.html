@@ -1,20 +1,20 @@
-<div class="row sheetPDF">
-  <h1>My Sheets</h1>
-  <div class="row">
+<div class="row">
+  <h1 class="col s12 center-align">My Sheets</h1>
+</div>
+<div class="row" id="sheetPDF">
+  <div class="col s12 m12 l2">
     <input routerLink="/add-worksheet" type="button" value="Add New Sheet" class="btn btn-small waves-effect waves-light blue lighten-2">
   </div>
-  <div class="sort">
-    <a materialize="dropdown" class='dropdown-button btn blue-grey lighten-5 black-text' href='#' data-activates='dropdown1'> {{ sortType }} </a>
+  <div class="col s1 m12 l2">
+    <a materialize="dropdown" class="dropdown-button btn blue-grey lighten-5 black-text" href='#' data-activates='dropdown1'> {{ sortType }} </a>
     <!-- Dropdown Structure -->
     <ul id='dropdown1' class='dropdown-content'>
       <li *ngFor="let sortType of sortTypes; index as i">
         <a> {{ sortType }} </a>
       </li>
-    </ul>
+    </ul> 
   </div>
-</div>
-<div class="row">
-  <nav class="search-bar">
+  <nav class="search-bar col s12 m12 l8">
     <div class="nav-wrapper blue lighten-4">
       <form>
         <div class="input-field">
@@ -26,106 +26,10 @@
     </div>
   </nav>
 </div>
-<div class="row">
+<div>
   <ul>
-    <li *ngFor="let sheet of sheets; let i = index">
-      <div *ngIf="isThisExpandedSheet(i); else isNotExpandedSheet" class="col s12 m12 l12 sheet">
-        <a class="waves-effect waves-light btn-floating right squared extend-template-arrow" (click)="closeSheet()"><i class="material-icons left">expand_less</i></a>
-        <a class="waves-effect waves-light btn-floating right squared extend-template-arrow red" (click)="deleteSheet(i)"><i class="material-icons left">delete_forever</i></a>  
-        <div class="row">
-          <div class="col center">
-            <form [formGroup]="expandedSheetForm" (ngSubmit)="updateSheet()" novalidate>
-              <ul>
-                <li>
-                  <div class="input-field col s12">
-                    <input formControlName="title" placeholder="Title" id="description" type="text" class="validate">
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="col s12">
-                      <div class="row">
-                        <div class="input-field col s12">
-                          <textarea formControlName="description" placeholder="Description" id="descriptionTextarea" class="materialize-textarea"></textarea>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li *ngFor="let item of expandedSheetForm.controls.items.controls; index as i">
-                  <div formArrayName="items">
-                    <form [formGroup]="item">
-                      <div [ngSwitch]="item.value.type">
-                        <!-- Header -->
-                        <div *ngSwitchCase="'header'">
-                          <div class="inputElement">
-                            <div class="input-field col s12">
-                              <hr>
-                              <label for="">Header</label>
-                              <input formControlName="value" placeholder="Header" id="fieldHeader" type="text" class="validate">
-                            </div>
-                          </div>
-                        </div>
-                        <!-- Field inputs -->
-                        <div *ngSwitchCase="'inputFields'">
-                          <div class="inputElement">
-                            <div class="input-field col">
-                              <hr>
-                              <!-- <input formControlName="header" placeholder="Group header" id="fieldHeader" type="text" class="validate"> -->
-                              <b class="left-align"> {{ item.value.header }} </b>
-                              <ul>
-                                <li *ngFor="let inputField of expandedSheetForm.controls.items.controls[i].controls.inputs.controls; index as y">
-                                  <div formArrayName="inputs">
-                                    <form [formGroup]="inputField">
-                                      <div class="input-group">
-                                        <p class="field-header col s4"> {{ inputField.value.header }} </p>
-                                        <input formControlName="value" placeholder="Value" id="fieldHeader" type="text" class="validate col s4 offset-s1">
-                                      </div>
-                                    </form>
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- Table -->
-                        <div *ngSwitchCase="'table'">
-        
-                        </div>
-                        <!-- List -->
-                        <div *ngSwitchCase="'list'">
-        
-                        </div>
-                        <!-- Checkboxes -->
-                        <div *ngSwitchCase="'checkboxes'">
-        
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </li>
-                <input type="submit" value="Edit Sheet" class="btn btn-small waves-effect waves-light blue lighten-2 left">
-              </ul>
-            </form>
-          </div>
-        </div>
-      </div>
-      <ng-template #isNotExpandedSheet>
-        <div class="col s12 m12 l12 sheet">
-          <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow" (click)="expandSheet(i)"><i class="material-icons left">arrow_downward</i></a>
-          <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow red" (click)="deleteSheet(i)"><i class="material-icons left">delete</i></a>
-          <b> {{ sheet.title }} </b>
-          <a materialize="dropdown" class='dropdown-button btn blue-grey lighten-5 black-text' href='#' data-activates='dropdown2'> {{ status }} </a>
-          <!-- Dropdown Structure -->
-          <ul id='dropdown2' class='dropdown-content'>
-            <li *ngFor="let status of statusTypes; index as i">
-              <a> {{ status }} </a>
-            </li>
-          </ul>
-          <p> {{ sheet.description }} </p>
-        </div>
-      </ng-template>
-      <button (click)="downloadPDF()">Dowload PDF</button>
+    <li class="row" *ngFor="let sheet of sheets; i as index" class="col s12 m12 l9 sheet light-blue lighten-5 z-depth-2">
+      <app-sheet class="col s12 m12 l12" class="sheet" [sheet]="sheet"></app-sheet>
     </li>
   </ul>
 </div>

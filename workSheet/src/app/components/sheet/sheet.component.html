@@ -1,54 +1,49 @@
 <!-- Status of sheeet -->
 <div class="statuses row">
-  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'grey': sheet.status == 'Not Started Yet', 'grey lighten-5': sheet.status != 'Not Started Yet' }">Not Started Yet</button>
-  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'red': sheet.status == 'On Hold', 'red lighten-5': sheet.status != 'On Hold' }">On Hold</button>
-  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'blue': sheet.status == 'In Progress', 'blue lighten-5': sheet.status != 'In Progress' }">In Progress</button>
-  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'green': sheet.status == 'Finished', 'green lighten-5': sheet.status != 'Finished' }">Finished</button>
+  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'grey lighten-1': sheet.status === 'Not Started Yet', 'blue-grey lighten-5 grey-text': sheet.status !== 'Not Started Yet' }">Not Started Yet</button>
+  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'red': sheet.status === 'On Hold', 'orange lighten-5 red-text': sheet.status !== 'On Hold' }">On Hold</button>
+  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'blue lighten-1': sheet.status === 'In Progress', 'light-blue lighten-5 blue-text': sheet.status !== 'In Progress' }">In Progress</button>
+  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'green lighten-1': sheet.status === 'Finished', 'light-green lighten-5 green-text': sheet.status !== 'Finished' }">Finished</button>
 </div>
 <!-- Priority of sheet -->
 <div class="priorities row">
-  <button (click)="setPriority($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'blue': sheet.priority == 'Low', 'blue lighten-5': sheet.priority != 'Low' }">Low</button>
-  <button (click)="setPriority($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'yellow': sheet.priority == 'Medium', 'yellow lighten-5': sheet.priority != 'Medium' }">Medium</button>
-  <button (click)="setPriority($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'red': sheet.priority == 'High', 'red lighten-5': sheet.priority != 'High' }">High</button>
+  <button (click)="setPriority($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'blue lighten-1': sheet.priority === 'Low', 'light-blue lighten-5 blue-text': sheet.priority !== 'Low' }">Low</button>
+  <button (click)="setPriority($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'yellow lighten-2 white-text': sheet.priority === 'Medium', 'lime lighten-5 black-text': sheet.priority !== 'Medium' }">Medium</button>
+  <button (click)="setPriority($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'red': sheet.priority === 'High', 'orange lighten-5 red-text': sheet.priority !== 'High' }">High</button>
 </div>
 
-<p> {{ sheet.status }} </p>
 
-<div *ngIf="isSheetExpanded(); else isNotExpandedSheet">
-  <p> {{ sheet._id }}</p>
-  <a class="waves-effect waves-light btn-floating right squared extend-template-arrow" (click)="closeSheet()"><i class="material-icons left">expand_less</i></a>
-  <a class="waves-effect waves-light btn-floating right squared extend-template-arrow red" (click)="deleteSheet(i)"><i class="material-icons left">delete_forever</i></a>  
+<div *ngIf="isSheetExpanded(); else isNotExpandedSheet" class="sheet" class="row">
+  <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow" (click)="closeSheet(i)"><i class="material-icons left">expand_less</i></a>
+  <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow red" (click)="deleteSheet(i)"><i class="material-icons left">delete</i></a>
   <a class="waves-effect waves-light btn-floating right squared extend-template-arrow grey" (click)="downloadPDF(i)"><i class="material-icons left">picture_as_pdf</i></a>
-  <div class="center">
-    <form [formGroup]="expandedSheetForm" (ngSubmit)="updateSheet()" novalidate>
-      <ul class="row">
-        <li class="col s12 m4 l2">
-          <div class="input-field">
-            <input formControlName="title" placeholder="Title" id="description" type="text" class="validate">
-          </div>
-          <div class="col s12 m6 l4">
-          </div>
-        </li>
-        <li class="col s12 m6 l4">
-          <div class="col s12">
-            <div class="">
-              <div class="input-field">
-                <textarea formControlName="description" placeholder="Description" id="descriptionTextarea" class="materialize-textarea"></textarea>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li class="col s12 m6 l3 sheet" *ngFor="let item of expandedSheetForm.controls.items.controls; index as i">
-          <div formArrayName="items">
-            <form [formGroup]="item">
-              <div [ngSwitch]="item.value.type">
+  <form [formGroup]="expandedSheetForm" (ngSubmit)="updateSheet()" novalidate>
+    <ul>
+      <li class="row">
+        <div class="col s12 m12 l12">
+          <input formControlName="title" placeholder="Title" id="title" type="text" class="col s12 m12 l12">
+        </div>
+      </li>
+      <li class="row">
+       <div class="col s12 m12 l12">
+          <p class="modified"> Modified: {{ sheet.modified }} </p>
+       </div>
+      </li>
+      <li class="row">
+        <div class="col s12 m12 l12">
+            <textarea formControlName="description" placeholder="Description" id="descriptionTextarea" class="materialize-textarea"></textarea>
+        </div>
+      </li>
+      <li *ngFor="let item of expandedSheetForm.controls.items.controls; index as i" class="col s12 m6 l6 items">
+        <div formArrayName="items">
+          <div [formGroup]="item">
+            <div [ngSwitch]="item.value.type" class="row">
                 <!-- Header -->
                 <div *ngSwitchCase="'header'">
                   <div class="inputElement">
-                    <div class="input-field col s12">
-                      <hr>
-                      <label for="">Header</label>
-                      <input formControlName="value" placeholder="Header" id="fieldHeader" type="text" class="validate">
+                    <div class="input-field">
+                        <label for="">Header</label>
+                        <input formControlName="value" placeholder="Header" id="fieldHeader" type="text" class="validate">
                     </div>
                   </div>
                 </div>
@@ -56,16 +51,16 @@
                 <div *ngSwitchCase="'inputFields'">
                   <div class="inputElement">
                     <div class="input-field">
-                      <hr>
-                      <b class="col s12 m12 l12 left-align"> {{ item.value.header }} </b>
+                      <div class="row">
+                        <b class="col s12 m12 l12"> {{ item.value.header }} </b>
+                      </div>
                       <ul>
-                        <li *ngFor="let inputField of expandedSheetForm.controls.items.controls[i].controls.inputs.controls; index as y">
-                          <div formArrayName="inputs" class="row">
+                        <li class="row" *ngFor="let inputField of expandedSheetForm.controls.items.controls[i].controls.inputs.controls; index as y">
+                          <div class="input-group" formArrayName="inputs">
                             <form [formGroup]="inputField">
-                              <div class="input-group">
-                                <p class="col s6 m4 l2 field-header"> {{ inputField.value.header }} : </p>
-                                <input class="col s6 m4 l2 validate" formControlName="value" placeholder="Value" id="fieldHeader" type="text">
-                              </div>
+                              <hr>
+                              <b class="col s6 m6 l6"> {{ inputField.value.header }} : </b>
+                              <input class="col s6 m6 l6 field-value" formControlName="value" placeholder="Value" id="fieldHeader" type="text">
                             </form>
                           </div>
                         </li>
@@ -85,81 +80,79 @@
                 <div *ngSwitchCase="'checkboxes'">
                 
                 </div>
-              </div>
-            </form>
+             </div>
+            </div>
+        </div>
+       </li>
+     </ul>
+    </form>
+</div>
+  
+<ng-template #isNotExpandedSheet>
+  <div class="sheet" class="row">
+    <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow" (click)="expandSheet(i)"><i class="material-icons left">expand_more</i></a>
+    <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow red" (click)="deleteSheet(i)"><i class="material-icons left">delete</i></a>
+    <a class="waves-effect waves-light btn-floating right squared extend-template-arrow grey" (click)="downloadPDF(i)"><i class="material-icons left">picture_as_pdf</i></a>
+    <ul>
+      <li class="row">
+        <div class="col s12 m12 l12">
+          <p class="title"> {{ sheet.title }} </p>
+        </div>
+        </li>
+        <li class="row">
+          <div class="col s12 m12 l12">
+            <p class="modified"> Modified: {{ sheet.modified }} </p>
           </div>
         </li>
-        <div class="row">
-          <div class="col s12 m12 l12 left-align">
-            <input type="submit" value="Edit Sheet" class="btn btn-small waves-effect waves-light blue lighten-2">
+        <li class="row">
+          <div class="col s12 m12 l12">
+            <p class="description"> {{ sheet.description }} </p>
           </div>
-        </div>
+        </li>
+        <li *ngFor="let item of sheet.items; index as i" class="col s12 m6 l6 items">
+          <div [ngSwitch]="item.type" class="row">
+            <!-- Header -->
+            <div *ngSwitchCase="'header'">
+              <div class="inputElement">
+                <div class="input-field">
+                  <label for="">Header</label>
+                  <p class="col s12 m12 l12"> {{ item.value.value }} </p>
+                </div>
+              </div>
+            </div>
+            <!-- Field inputs -->
+            <div *ngSwitchCase="'inputFields'">
+              <div class="inputElement">
+                <div class="input-field">
+                  <div class="row">
+                    <b class="col s12 m12 l12"> {{ item.header }} </b>
+                  </div>
+                  <ul>
+                    <li class="row" *ngFor="let inputField of sheet.items[i].inputs; index as y">
+                      <div class="input-group">
+                        <hr>
+                        <b class="col s6 m6 l6"> {{ inputField.header }} : </b>
+                        <p class="col s6 m6 l6 field-value"> {{ inputField.value }} </p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- Table -->
+            <div *ngSwitchCase="'table'">
+          
+            </div>
+            <!-- List -->
+            <div *ngSwitchCase="'list'">
+          
+            </div>
+            <!-- Checkboxes -->
+            <div *ngSwitchCase="'checkboxes'">
+          
+            </div>
+          </div>
+        </li>
       </ul>
-    </form>
-  </div>
-</div>
-
-  <ng-template #isNotExpandedSheet>
-   <div id="sheet">
-     <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow" (click)="expandSheet(i)"><i class="material-icons left">expand_more</i></a>
-     <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow red" (click)="deleteSheet(i)"><i class="material-icons left">delete</i></a>
-     <a class="waves-effect waves-light btn-floating right squared extend-template-arrow grey" (click)="downloadPDF(i)"><i class="material-icons left">picture_as_pdf</i></a>
-     <ul>
-       <li>
-         <div class="col s12 m4 l2">
-           <p class="title"> {{ sheet.title }} </p>
-         </div>
-       </li>
-       <li class="col s12 m6 l4">
-       </li>
-       <li class="row">
-         <div class="col s12">
-           <p> {{ sheet.description }} </p>
-         </div>
-       </li>
-       <li *ngFor="let item of sheet.items; index as i" class="row">
-         <div [ngSwitch]="item.type">
-           <!-- Header -->
-           <div *ngSwitchCase="'header'">
-             <div class="inputElement">
-               <div class="input-field">
-                 <hr>
-                 <label for="">Header</label>
-                 <p class="col s12 m12 l12"> {{ item.value.value }} </p>
-               </div>
-             </div>
-           </div>
-           <!-- Field inputs -->
-           <div *ngSwitchCase="'inputFields'">
-             <div class="inputElement">
-               <div class="input-field">
-                 <hr>
-                 <b class="col s12 m12 l12"> {{ item.header }} </b>
-                 <ul>
-                   <li class="row" *ngFor="let inputField of sheet.items[i].inputs; index as y">
-                     <div class="input-group">
-                       <b class="col s6 m4 l2"> {{ inputField.header }} : </b>
-                       <p class="col s6 m4 l2"> {{ inputField.value }} </p>
-                     </div>
-                   </li>
-                 </ul>
-               </div>
-             </div>
-           </div>
-           <!-- Table -->
-           <div *ngSwitchCase="'table'">
-          
-           </div>
-           <!-- List -->
-           <div *ngSwitchCase="'list'">
-          
-           </div>
-           <!-- Checkboxes -->
-           <div *ngSwitchCase="'checkboxes'">
-          
-           </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-</ng-template>
+    </div>
+  </ng-template>

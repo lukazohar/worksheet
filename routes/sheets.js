@@ -6,16 +6,16 @@ require('../config/passport')(passport);
 
 const Sheet = require('../models/sheet');
 
-
 // Sheet
 router.route('/sheet')
-    .get(passport.authenticate('jwt', {session: false}, (req, res) => {
+    .get(passport.authenticate('jwt', {session: false}, (_req, res) => {
         // TODO Dodaj da vrne sheet z id-jem
         return res.send().status(501);
     }))
     .post(passport.authenticate('jwt', {session: false}), (req, res) => {
         // Extracts sheet object from HTTP body and userID
         let editedSheet = req.body;
+        editedSheet.modified = moment().format('DD.MM.YYYY HH:mm');
         const userID = req.user._id;
         Sheet.addSheet(userID, editedSheet, (err, newsheet) => {
             if(err) {
@@ -43,7 +43,7 @@ router.route('/sheet')
         const sheetId = req.body._id;
         const updatedSheet = req.body;
         // Sets modified date to current
-        updatedSheet.modified = moment().format('DD.MM.YYYY HH:mm');
+        updatedSheet.modified = moment().format('DD.MM.YYYY HH:mm')
         Sheet.updateSheet(userId, sheetId, updatedSheet, (err, modifiedStatus) => {
             if(err) {
                 console.error(err);
@@ -91,5 +91,46 @@ router.route('/sheet')
             }
         });
     })
+
+
+router.put('/setStatus', passport.authenticate('jwt', {session: false}), (req, res) => {
+    const userID = req.user._id;
+    const sheetID = req.body.sheetID;
+    const newStatus = req.body.status;
+    Sheet.setStatus(userID, sheetID, newStatus, (err, modifiedStatus) => {
+        if(err) throw err;
+        if(( modifiedStatus.n === 1 && modifiedStatus.nModified === 1 ) || ( modifiedStatus.n === 1 && modifiedStatus.nModified === 0 )) {
+            return res.json({
+                success: true,
+                msg: 'Status changed to ' + newStatus,
+                data: moment().format('DD.MM.YYYY HH:mm')
+            }).status(200);
+        } else return res.json({
+            success: false,
+            msg: 'Error updating sheet status to ' + newStatus
+        }).status(500);
+    })
+})
+
+router.put('/setPriority', passport.authenticate('jwt', {session: false}), (req, res) => {
+    const userID = req.user._id;
+    const sheetID = req.body.sheetID;
+    const newPriority = req.body.priority;
+    Sheet.setPriority(userID, sheetID, newPriority, (err, modifiedStatus) => {
+        if(err) throw err;
+        if(( modifiedStatus.n === 1 && modifiedStatus.nModified === 1 ) || ( modifiedStatus.n === 1 && modifiedStatus.nModified === 0 )) {
+            return res.json({
+                success: true,
+                msg: 'Priority changed to ' + newPriority,
+                data: moment().format('DD.MM.YYYY HH:mm')
+            }).status(200);
+        } else {
+            return res.json({
+                success: false,
+                msg: 'Error updating sheet priority to ' + newPriority
+            }).status(500);
+        }
+    })
+})
 
 module.exports = router;

@@ -4,7 +4,6 @@
 - komentiraj stvari
 - polep�aj stran, stil, CSS,...
 - retry, error, razne stvari pri PIPE, rxjs funkcije pri http
-- zrihtaj route, zdej je fiksirani na 'lukazohi', neka fora je z @Input da dobi� podatke iz druge komponente, ker se sidenav nalo�i preden dobi� username
 - animacije
 - tam ko je podatkovni tip ANY, popravi v primerne
 - ko posodobi� user-ja, je problem z username (�e je druga�en username ne posodobi)

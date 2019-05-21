@@ -12,7 +12,7 @@ import { IInputFields } from 'src/app/models/template/templateItems/inputFields/
 })
 export class SheetService {
 
-  URL = 'http://localhost:3000/sheets/sheet';
+  URL = 'http://localhost:3000/sheets';
 
   constructor(
     private http: HttpClient,
@@ -34,7 +34,7 @@ export class SheetService {
 
   // Adds sheet to user
   addSheet(sheet: ISheet): Observable<ISuccessMsgResponse> {
-    return this.http.post<ISuccessMsgResponse>(this.URL, sheet, {
+    return this.http.post<ISuccessMsgResponse>(`${this.URL}/sheet`, sheet, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
@@ -43,7 +43,7 @@ export class SheetService {
 
   // Updates sheet with given data
   updateSheet(updatedSheet: ISheet): Observable<ISuccessMsgResponse> {
-    return this.http.put<ISuccessMsgResponse>(`${this.URL}`, updatedSheet, {
+    return this.http.put<ISuccessMsgResponse>(`${this.URL}/sheet`, updatedSheet, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
@@ -52,13 +52,37 @@ export class SheetService {
 
   // Delets sheet with id in parameters
   deleteSheet(sheetId: string): Observable<ISuccessMsgResponse> {
-    return this.http.delete<ISuccessMsgResponse>(`${this.URL}?sheetId=${sheetId}`, {
+    return this.http.delete<ISuccessMsgResponse>(`${this.URL}/sheet?sheetId=${sheetId}`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
     });
   }
 
+  // Sends PUT request to /sheets/setStatus route with sheetID and statusValues in query. Returns success and message
+  setStatus(sheetID: string, status: string): Observable<ISuccessMsgResponse> {
+    const body = {
+      sheetID: sheetID,
+      status: status
+    };
+    return this.http.put<ISuccessMsgResponse>(`${this.URL}/setStatus`, body, {
+      headers: new HttpHeaders({
+        'Authorization': this.token.getToken()
+      })
+    });
+  }
+
+  setPriority(sheetID: string, priority: string): Observable<ISuccessMsgResponse> {
+    const body = {
+      sheetID: sheetID,
+      priority: priority
+    };
+    return this.http.put<ISuccessMsgResponse>(`${this.URL}/setPriority`, body, {
+      headers: new HttpHeaders({
+        'Authorization': this.token.getToken()
+      })
+    });
+  }
 
   //
   // Functions for setup of sheet

@@ -23,6 +23,7 @@ import { ToastService } from './services/toast/toast.service';
 import { AddTemplateComponent } from './components/add-template/add-template.component';
 import { TemplatesComponent } from './components/templates/templates.component';
 import { UserValidator } from './validators/user/user.validator';
+import { SheetComponent } from './components/sheet/sheet.component';
 
 export function tokenGetter(): string {
   return localStorage.getItem('token');
@@ -39,7 +40,8 @@ export function tokenGetter(): string {
     RegisterComponent,
     NavbarComponent,
     AddTemplateComponent,
-    TemplatesComponent
+    TemplatesComponent,
+    SheetComponent
   ],
   imports: [
     BrowserModule,
