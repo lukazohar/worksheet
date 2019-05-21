@@ -12,7 +12,7 @@ import { IInputFields } from 'src/app/models/template/templateItems/inputFields/
 })
 export class SheetService {
 
-  URL = 'http://localhost:3000/sheets';
+  URL = '/sheets';
 
   constructor(
     private http: HttpClient,
