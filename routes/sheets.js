@@ -176,7 +176,7 @@ router.put('/setPriority', passport.authenticate('jwt', {session: false}), (req,
 
 router.get('/sort', passport.authenticate('jwt', {session: false}), (req, res) => {
     const userID = req.user._id;
-    const sortType = req.query.type;
+    const type = req.query.type;
     const limit = () => {
         if(req.query.limit) { return req.query.limit; }
         else { return 16; }
@@ -189,18 +189,17 @@ router.get('/sort', passport.authenticate('jwt', {session: false}), (req, res) =
         if(req.query.order) { return req.query.order; }
         else { return 'descending'; }
     }
-    Sheet.getSortedSheets(userID, sortType, order, limit, page, (err, sheets) => {
+    Sheet.getSortedSheets(userID, type, order(), limit(), page(), (err, sheets) => {
         if(err) throw err;
         if(!sheets) {
             return res.json({
                 success: false,
-                msg: 'Failed to sort sheets by ' + sortType,
+                msg: 'Failed to sort sheets by ' + type,
             }).status(400);
-        }
-        if(sheets) {
+        } else {
             return res.json({
                 success: true,
-                msg: 'Found and returned sheets, sorty by ' + sortType,
+                msg: 'Found and returned sheets, sorted by ' + type + ' ' + order(),
                 data: sheets
             }).status(200);
         }

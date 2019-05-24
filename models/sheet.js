@@ -84,11 +84,49 @@ module.exports.getSortedSheets = function(userID, sortType, order, limit, page, 
         if(!user) {
             callback(null, undefined);
         } else {
-            sortModule.orderSheetsByDateAscending(user.sheets, 16, 1, (err, orderedSheet) => {
-                if(err) throw err;
-                callback(null, orderedSheet);
-            });
+            switch(sortType) {
+                case 'date' : {
+                    if(order == 'ascending') {
+                        sortModule.orderSheetsByDateAscending(user.sheets, limit, page, (err, orderedSheet) => {
+                            if(err) throw err;
+                            callback(null, orderedSheet);
+                        });
+                    } else {
+                        sortModule.orderSheetsByDateDescending(user.sheets, limit, page, (err, orderedSheet) => {
+                            if(err) throw err;
+                            callback(null, orderedSheet);
+                        });
+                    }
+                };
+                case 'priority': {
+                    if(order == 'ascending') {
+                        sortModule.orderSheetsByPriorityAscending(user.sheets, limit, page, (err, orderedSheet) => {
+                            if(err) throw err;
+                            callback(null, orderedSheet);
+                        });
+                    } else {
+                        sortModule.orderSheetsByPriorityDescending(user.sheets, limit, page, (err, orderedSheet) => {
+                            if(err) throw err;
+                            callback(null, orderedSheet);
+                        });
+
+                    }
+                };
+                case 'status' : {
+                    if(order == 'ascending') {
+                        sortModule.orderSheetsByStatusAscending(user.sheets, limit, page, (err, orderedSheet) => {
+                            if(err) throw err;
+                            callback(null, orderedSheet);
+                        });
+                    } else {
+                        sortModule.orderSheetsByStatusDescending(user.sheets, limit, page, (err, orderedSheet) => {
+                            if(err) throw err;
+                            callback(null, orderedSheet);
+                        });
+
+                    }
+                }
+            }
         }
     })
 }
-
