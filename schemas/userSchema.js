@@ -9,8 +9,8 @@ const UserSchema = Schema({
         email: { type: String, require: true },
         firstName: { type: String, default: '' },
         lastName: { type: String, default: '' },
-        created: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
-        modified: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
+        created: { type: String, default: moment().format('YYYY-MM-DDTHH:mm:ss') },
+        modified: { type: String, default: moment().format('YYYY-MM-DDTHH:mm:ss') },
         password: { type: String, require: true }
     },
     sheets: [
@@ -18,12 +18,12 @@ const UserSchema = Schema({
             templateTitle: { type: String },
             title: { type: String },
             description: { type: String, default: '' },
-            sheetCreated: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
-            sheetModified: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
+            sheetCreated: { type: String, default: moment().format('YYYY-MM-DDTHH:mm:ss') },
+            sheetModified: { type: String, default: moment().format('YYYY-MM-DDTHH:mm:ss') },
             status: { type: String, default: 'Not Started Yet' },
-            statusModified: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
+            statusModified: { type: String, default: moment().format('YYYY-MM-DDTHH:mm:ss') },
             priority: { type: String, default: 'Low' },
-            priorityModified: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
+            priorityModified: { type: String, default: moment().format('YYYY-MM-DDTHH:mm:ss') },
             items: { type: Array }
         }
     ],
@@ -32,8 +32,8 @@ const UserSchema = Schema({
             title: { type: String },
             description: { type: String },
             items: { type: Array },
-            created: { type: String, default: moment().format('DD.MM.YYYY HH:mm') },
-            modified: { type: String, default: moment().format('DD.MM.YYYY HH:mm') }
+            created: { type: String, default: moment().format('YYYY-MM-DDTHH:mm:ss') },
+            modified: { type: String, default: moment().format('YYYY-MM-DDTHH:mm:ss') }
         }
     ]
 });

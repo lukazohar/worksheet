@@ -5,6 +5,8 @@ const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const config = require('./config/database');
+const schedule = require('node-schedule');
+const backup = require('mongodb-backup');
 
 // Connects to database
 mongoose.connect(config.database, { useNewUrlParser: true });
@@ -59,6 +61,16 @@ app.get('/', (req, res) => {
 app.get('/api'), (req, res) => {
     res.send('Welcome to my API for WorkSheet')
 }
+
+// Created backup every TIME
+// const test = schedule.scheduleJob('*/5 * * * * *', () => {
+//    backup({
+//        uri: config.database,
+//        root: './dbBackup'
+//    });
+//    const dbName = 'workSheet';
+//    console.log('Backup of ' + dbName + ' created');
+// });
 
 // Server port
 const port = 3000;

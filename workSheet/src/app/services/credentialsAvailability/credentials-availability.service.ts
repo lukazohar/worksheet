@@ -14,12 +14,14 @@ export class CredentialsAvailabilityService {
     private token: TokenService
   ) { }
 
+  URL = 'http://localhost:3000/users';
+
   usernameAvailabilityQuery: any;
   emailAvailabilityQuery: any;
 
   // Calls username availability on backend with username in parameters
   private checkForUsernameAvailable(username: string): Observable<ISuccessMsgResponse> {
-    return this.http.get<ISuccessMsgResponse>(`/users/usernameAvailability?username=${username}`, {
+    return this.http.get<ISuccessMsgResponse>(`${this.URL}/usernameAvailability?username=${username}`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
@@ -27,7 +29,7 @@ export class CredentialsAvailabilityService {
   }
   // Calls email availability on backend with email in parameters
   private checkForEmailAvailable(email: string): Observable<ISuccessMsgResponse> {
-    return this.http.get<ISuccessMsgResponse>(`/users/emailAvailability?email=${email}`, {
+    return this.http.get<ISuccessMsgResponse>(`${this.URL}/emailAvailability?email=${email}`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })

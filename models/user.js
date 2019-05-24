@@ -10,7 +10,10 @@ const User = module.exports = mongoose.model('User', UserSchema.UserSchema);
 
 // Finds user by ID and returns it
 module.exports.getUserById = function (id, callback) {
-    User.findById(id, callback);
+    User.findById(id, (err, user) => {
+        if(err) throw err;
+        callback(null, callback);
+    });
 };
 
 // Finds user by username and returns it

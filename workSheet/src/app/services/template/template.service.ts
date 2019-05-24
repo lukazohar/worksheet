@@ -12,7 +12,7 @@ import { IInputFields } from 'src/app/models/template/templateItems/inputFields/
 })
 export class TemplateService {
 
-  ULR = '/templates/';
+  ULR = 'http://localhost:3000/templates/';
   template: FormArray;
 
   constructor(

@@ -1,21 +1,62 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
 const moment = require('moment');
+const passport = require('passport');
 require('../config/passport')(passport);
 
 const Sheet = require('../models/sheet');
 
 // Sheet
 router.route('/sheet')
-    .get(passport.authenticate('jwt', {session: false}, (_req, res) => {
+    .get(passport.authenticate('jwt', {session: false}, (req, res) => {
+        const userID = req.user._id;
+        const sheetID = req.query.sheetID;
+        if(sheetID) {
+            Sheet.getSheet(userID, sheetID, (err, sheet) => {
+                if(err) throw err;
+                if(sheet) {
+                    return res.json({
+                        success: true,
+                        msg: 'Found sheet with id ' + sheetID,
+                        data: sheet
+                    });
+                } else {
+                    return res.json({
+                        success: false,
+                        msg: 'Sheet with id ' + sheetID + "sheet doesn't exist",
+                        data: null
+                    })
+                }
+            })
+        } else {
+            const sortType = req.query.type;
+            const limit = req.query.limit;
+            const page = req.query.page;
+            Sheet.getSortedSheets(userID, sortType, (err, sheets) => {
+                if(err) throw err;
+                if(sheets) {
+                    return res.json({
+                        success: true,
+                        msg: `Sorted sheets by: ${sortType}, limit: ${limit}, page: ${page}`,
+                        data: null
+                    });
+                } else {
+                    return res.json({
+                        success: false,
+                        msg: 'Failed to get sheets',
+                        data: null
+                    });
+                }
+            })
+        }
         // TODO Dodaj da vrne sheet z id-jem
         return res.send().status(501);
     }))
     .post(passport.authenticate('jwt', {session: false}), (req, res) => {
         // Extracts sheet object from HTTP body and userID
         let editedSheet = req.body;
-        editedSheet.modified = moment().format('DD.MM.YYYY HH:mm');
+        editedSheet.sheetCreated = moment().format('YYYY-MM-DDTHH:mm:ss');
+        editedSheet.sheetModified = moment().format('YYYY-MM-DDTHH:mm:ss');
         const userID = req.user._id;
         Sheet.addSheet(userID, editedSheet, (err, newsheet) => {
             if(err) {
@@ -43,7 +84,7 @@ router.route('/sheet')
         const sheetId = req.body._id;
         const updatedSheet = req.body;
         // Sets modified date to current
-        updatedSheet.modified = moment().format('DD.MM.YYYY HH:mm')
+        updatedSheet.modified = moment().format('YYYY-MM-DDTHH:mm:ss')
         Sheet.updateSheet(userId, sheetId, updatedSheet, (err, modifiedStatus) => {
             if(err) {
                 console.error(err);
@@ -96,14 +137,14 @@ router.route('/sheet')
 router.put('/setStatus', passport.authenticate('jwt', {session: false}), (req, res) => {
     const userID = req.user._id;
     const sheetID = req.body.sheetID;
-    const newStatus = req.body.status;
+    const newStatus = req.body.status;    
     Sheet.setStatus(userID, sheetID, newStatus, (err, modifiedStatus) => {
         if(err) throw err;
         if(( modifiedStatus.n === 1 && modifiedStatus.nModified === 1 ) || ( modifiedStatus.n === 1 && modifiedStatus.nModified === 0 )) {
             return res.json({
                 success: true,
                 msg: 'Status changed to ' + newStatus,
-                data: moment().format('DD.MM.YYYY HH:mm')
+                data: moment().format('YYYY-MM-DDTHH:mm:ss')
             }).status(200);
         } else return res.json({
             success: false,
@@ -122,7 +163,7 @@ router.put('/setPriority', passport.authenticate('jwt', {session: false}), (req,
             return res.json({
                 success: true,
                 msg: 'Priority changed to ' + newPriority,
-                data: moment().format('DD.MM.YYYY HH:mm')
+                data: moment().format('YYYY-MM-DDTHH:mm:ss')
             }).status(200);
         } else {
             return res.json({
@@ -131,6 +172,39 @@ router.put('/setPriority', passport.authenticate('jwt', {session: false}), (req,
             }).status(500);
         }
     })
+})
+
+router.get('/sort', passport.authenticate('jwt', {session: false}), (req, res) => {
+    const userID = req.user._id;
+    const sortType = req.query.type;
+    const limit = () => {
+        if(req.query.limit) { return req.query.limit; }
+        else { return 16; }
+    }
+    const page = () => {
+        if(req.query.page) { return req.query.page; }
+        else { return 1; }
+    }
+    const order = () => {
+        if(req.query.order) { return req.query.order; }
+        else { return 'descending'; }
+    }
+    Sheet.getSortedSheets(userID, sortType, order, limit, page, (err, sheets) => {
+        if(err) throw err;
+        if(!sheets) {
+            return res.json({
+                success: false,
+                msg: 'Failed to sort sheets by ' + sortType,
+            }).status(400);
+        }
+        if(sheets) {
+            return res.json({
+                success: true,
+                msg: 'Found and returned sheets, sorty by ' + sortType,
+                data: sheets
+            }).status(200);
+        }
+    });
 })
 
 module.exports = router;

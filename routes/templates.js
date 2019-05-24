@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-require('../config/passport')(passport);
-const jwt = require('jsonwebtoken');
-const config = require('../config/database');
 const moment = require('moment');
+require('../config/passport')(passport);
 
 const Template = require('../models/template');
 
@@ -19,7 +17,6 @@ router.route('/template')
         }).status(501);
     }))
     .post(passport.authenticate('jwt', {session: false}), (req, res) => {
-        // 
         let template = req.body;
         let userID = req.user._id;
         Template.addTemplate(template, userID, (err, template) => {
@@ -37,7 +34,7 @@ router.route('/template')
     })
     .put(passport.authenticate('jwt', {session: false}), (req, res) => {
         // Sets modified to current time
-        req.body.modified = moment().format('DD.MM.YYYY HH:mm');
+        req.body.modified = moment().format('YYYY-MM-DDTHH:mm:ss')
         Template.updateTemplate(req.user._id, req.body._id, req.body, (err, modifiedStatus) => {
             if(err) {
                 console.error(err);

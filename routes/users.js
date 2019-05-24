@@ -3,8 +3,8 @@ const router = express.Router();
 const passport = require('passport');
 require('../config/passport')(passport);
 const jwt = require('jsonwebtoken');
-const moment = require('moment');
 const config = require('../config/database');
+const moment = require('moment');
 
 const User = require('../models/user');
 
@@ -18,8 +18,8 @@ router.post('/register', (req, res, next) => {
             email: req.body.email,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            userCreated: moment().format('DD.MM.YYYY:MM:SS'),
-            userModified: moment().format('DD.MM.YYYY:MM:SS'),
+            userCreated: moment().format('YYYY-MM-DDTHH:mm:ss'),
+            userModified: moment().format('YYYY-MM-DDTHH:mm:ss'),
             password: req.body.password
         }
     });

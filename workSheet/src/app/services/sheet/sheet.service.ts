@@ -12,7 +12,7 @@ import { IInputFields } from 'src/app/models/template/templateItems/inputFields/
 })
 export class SheetService {
 
-  URL = '/sheets';
+  URL = 'http://localhost:3000/sheets';
 
   constructor(
     private http: HttpClient,
@@ -28,8 +28,12 @@ export class SheetService {
     });
   }
   // Returns all sheets from backend
-  getSheets() {
-    return this.http.get(this.URL);
+  getSheets(sortType?: string, limit?: number, page?: number): Observable<ISuccessMsgResponse> {
+    return this.http.get<ISuccessMsgResponse>(`${this.URL}/sort?type=${sortType.toLowerCase()}`, {
+      headers: new HttpHeaders({
+        'Authorization': this.token.getToken()
+      })
+    });
   }
 
   // Adds sheet to user

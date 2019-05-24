@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserValidator } from 'src/app/validators/user/user.validator';
 import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -24,7 +25,8 @@ export class RegisterComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private toast: ToastService,
-    private userValidator: UserValidator
+    private userValidator: UserValidator,
+    private http: HttpClient
   ) { }
 
 

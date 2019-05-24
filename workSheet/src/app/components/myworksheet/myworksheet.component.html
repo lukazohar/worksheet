@@ -10,7 +10,7 @@
     <!-- Dropdown Structure -->
     <ul id='dropdown1' class='dropdown-content'>
       <li *ngFor="let sortType of sortTypes; index as i">
-        <a> {{ sortType }} </a>
+        <a (click)="sortSheets(sortType)"> {{ sortType }} </a>
       </li>
     </ul> 
   </div>
