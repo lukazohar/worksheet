@@ -10,7 +10,7 @@ import { Observable, timer } from 'rxjs';
 })
 export class UserValidator {
 
-  URL = 'http://localhost:3000/users/';
+  URL = 'http://localhost:3000/api/users/';
 
   constructor(
     private http: HttpClient

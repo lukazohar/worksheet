@@ -1,6 +1,6 @@
 :: Starts Visual Studio Code at location bellow
 
-CD C:\Users\Luka\Documents\workSheet
+CD C:\Users\lukaz\Documents\workSheet
 SET command=code .
 %command%
 EXIT

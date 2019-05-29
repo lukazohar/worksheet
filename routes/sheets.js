@@ -54,11 +54,11 @@ router.route('/sheet')
     }))
     .post(passport.authenticate('jwt', {session: false}), (req, res) => {
         // Extracts sheet object from HTTP body and userID
-        let editedSheet = req.body;
-        editedSheet.sheetCreated = moment().format('YYYY-MM-DDTHH:mm:ss');
-        editedSheet.sheetModified = moment().format('YYYY-MM-DDTHH:mm:ss');
+        let newSheetFromBody = req.body;
+        newSheetFromBody.sheetCreated = moment().format('YYYY-MM-DDTHH:mm:ss');
+        newSheetFromBody.sheetModified = moment().format('YYYY-MM-DDTHH:mm:ss');
         const userID = req.user._id;
-        Sheet.addSheet(userID, editedSheet, (err, newsheet) => {
+        Sheet.addSheet(userID, newSheetFromBody, (err, newsheet) => {
             if(err) {
                 console.error(err);
                 return res.json({ success: false, msg: 'Server error' }).status(500);
@@ -131,7 +131,7 @@ router.route('/sheet')
                 }).status(200);
             }
         });
-    })
+    });
 
 
 router.put('/setStatus', passport.authenticate('jwt', {session: false}), (req, res) => {
@@ -150,7 +150,7 @@ router.put('/setStatus', passport.authenticate('jwt', {session: false}), (req, r
             success: false,
             msg: 'Error updating sheet status to ' + newStatus
         }).status(500);
-    })
+    });
 })
 
 router.put('/setPriority', passport.authenticate('jwt', {session: false}), (req, res) => {
@@ -175,6 +175,7 @@ router.put('/setPriority', passport.authenticate('jwt', {session: false}), (req,
 })
 
 router.get('/sort', passport.authenticate('jwt', {session: false}), (req, res) => {
+    let hasRunAlready = false;
     const userID = req.user._id;
     const type = req.query.type;
     const limit = () => {
@@ -183,7 +184,7 @@ router.get('/sort', passport.authenticate('jwt', {session: false}), (req, res) =
     }
     const page = () => {
         if(req.query.page) { return req.query.page; }
-        else { return 1; }
+        else { return 0; }
     }
     const order = () => {
         if(req.query.order) { return req.query.order; }
@@ -196,7 +197,8 @@ router.get('/sort', passport.authenticate('jwt', {session: false}), (req, res) =
                 success: false,
                 msg: 'Failed to sort sheets by ' + type,
             }).status(400);
-        } else {
+        } else if(!hasRunAlready) {
+            hasRunAlready = true;
             return res.json({
                 success: true,
                 msg: 'Found and returned sheets, sorted by ' + type + ' ' + order(),

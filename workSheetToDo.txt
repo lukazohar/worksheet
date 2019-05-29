@@ -36,3 +36,9 @@
 - pri prijavi je odziv iz strežnika napačen
 - pri urejanju profile dodaj enake validatorje kot pri registraciji
 - password iz npm namesto patterna
+- firewall pri mongodb na strežniku
+- userji na strežniku
+- userji na bazi
+- ssl
+- ko boš zrihtau ssl, disablam http (80) port
+- pri sortSheets se callback ponovi, zrihtaj

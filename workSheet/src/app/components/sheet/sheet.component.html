@@ -1,15 +1,15 @@
 <!-- Status of sheeet -->
 <div class="statuses row">
   <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'grey lighten-1': sheet.status === 'Not Started Yet', 'blue-grey lighten-5 grey-text': sheet.status !== 'Not Started Yet' }">Not Started Yet</button>
-  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'red': sheet.status === 'On Hold', 'orange lighten-5 red-text': sheet.status !== 'On Hold' }">On Hold</button>
-  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'blue lighten-1': sheet.status === 'In Progress', 'light-blue lighten-5 blue-text': sheet.status !== 'In Progress' }">In Progress</button>
-  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'green lighten-1': sheet.status === 'Finished', 'light-green lighten-5 green-text': sheet.status !== 'Finished' }">Finished</button>
+  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'red': sheet.status === 'On Hold', 'blue-grey lighten-5 red-text': sheet.status !== 'On Hold' }">On Hold</button>
+  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'blue lighten-1': sheet.status === 'In Progress', 'blue-grey lighten-5 blue-text': sheet.status !== 'In Progress' }">In Progress</button>
+  <button (click)="setStatus($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'green lighten-1': sheet.status === 'Finished', 'blue-grey lighten-5 green-text': sheet.status !== 'Finished' }">Finished</button>
 </div>
 <!-- Priority of sheet -->
 <div class="priorities row">
-  <button (click)="setPriority($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'blue lighten-1': sheet.priority === 'Low', 'light-blue lighten-5 blue-text': sheet.priority !== 'Low' }">Low</button>
-  <button (click)="setPriority($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'yellow lighten-2 white-text': sheet.priority === 'Medium', 'lime lighten-5 black-text': sheet.priority !== 'Medium' }">Medium</button>
-  <button (click)="setPriority($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'red': sheet.priority === 'High', 'orange lighten-5 red-text': sheet.priority !== 'High' }">High</button>
+  <button (click)="setPriority($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'blue lighten-1': sheet.priority === 'Low', 'blue-grey lighten-5 blue-text': sheet.priority !== 'Low' }">Low</button>
+  <button (click)="setPriority($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'yellow lighten-2 white-text': sheet.priority === 'Medium', 'blue-grey lighten-5 black-text': sheet.priority !== 'Medium' }">Medium</button>
+  <button (click)="setPriority($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'red': sheet.priority === 'High', 'blue-grey lighten-5 red-text': sheet.priority !== 'High' }">High</button>
 </div>
 
 
@@ -26,7 +26,7 @@
       </li>
       <li class="row">
        <div class="col s12 m12 l12">
-          <p class="modified"> Modified: {{ sheet.modified }} </p>
+          <p class="modified"> Modified: {{ sheet.sheetModified }} </p>
        </div>
       </li>
       <li class="row">

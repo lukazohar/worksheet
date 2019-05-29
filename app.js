@@ -37,15 +37,15 @@ app.use(cors({
 
 // Users router
 const users = require('./routes/users');
-app.use('/users', users);
+app.use('/api/users', users);
 
 // Templates route
 const templates = require('./routes/templates');
-app.use('/templates', templates);
+app.use('/api/templates', templates);
 
 // Sheets router
 const sheets = require('./routes/sheets');
-app.use('/sheets', sheets);
+app.use('/api/sheets', sheets);
 
 // Passport Middleware
 app.use(passport.initialize());

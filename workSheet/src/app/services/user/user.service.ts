@@ -10,7 +10,7 @@ import { TokenService } from '../token/token.service';
 })
 export class UserService {
 
-  URL = 'http://localhost:3000/users/profile';
+  URL = 'http://localhost:3000/api/users/profile';
 
   constructor(
     private http: HttpClient,

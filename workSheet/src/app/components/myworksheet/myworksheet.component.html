@@ -3,7 +3,7 @@
 </div>
 <div class="row">
   <div class="col s12 m2 l2">
-    <input routerLink="/add-worksheet" type="button" value="Add New Sheet" class="btn btn-small waves-effect waves-light blue lighten-2">
+    <a routerLink="/add-worksheet" class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">add</i></a>
   </div>
   <nav class="search-bar col s12 m8 l8 offset-m2 offset-l2">
     <div class="nav-wrapper blue lighten-4">
@@ -18,26 +18,88 @@
   </nav>
 </div>
 <div class="row">
-  <button (click)="sortSheets($event.target.textContent, 'ascending')" *ngIf="sortType != 'date ascending' || sortType != 'date descending'" class="btn waves-effect waves-light col s6 m3 l3 grey">Date</button>
-  <button (click)="sortSheets($event.target.textContent, 'ascending')" *ngIf="sortType == 'date ascending'" class="btn waves-effect waves-light col s6 m3 l3">Date <i class="material-icons">expand_less</i></button>
-  <button (click)="sortSheets($event.target.textContent, 'descending')" *ngIf="sortType == 'date descending'"  class="btn waves-effect waves-light col s6 m3 l3 ">Date <i class="material-icons">expand_more</i></button>
+  <button (click)="changeType('date')" *ngIf="sort.type != 'date'" class="btn waves-effect waves-light col s6 m2 l2 grey">Date <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('descending')" *ngIf="sort.type == 'date' && sort.order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Date <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('ascending')" *ngIf="sort.type == 'date' && sort.order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2 ">Date <i class="material-icons">expand_more</i></button>
   
-  <button (click)="sortSheets($event.target.textContent, 'ascending')" *ngIf="sortType != 'priority ascending' || sortType != 'priority descending'" class="btn waves-effect waves-light col s6 m3 l3 grey">Priority</button>
-  <button (click)="sortSheets($event.target.textContent, 'ascending')" *ngIf="sortType == 'priority ascending'" class="btn waves-effect waves-light col s6 m3 l3 ">Priority <i class="material-icons">expand_less</i></button>
-  <button (click)="sortSheets($event.target.textContent, 'descending')" *ngIf="sortType == 'priority descending'"  class="btn waves-effect waves-light col s6 m3 l3 ">Priority <i class="material-icons">expand_more</i></button>
+  <button (click)="changeType('priority')" *ngIf="sort.type != 'priority'" class="btn waves-effect waves-light col s6 m2 l2 grey">Priority <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('descending')" *ngIf="sort.type == 'priority' && sort.order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Priority <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('ascending')" *ngIf="sort.type == 'priority' && sort.order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2 ">Priority <i class="material-icons">expand_more</i></button>
   
-  <button (click)="sortSheets($event.target.textContent, 'ascending')" *ngIf="sortType != 'status ascending' || sortType != 'status descending'" class="btn waves-effect waves-light col s6 m3 l3 grey">Status</button>
-  <button (click)="sortSheets($event.target.textContent, 'ascending')" *ngIf="sortType == 'status ascending'" class="btn waves-effect waves-light col s6 m3 l3">Status <i class="material-icons">expand_less</i></button>
-  <button (click)="sortSheets($event.target.textContent, 'descending')" *ngIf="sortType == 'status descending'"  class="btn waves-effect waves-light col s6 m3 l3">Status <i class="material-icons">expand_more</i></button>
+  <button (click)="changeType('status')" *ngIf="sort.type != 'status'" class="btn waves-effect waves-light col s6 m2 l2 grey">Status <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('descending')" *ngIf="sort.type == 'status' && sort.order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Status <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('ascending')" *ngIf="sort.type == 'status' && sort.order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2">Status <i class="material-icons">expand_more</i></button>
   
-  <button (click)="sortSheets($event.target.textContent, 'ascending')" *ngIf="sortType != 'modified ascending' || sortType != 'modified descending'" class="btn waves-effect waves-light col s6 m3 l3 grey">Modified</button>
-  <button (click)="sortSheets($event.target.textContent, 'ascending')" *ngIf="sortType == 'modified descending'" class="btn waves-effect waves-light col s6 m3 l3">Modified <i class="material-icons">expand_less</i></button>
-  <button (click)="sortSheets($event.target.textContent, 'descending')" *ngIf="sortType == 'modified descending'"  class="btn waves-effect waves-light col s6 m3 l3">Modified <i class="material-icons">expand_more</i></button>
+  <button (click)="changeType('modified')" *ngIf="sort.type != 'modified'" class="btn waves-effect waves-light col s6 m2 l2 grey">Modified <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('descending')" *ngIf="sort.type == 'modified' && sort.order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Modified <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('ascending')" *ngIf="sort.type == 'modified' && sort.order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2">Modified <i class="material-icons">expand_more</i></button>
+  <!-- Dropdown Trigger -->
+  <div class="col s12 m3 l2 offset-s2">
+    <a materialize="dropdown" class='dropdown-button btn blue deep-purple lighten-4' href='#' data-activates='dropdownLimit'>No.: {{ sort.limit }} </a>
+    <!-- Dropdown Structure -->
+    <ul id='dropdownLimit' class='dropdown-content'>
+      <li (click)="changeLimit(8)">8</li>
+      <li (click)="changeLimit(16)">16</li>
+      <li (click)="changeLimit(32)">32</li>
+      <li (click)="changeLimit(0)">All</li>
+    </ul>
+  </div>
 </div>
-<div>
-  <ul>
-    <li class="row" *ngFor="let sheet of sheets; i as index" class="col s12 m12 l9 sheet light-blue lighten-5 z-depth-2">
+<div class="row">
+  <ul *ngIf="!loading; else loadingSheets">
+    <li class="row" *ngFor="let sheet of sheets; i as index" class="sheet light-blue lighten-5 z-depth-2">
       <app-sheet class="col s12 m12 l12" class="sheet" [sheet]="sheet"></app-sheet>
     </li>
+  </ul>
+  <ng-template #loadingSheets class="col s12 m12 l12">
+    <div class="row center-align loader">
+      <div class="preloader-wrapper big active">
+          <div class="spinner-layer spinner-blue">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div><div class="gap-patch">
+              <div class="circle"></div>
+            </div><div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+          <div class="spinner-layer spinner-red">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div><div class="gap-patch">
+              <div class="circle"></div>
+            </div><div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+          <div class="spinner-layer spinner-yellow">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div><div class="gap-patch">
+              <div class="circle"></div>
+            </div><div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+          <div class="spinner-layer spinner-green">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div><div class="gap-patch">
+              <div class="circle"></div>
+            </div><div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </ng-template>
+</div>
+<div class="row center-align">
+  <ul class="col s12 m12 l12">
+    <div class="row center-align">
+      <li *ngFor="let pgNum of pageCounter()">
+        <div (click)="changePage(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === sort.page, 'grey': pgNum !== sort.page }"> {{ pgNum }} </div>
+      </li>
+    </div>
   </ul>
 </div>

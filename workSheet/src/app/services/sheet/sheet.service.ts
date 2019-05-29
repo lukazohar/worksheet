@@ -12,7 +12,7 @@ import { IInputFields } from 'src/app/models/template/templateItems/inputFields/
 })
 export class SheetService {
 
-  URL = 'http://localhost:3000/sheets';
+  URL = 'http://localhost:3000/api/sheets';
 
   constructor(
     private http: HttpClient,
@@ -29,14 +29,8 @@ export class SheetService {
   }
   // Returns all sheets from backend
   getSheets(sortType?: string, order?: string, limit?: number, page?: number): Observable<ISuccessMsgResponse> {
-    console.log('test');
-    
-    return this.http.get<ISuccessMsgResponse>(`
-        ${this.URL}/sort
-        ?type=${sortType.toLowerCase()}
-        &order=${order}
-        &limit=${limit}
-        &page=${page}`, {
+    return this.http.get<ISuccessMsgResponse>(
+        `${this.URL}/sort?type=${sortType}&order=${order}&limit=${limit}&page=${page}`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })

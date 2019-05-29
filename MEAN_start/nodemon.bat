@@ -1,5 +1,5 @@
 :: Starts nodemon, which rebuilds application when any file is changed
 
-cd C:\Users\Luka\Documents\workSheet
+cd C:\Users\lukaz\Documents\workSheet
 set command=nodemon
 %command%
