@@ -31,9 +31,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Enables CORS
-app.use(cors({
-    origin: 'http://localhost:4200'
-}));
+app.use(cors());
 
 // Users router
 const users = require('./routes/users');
