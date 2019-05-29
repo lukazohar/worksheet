@@ -94,7 +94,7 @@ router.post('/authenticate', (req, res, next) => {
                 return res.json({
                     _id: user._id,
                     success: true,
-                    token: 'JWT ' + token,
+                    token: 'Bearer ' + token,
                     userData: {
                         profile: profile,
                         sheets: user.sheets,
