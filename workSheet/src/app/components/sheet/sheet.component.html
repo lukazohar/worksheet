@@ -12,11 +12,10 @@
   <button (click)="setPriority($event.target.textContent)" class="btn waves-effect waves-light col s6 m3 l3" [ngClass]="{ 'red': sheet.priority === 'High', 'blue-grey lighten-5 red-text': sheet.priority !== 'High' }">High</button>
 </div>
 
-
 <div *ngIf="isSheetExpanded(); else isNotExpandedSheet" class="sheet" class="row">
-  <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow" (click)="closeSheet(i)"><i class="material-icons left">expand_less</i></a>
-  <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow red" (click)="deleteSheet(i)"><i class="material-icons left">delete</i></a>
-  <a class="waves-effect waves-light btn-floating right squared extend-template-arrow grey" (click)="downloadPDF(i)"><i class="material-icons left">picture_as_pdf</i></a>
+  <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow" (click)="closeSheet()"><i class="material-icons left">expand_less</i></a>
+  <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow red" (click)="deleteSheet()"><i class="material-icons left">delete</i></a>
+  <!-- <a class="waves-effect waves-light btn-floating right squared extend-template-arrow grey" (click)="downloadPDF()"><i class="material-icons left">picture_as_pdf</i></a> -->
   <form [formGroup]="expandedSheetForm" (ngSubmit)="updateSheet()" novalidate>
     <ul>
       <li class="row">
@@ -26,7 +25,8 @@
       </li>
       <li class="row">
        <div class="col s12 m12 l12">
-          <p class="modified"> Modified: {{ sheet.sheetModified }} </p>
+        <p class="modified">Modified: {{ getDateFromNow(sheet.modified) }} </p>
+        <p class="modified">Created: {{ getDateFromNow(sheet.created) }} </p>
        </div>
       </li>
       <li class="row">
@@ -55,7 +55,7 @@
                         <b class="col s12 m12 l12"> {{ item.value.header }} </b>
                       </div>
                       <ul>
-                        <li class="row" *ngFor="let inputField of expandedSheetForm.controls.items.controls[i].controls.inputs.controls; index as y">
+                        <li class="row" *ngFor="let inputField of item.controls.inputs.controls; index as y">
                           <div class="input-group" formArrayName="inputs">
                             <form [formGroup]="inputField">
                               <hr>
@@ -85,17 +85,17 @@
         </div>
        </li>
        <li class="row center-align">
-          <div class="col s8 m4 l4 btn waves-effect waves-light" (click)="updateSheet()">Add Sheet</div>
+          <div class="col s12 m12 l12 btn blue waves-effect waves-light blue lighten" (click)="updateSheet()">Update Sheet</div>
        </li>
      </ul>
     </form>
 </div>
   
 <ng-template #isNotExpandedSheet>
-  <div class="sheet" class="row">
-    <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow" (click)="expandSheet(i)"><i class="material-icons left">expand_more</i></a>
-    <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow red" (click)="deleteSheet(i)"><i class="material-icons left">delete</i></a>
-    <a class="waves-effect waves-light btn-floating right squared extend-template-arrow grey" (click)="downloadPDF(i)"><i class="material-icons left">picture_as_pdf</i></a>
+  <div class="sheet row">
+    <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow" (click)="expandSheet()"><i class="material-icons left">expand_more</i></a>
+    <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow red" (click)="deleteSheet()"><i class="material-icons left">delete</i></a>
+    <a class="waves-effect waves-light btn-floating right squared extend-template-arrow grey" (click)="downloadPDF()"><i class="material-icons left">picture_as_pdf</i></a>
     <ul>
       <li class="row">
         <div class="col s12 m12 l12">
@@ -104,7 +104,8 @@
         </li>
         <li class="row">
           <div class="col s12 m12 l12">
-            <p class="modified"> Modified: {{ sheet.modified }} </p>
+            <p class="modified">Modified: {{ getDateFromNow(sheet.modified) }} </p>
+            <p class="modified">Created: {{ getDateFromNow(sheet.created) }} </p>
           </div>
         </li>
         <li class="row">

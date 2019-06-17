@@ -3,6 +3,7 @@ const UserSchema = require('../schemas/userSchema');
 const ObjectId = mongoose.Types.ObjectId;
 const moment = require('moment');
 const sortModule = require('../modules/sheetSort');
+const sheetTrim = require('../modules/sheetTrim');
 
 const User = mongoose.model('User', UserSchema.UserSchema);
 
@@ -77,7 +78,7 @@ module.exports.setPriority = function(userID, sheetID, priority, callback) {
         });
 }
 
-module.exports.getSortedSheets = function(userID, sortType, order, limit, page, callback) {page
+module.exports.getSortedSheets = function(userID, sortType, order, limit, page, callback) {
     User.findById(userID, (err, user) => {
         if(err) throw err;
         if(!user) {
@@ -88,9 +89,7 @@ module.exports.getSortedSheets = function(userID, sortType, order, limit, page, 
                     if(order == 'ascending') {
                         sortModule.orderSheetsByDateAscending(user.sheets, limit, page, (err, orderedSheets) => {
                             if(err) throw err;
-                            console.log('TEST 1');
                             callback(null, orderedSheets);
-                            console.log('TEST 2');
                         });
                     } else {
                         sortModule.orderSheetsByDateDescending(user.sheets, limit, page, (err, orderedSheets) => {
@@ -102,6 +101,7 @@ module.exports.getSortedSheets = function(userID, sortType, order, limit, page, 
                 case 'priority' : {
                     if(order == 'ascending') {
                         sortModule.orderSheetsByPriorityAscending(user.sheets, limit, page, (err, orderedSheets) => {
+                            console.log(orderedSheets);
                             if(err) throw err;
                             callback(null, orderedSheets);
                         });
@@ -149,4 +149,40 @@ module.exports.getSortedSheets = function(userID, sortType, order, limit, page, 
         }
 
     });
+}
+
+module.exports.getQueryedSheets = function(userID, query, limit, page, callback) {
+    User.aggregate()
+    .unwind("$sheets")
+    .match({$or: [
+        { "sheets.title": {$regex: new RegExp(query, "ig")} }
+    ]})
+    .match({_id: ObjectId(userID)})
+    .group({
+        "_id": null,
+        "sheets": { $push: "$sheets" },
+        "sheetsTitles": { $push: "$sheets.title" },
+        "noOfSheets": { $sum: 1 }
+    })
+    .project({
+        _id: false,
+        sheets: true,
+        sheetsTitles: true,
+        noOfSheets: true
+    })
+    .exec((err, result) => {
+        if(err) throw err;
+        if(result[0]) {
+            sheetTrim.trimSheets(result[0].sheets, limit, page, (err, trimmedSheets) => {
+                if(err) throw err;
+                result[0].sheets = trimmedSheets;
+            });
+            callback(null, result);
+        } else {
+            callback(null, [{sheets: null, noOfSheets: 0, sheetsTitles: 0}])
+        }
+    });
+}
+
+module.exports.getQueryedTitles = function(userID, query, callback) {
 }

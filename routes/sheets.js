@@ -39,13 +39,13 @@ router.route('/sheet')
                         success: true,
                         msg: `Sorted sheets by: ${sortType}, limit: ${limit}, page: ${page}`,
                         data: null
-                    });
+                    }).status(200);
                 } else {
                     return res.json({
                         success: false,
                         msg: 'Failed to get sheets',
                         data: null
-                    });
+                    }).status(400);
                 }
             })
         }
@@ -204,6 +204,43 @@ router.get('/sort', passport.authenticate('jwt', {session: false}), (req, res) =
                 msg: 'Found and returned sheets, sorted by ' + type + ' ' + order(),
                 data: sheets
             }).status(200);
+        }
+    });
+})
+
+router.get('/querySheets', passport.authenticate('jwt', {session: false}), (req, res) => {
+    const userID = req.user._id;
+    const query = () => {
+        if(req.query.query) { return req.query.query; }
+        else { return ''; }
+    }
+    const page = () => {
+        if(req.query.page) { return req.query.page; }
+        else { return 0; }
+    }
+    const limit = () => {
+        if(req.query.limit) { return req.query.limit; }
+        else { return 0; }
+    }
+    console.log(query(), '', limit(), '', page());
+    Sheet.getQueryedSheets(userID, query(), limit(), page(), (err, queryedSheets) => {
+        if(err) throw err;
+        if(queryedSheets) {
+            return res.json({
+                success: true,
+                msg: `Found queryed sheets, query: ${query()}, limit: ${limit()}, page: ${page()}`,
+                data: {
+                    sheets: queryedSheets[0].sheets,
+                    noOfSheets: queryedSheets[0].noOfSheets,
+                    sheetsTitles: queryedSheets[0].sheetsTitles
+                }
+            });
+        } else {
+            return res.json({
+                success: false,
+                msg: 'Failed to query sheets',
+                data: undefined
+            });
         }
     });
 })

@@ -9,45 +9,65 @@
     <div class="nav-wrapper blue lighten-4">
       <form>
         <div class="input-field">
-          <input id="search" type="search">
+          <input id="search" type="search" (keyup)="querySheets($event.target.value, page, limit)">
           <label class="label-icon search-icon" for="search"><i class="material-icons">search</i></label>
-          <i class="material-icons">close</i>
+          <i class="material-icons" (click)="removeQuery()">close</i>
         </div>
       </form>
     </div>
   </nav>
-</div>
-<div class="row">
-  <button (click)="changeType('date')" *ngIf="sort.type != 'date'" class="btn waves-effect waves-light col s6 m2 l2 grey">Date <i class="material-icons">expand_less</i></button>
-  <button (click)="changeOrder('descending')" *ngIf="sort.type == 'date' && sort.order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Date <i class="material-icons">expand_less</i></button>
-  <button (click)="changeOrder('ascending')" *ngIf="sort.type == 'date' && sort.order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2 ">Date <i class="material-icons">expand_more</i></button>
-  
-  <button (click)="changeType('priority')" *ngIf="sort.type != 'priority'" class="btn waves-effect waves-light col s6 m2 l2 grey">Priority <i class="material-icons">expand_less</i></button>
-  <button (click)="changeOrder('descending')" *ngIf="sort.type == 'priority' && sort.order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Priority <i class="material-icons">expand_less</i></button>
-  <button (click)="changeOrder('ascending')" *ngIf="sort.type == 'priority' && sort.order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2 ">Priority <i class="material-icons">expand_more</i></button>
-  
-  <button (click)="changeType('status')" *ngIf="sort.type != 'status'" class="btn waves-effect waves-light col s6 m2 l2 grey">Status <i class="material-icons">expand_less</i></button>
-  <button (click)="changeOrder('descending')" *ngIf="sort.type == 'status' && sort.order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Status <i class="material-icons">expand_less</i></button>
-  <button (click)="changeOrder('ascending')" *ngIf="sort.type == 'status' && sort.order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2">Status <i class="material-icons">expand_more</i></button>
-  
-  <button (click)="changeType('modified')" *ngIf="sort.type != 'modified'" class="btn waves-effect waves-light col s6 m2 l2 grey">Modified <i class="material-icons">expand_less</i></button>
-  <button (click)="changeOrder('descending')" *ngIf="sort.type == 'modified' && sort.order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Modified <i class="material-icons">expand_less</i></button>
-  <button (click)="changeOrder('ascending')" *ngIf="sort.type == 'modified' && sort.order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2">Modified <i class="material-icons">expand_more</i></button>
-  <!-- Dropdown Trigger -->
-  <div class="col s12 m3 l2 offset-s2">
-    <a materialize="dropdown" class='dropdown-button btn blue deep-purple lighten-4' href='#' data-activates='dropdownLimit'>No.: {{ sort.limit }} </a>
-    <!-- Dropdown Structure -->
-    <ul id='dropdownLimit' class='dropdown-content'>
-      <li (click)="changeLimit(8)">8</li>
-      <li (click)="changeLimit(16)">16</li>
-      <li (click)="changeLimit(32)">32</li>
-      <li (click)="changeLimit(0)">All</li>
-    </ul>
+  <div class="col s12 m8 l8 offset-m2 offset-l2">
+    <div class="row">
+      <div class="input-field col s12">
+        <i class="material-icons prefix">search</i>
+        <input type="text" id="autocomplete-input" class="autocomplete" value=''>
+        <label for="autocomplete-input">Search</label>
+      </div>
+    </div>
   </div>
 </div>
 <div class="row">
+  <button (click)="changeType('date')" *ngIf="type != 'date'" class="btn waves-effect waves-light col s6 m2 l2 grey">Date <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('descending')" *ngIf="type == 'date' && order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Date <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('ascending')" *ngIf="type == 'date' && order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2 ">Date <i class="material-icons">expand_more</i></button>
+  
+  <button (click)="changeType('priority')" *ngIf="type != 'priority'" class="btn waves-effect waves-light col s6 m2 l2 grey">Priority <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('descending')" *ngIf="type == 'priority' && order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Priority <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('ascending')" *ngIf="type == 'priority' && order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2 ">Priority <i class="material-icons">expand_more</i></button>
+  
+  <button (click)="changeType('status')" *ngIf="type != 'status'" class="btn waves-effect waves-light col s6 m2 l2 grey">Status <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('descending')" *ngIf="type == 'status' && order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Status <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('ascending')" *ngIf="type == 'status' && order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2">Status <i class="material-icons">expand_more</i></button>
+  
+  <button (click)="changeType('modified')" *ngIf="type != 'modified'" class="btn waves-effect waves-light col s6 m2 l2 grey">Modified <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('descending')" *ngIf="type == 'modified' && order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Modified <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('ascending')" *ngIf="type == 'modified' && order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2">Modified <i class="material-icons">expand_more</i></button>
+  <!-- Dropdown Trigger -->
+  <div class="col s12 m3 l2 offset-s2">
+    <a materialize="dropdown" class='dropdown-button btn blue deep-purple lighten-4' href='#' data-activates='dropdownLimit'>No.: {{ limit }} </a>
+    <!-- Dropdown Structure -->
+    <ul id='dropdownLimit' class='dropdown-content'>
+      <li (click)="changeLimit(4)"><a>4</a></li>
+      <li (click)="changeLimit(8)"><a>8</a></li>
+      <li (click)="changeLimit(16)"><a>16</a></li>
+      <li (click)="changeLimit(32)"><a>32</a></li>
+      <li (click)="changeLimit(0)"><a>All</a></li>
+    </ul>
+  </div>
+</div>
+<div class="row center-align">
+  <ul class="col s12 m12 l12">
+    <div class="row center-align">
+      <li *ngFor="let pgNum of pageCounter()">
+        <div *ngIf="query == ''" (click)="changePageSortSheets(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
+        <div *ngIf="query != ''" (click)="changePageQuerySheets(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
+      </li>
+    </div>
+  </ul>
+</div>
+<div class="row">
   <ul *ngIf="!loading; else loadingSheets">
-    <li class="row" *ngFor="let sheet of sheets; i as index" class="sheet light-blue lighten-5 z-depth-2">
+    <li class="row" *ngFor="let sheet of sheets" class="sheet light-blue lighten-5 z-depth-2">
       <app-sheet class="col s12 m12 l12" class="sheet" [sheet]="sheet"></app-sheet>
     </li>
   </ul>
@@ -98,8 +118,12 @@
   <ul class="col s12 m12 l12">
     <div class="row center-align">
       <li *ngFor="let pgNum of pageCounter()">
-        <div (click)="changePage(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === sort.page, 'grey': pgNum !== sort.page }"> {{ pgNum }} </div>
+        <div *ngIf="query == ''" (click)="changePageSortSheets(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
+        <div *ngIf="query != ''" (click)="changePageQuerySheets(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
       </li>
     </div>
   </ul>
 </div>
+
+<p> {{ page }} </p>
+<pre> {{ queryTitles | json }} </pre>

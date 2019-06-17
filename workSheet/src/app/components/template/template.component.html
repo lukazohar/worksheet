@@ -1,0 +1,164 @@
+<div *ngIf="isTemplateExpanded(); else isNotExpandedTemplate" class="template" class="row">
+  <div class="row">
+    <a class="waves-effect waves-light btn-floating right squared" (click)="closeTemplate()"><i class="material-icons left">expand_less</i></a>
+    <a class="waves-effect waves-light btn-floating right squared red" (click)="deleteTemplate()"><i class="material-icons left">delete</i></a>
+    <a class="waves-effect waves-light btn-floating right squared extend-template-arrow grey" (click)="downloadPDF()"><i class="material-icons left">picture_as_pdf</i></a>
+    <div class="">
+      <div class="">
+        <!-- Dropdown Trigger -->
+        <a materialize="dropdown" class="dropdown-button btn-floating btn-large waves-effect waves-light blue lighten-2" href='#' data-activates='dropdown2'><i class="material-icons">add</i></a>
+        <!-- Dropdown Structure -->
+        <ul id='dropdown2' class='dropdown-content'>
+          <li (click)="addHeader()"><a><i class="material-icons">remove</i>Header</a></li>
+          <li (click)="addInputFields()"><a><i class="material-icons"></i>Input fields</a></li>
+          <li (click)="addTable()"><a><i class="material-icons">grid_on</i>Table</a></li>
+          <li (click)="addList()"><a><i class="material-icons">format_list_bulleted</i>List</a></li>
+          <li (click)="addCheckboxes()"><a><i class="material-icons">check_box</i>Checkboxes</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="expandedTemplateForm" (ngSubmit)="updateTemplate()" novalidate>
+    <ul>
+      <li class="row">
+        <div class="col s12 m12 l12">
+          <input formControlName="title" placeholder="Title" id="title" type="text" class="col s12 m12 l12">
+        </div>
+      </li>
+      <li class="row">
+       <div class="col s12 m12 l12 dates">
+        <p class="modified date">Modified: {{ getDateFromNow(template.modified) }} </p>
+        <p class="modified date">Created: {{ getDateFromNow(template.created) }} </p>
+       </div>
+      </li>
+      <li class="row">
+        <div class="col s12 m12 l12">
+          <textarea formControlName="description" placeholder="Description" id="descriptionTextarea" class="materialize-textarea"></textarea>
+        </div>
+      </li>
+      <li *ngFor="let item of expandedTemplateForm.controls.items.controls; index as i" class="row items">
+        <div formArrayName="items">
+          <div [formGroup]="item">
+            <div [ngSwitch]="item.value.type" class="col s12 m12 l12">
+                <!-- Header -->
+                <div *ngSwitchCase="'header'">
+                  <div class="inputElement">
+                    <div class="input-field">
+                        <label for="">Header</label>
+                        <input formControlName="value" placeholder="Header" id="fieldHeader" type="text" class="validate">
+                    </div>
+                  </div>
+                </div>
+                <!-- Field inputs -->
+                <div *ngSwitchCase="'inputFields'">
+                  <div class="inputElement">
+                    <div class="input-field">
+                      <div class="row">
+                        <b class="col s12 m12 l12"> {{ item.value.header }} </b>
+                      </div>
+                      <ul>
+                        <li class="row" *ngFor="let inputField of item.controls.inputs.controls; index as y">
+                          <div class="input-group" formArrayName="inputs">
+                            <form [formGroup]="inputField">
+                              <hr>
+                              <b class="col s6 m6 l6"> {{ inputField.value.header }} : </b>
+                              <input class="col s6 m6 l6 field-value" formControlName="value" placeholder="Value" id="fieldHeader" type="text">
+                            </form>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <!-- Table -->
+                <div *ngSwitchCase="'table'">
+                
+                </div>
+                <!-- List -->
+                <div *ngSwitchCase="'list'">
+                
+                </div>
+                <!-- Checkboxes -->
+                <div *ngSwitchCase="'checkboxes'">
+                  <p> {{ item.value | json }} </p>
+                </div>
+             </div>
+            </div>
+        </div>
+       </li>
+       <li class="row center-align">
+          <div class="col s12 m12 l12 btn blue waves-effect waves-light" (click)="updateTemplate()">Update Template</div>
+       </li>
+     </ul>
+    </form>
+</div>
+
+<ng-template #isNotExpandedTemplate>
+    <div class="template row">
+      <a class="waves-effect waves-light btn-floating right squared" (click)="expandTemplate()"><i class="material-icons left">expand_more</i></a>
+      <a class="waves-effect waves-light btn-floating right squared red" (click)="deleteTemplate()"><i class="material-icons left">delete</i></a>
+      <a class="waves-effect waves-light btn-floating right squared grey" (click)="downloadPDF()"><i class="material-icons left">picture_as_pdf</i></a>
+      <ul>
+        <li class="row">
+          <div class="col s12 m12 l12">
+            <p class="title"> {{ template.title }} </p>
+          </div>
+          </li>
+          <li class="row">
+            <div class="col s12 m12 l12">
+              <p class="modified">Modified: {{  getDateFromNow(template.modified) }} </p>
+              <p class="modified">Created: {{ getDateFromNow(template.created) }} </p>
+            </div>
+          </li>
+          <li class="row">
+            <div class="col s12 m12 l12">
+              <p class="description"> {{ template.description }} </p>
+            </div>
+          </li>
+          <li *ngFor="let item of template.items; index as i" class="col s12 m6 l6 items">
+            <div [ngSwitch]="item.type" class="row">
+              <!-- Header -->
+              <div *ngSwitchCase="'header'">
+                <div class="inputElement">
+                  <div class="input-field">
+                    <label for="">Header</label>
+                    <p class="col s12 m12 l12"> {{ item.value.value }} </p>
+                  </div>
+                </div>
+              </div>
+              <!-- Field inputs -->
+              <div *ngSwitchCase="'inputFields'">
+                <div class="inputElement">
+                  <div class="input-field">
+                    <div class="row">
+                      <b class="col s12 m12 l12"> {{ item.header }} </b>
+                    </div>
+                    <ul>
+                      <li class="row" *ngFor="let inputField of template.items[i].inputs; index as y">
+                        <div class="input-group">
+                          <hr>
+                          <b class="col s6 m6 l6"> {{ inputField.header }} : </b>
+                          <p class="col s6 m6 l6 field-value"> {{ inputField.value }} </p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <!-- Table -->
+              <div *ngSwitchCase="'table'">
+            
+              </div>
+              <!-- List -->
+              <div *ngSwitchCase="'list'">
+            
+              </div>
+              <!-- Checkboxes -->
+              <div *ngSwitchCase="'checkboxes'">
+            
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+</ng-template>

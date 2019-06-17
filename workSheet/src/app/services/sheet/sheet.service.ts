@@ -29,8 +29,15 @@ export class SheetService {
   }
   // Returns all sheets from backend
   getSheets(sortType?: string, order?: string, limit?: number, page?: number): Observable<ISuccessMsgResponse> {
-    return this.http.get<ISuccessMsgResponse>(
-        `${this.URL}/sort?type=${sortType}&order=${order}&limit=${limit}&page=${page}`, {
+    return this.http.get<ISuccessMsgResponse>(`${this.URL}/sort?type=${sortType}&order=${order}&limit=${limit}&page=${page}`, {
+      headers: new HttpHeaders({
+        'Authorization': this.token.getToken()
+      })
+    });
+  }
+
+  getQueryedShets(query: string, page?: number, limit?: number): Observable<ISuccessMsgResponse> {
+    return this.http.get<ISuccessMsgResponse>(`${this.URL}/querySheets?query=${query}&limit=${limit}&page=${page}`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })

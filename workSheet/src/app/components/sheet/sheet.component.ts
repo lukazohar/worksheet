@@ -5,6 +5,7 @@ import { SheetService } from 'src/app/services/sheet/sheet.service';
 import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
 import { IUserModel } from 'src/app/models/user-model';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-sheet',
@@ -37,6 +38,10 @@ export class SheetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  getDateFromNow(dateString: string): string {
+    return moment(dateString).fromNow();
   }
 
   updateSheetInLocalstorage(sheetId: string, sheet: ISheet) {
@@ -200,6 +205,9 @@ export class SheetComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+
+  downloadPDF() {
   }
 
 }

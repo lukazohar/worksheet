@@ -134,12 +134,45 @@ export class TemplateService {
   addTable(items: FormArray): FormArray {
     items.push(new FormGroup({
       type: new FormControl('table'),
-      header: new FormControl('')
+      rows: new FormArray([new FormGroup({
+        header: new FormControl(''),
+        values: new FormArray([
+          new FormControl('Test')
+        ])
+      })])
     }));
     return items;
   }
-  // Adds table cell
-  addTableCell(): void {
+  addTableRow(items: FormArray, itemIndex: number): FormArray {
+    // @ts-ignore
+    items.controls[itemIndex].controls.rows.push(
+      new FormGroup({
+        header: new FormControl(''),
+        values: new FormArray([ new FormGroup({
+          value: new FormControl()
+        }) ])
+      })
+    );
+    return items;
+  }
+  removeTableRow(items: FormArray, itemIndex: number, rowIndex: number): FormArray {
+    // @ts-ignore
+    items.controls[itemIndex].controls.rows.removeAt(rowIndex);
+    return items;
+  }
+  addTableColumn(items: FormArray, itemIndex: number): FormArray {
+    // @ts-ignore
+    items.controls[itemIndex].controls.rows.forEach(row => {
+      row.controls.values.push(new FormArray([]));
+    });
+    return items;
+  }
+  removeTableColumn(items: FormArray, itemIndex: number, columnIndex: number): FormArray {
+    // @ts-ignore
+    items.controls[itemIndex].controls.rows.forEach(row => {
+      row.controls.values.removeAt(columnIndex);
+    });
+    return items;
   }
 
   // Adds list to array of items
@@ -149,7 +182,7 @@ export class TemplateService {
       header: new FormControl(''),
       // Adds 1 starting row
       rows: new FormArray([
-        new FormControl()
+        new FormControl('Test')
       ])
     }));
     return items;
@@ -159,8 +192,13 @@ export class TemplateService {
   addCheckboxes(items: FormArray): FormArray {
     items.push(new FormGroup({
       type: new FormControl('checkboxes'),
-      value: new FormControl(''),
-      rows: new FormArray([ new FormControl() ])
+      header: new FormControl(),
+      boxes: new FormArray([
+        new FormGroup({
+          checked: new FormControl(false),
+          value: new FormControl('')
+        })
+      ])
     }));
     return items;
   }

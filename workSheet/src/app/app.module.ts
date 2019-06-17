@@ -24,6 +24,7 @@ import { AddTemplateComponent } from './components/add-template/add-template.com
 import { TemplatesComponent } from './components/templates/templates.component';
 import { UserValidator } from './validators/user/user.validator';
 import { SheetComponent } from './components/sheet/sheet.component';
+import { TemplateComponent } from './components/template/template.component';
 
 export function tokenGetter(): string {
   return localStorage.getItem('token');
@@ -41,7 +42,8 @@ export function tokenGetter(): string {
     NavbarComponent,
     AddTemplateComponent,
     TemplatesComponent,
-    SheetComponent
+    SheetComponent,
+    TemplateComponent
   ],
   imports: [
     BrowserModule,

@@ -23,7 +23,7 @@ export class AddTemplateComponent implements OnInit {
   // Gets items array in template form
   get items(): FormArray { return this.templateForm.get('items') as FormArray; }
   // Sets items in template form
-  set items(test: FormArray) { this.templateForm.setControl('items', test); }
+  set items(newItems: FormArray) { this.templateForm.setControl('items', newItems); }
   // Returns inputs at index in parameter
   inputs(index: number): FormArray {
     return this.templateForm.controls.items[index];
@@ -61,12 +61,25 @@ export class AddTemplateComponent implements OnInit {
     this.items = this.templateService.removeInputField(this.items, index1, index2);
   }
 
+  test() {
+    console.log(this.items);
+  }
+
   // Adds table
   addTable(): void {
     this.items = this.templateService.addTable(this.items);
   }
-  // Adds table cell
-  addTableCell(): void {
+  addTableRow(itemIndex: number) {
+    this.items = this.templateService.addTableRow(this.items, itemIndex);
+  }
+  removeTableRow(itemIndex: number, rowIndex: number) {
+    this.items = this.templateService.removeTableRow(this.items, itemIndex, rowIndex);
+  }
+  addTableColumn(itemIndex: number) {
+    this.items = this.templateService.addTableColumn(this.items, itemIndex);
+  }
+  removeTableColumn(itemIndex: number, columnIndex: number) {
+    this.items = this.templateService.removeTableColumn(this.items, itemIndex, columnIndex);
   }
 
   // Adds list

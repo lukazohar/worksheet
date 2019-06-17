@@ -5,7 +5,7 @@ input[type=text], textarea {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    padding: 5px;
+    padding: 0px;
 }
 
 label {
@@ -18,4 +18,12 @@ label {
 
 .remove-btn-top {
     margin-top: 30px;
+}
+
+.rmRow {
+    margin-bottom: -50px;
+}
+
+.list-row-add-btn {
+    margin-left: 10px;
 }
