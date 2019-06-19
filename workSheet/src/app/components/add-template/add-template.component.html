@@ -1,7 +1,3 @@
-<!-- <pre> {{ templateForm.value | json }} </pre>
- -->
-<button (click)="test()">Test</button>
-
 <pre> {{ templateForm.value | json }} </pre>
 
 <div class="row">
@@ -17,9 +13,9 @@
     <ul id='dropdown1' class='dropdown-content'>
       <li (click)="addHeader()"><a><i class="material-icons">remove</i>Header</a></li>
       <li (click)="addInputFields()"><a><i class="material-icons"></i>Input fields</a></li>
-      <li (click)="addTable()"><a><i class="material-icons">grid_on</i>Table</a></li>
+      <li ><a class="grey-text"><i class="material-icons">grid_on</i>Table</a></li>
       <li (click)="addList()"><a><i class="material-icons">format_list_bulleted</i>List</a></li>
-      <li (click)="addCheckboxes()"><a><i class="material-icons">check_box</i>Checkbox</a></li>
+      <li ><a class="grey-text" ><i class="material-icons">check_box</i>Checkbox</a></li>
     </ul>
   </div>
 </div>
@@ -41,6 +37,7 @@
         </li>
         <ul *ngIf="templateForm.get('items')">
           <li class="row" *ngFor="let item of templateForm.get('items').controls; index as i">
+            <hr>
             <div formArrayName="items">
               <form [formGroup]="item" novalidate>
                 <div [ngSwitch]="item.value.type">
@@ -48,10 +45,9 @@
                   <div *ngSwitchCase="'header'">
                     <div class="inputElement">
                       <a (click)="removeItem(i)" class="btn-floating red lighten-1 remove-btn-top"><i class="small material-icons white-text">remove</i></a>
-                      <div class="input-field col s12 m12 l12">
-                        <hr>
+                      <div class="input-field col s10 m8 l6">
                         <label for="">Header</label>
-                        <input formControlName="value" placeholder="Header" id="fieldHeader" type="text" class="">
+                        <input formControlName="value" id="fieldHeader" type="text">
                       </div>
                     </div>
                   </div>
@@ -59,24 +55,27 @@
                   <div *ngSwitchCase="'inputFields'">
                     <div class="inputElement">
                       <a (click)="removeItem(i)" class="btn-floating red lighten-1 remove-btn-top"><i class="small material-icons white-text">remove</i></a>
-                      <div class="input-field col">
-                        <hr>
-                        <label for="">Fields header</label>
-                        <input formControlName="header" placeholder="Group header" id="fieldHeader" type="text" class="validate">
-                        <ul>
-                          <li *ngFor="let inputField of item.controls.inputs.controls; index as y">
-                            <div formArrayName="inputs">
-                              <form [formGroup]="inputField" novalidate>
-                                <div class="input-group">
-                                  <input formControlName="header" placeholder="Header" id="fieldHeader" type="text" class="validate col s4">
-                                  <input disabled placeholder="Value" id="fieldHeader" type="text" class="validate col s4 offset-s1">
-                                  <a *ngIf="y > 0" (click)="removeInputField(i, y)" class="btn-floating red lighten-1 remove-btn"><i class="small material-icons white-text">remove</i></a>
-                                  <a *ngIf="y == 0" (click)="addInputField(i)" class="btn-floating btn-small waves-effect waves-light"><i class="small material-icons">add</i></a>
-                                </div>
-                              </form>
-                            </div>
-                          </li>
-                        </ul>
+                      <div class="input-field col s10 m8 l6">
+                        <label for="">Header</label>
+                        <input formControlName="header" id="fieldHeader" type="text">
+                      </div>
+                      <div class="row">
+                        <div class="input-field">
+                          <ul>
+                            <li *ngFor="let inputField of item.controls.inputs.controls; index as y">
+                              <div formArrayName="inputs">
+                                <form [formGroup]="inputField" novalidate>
+                                  <div class="">
+                                    <input formControlName="header" placeholder="Header" id="fieldHeader" type="text" class="col s4 m4 l4">
+                                    <input disabled placeholder="Value" id="fieldHeader" type="text" class="input-value col s4 m4 l4">
+                                    <a *ngIf="y > 0" (click)="removeInputField(i, y)" class="btn-floating red lighten-1 remove-btn"><i class="small material-icons white-text input-value">remove</i></a>
+                                    <a *ngIf="y == 0" (click)="addInputField(i)" class="btn-floating btn-small waves-effect waves-light"><i class="small material-icons input-value">add</i></a>
+                                  </div>
+                                </form>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -120,23 +119,29 @@
                   </div>
                   <!-- List -->
                   <div *ngSwitchCase="'list'">
-                    <div class="row">
-                      <div class="row">
-                        <input type="text" formControlName="header" class="col s6 m8 l10 offset-s6">
+                    <div class="inputElement">
+                      <a (click)="removeItem(i)" class="btn-floating red lighten-1 remove-btn-top"><i class="small material-icons white-text">remove</i></a>
+                      <div class="input-field col s10 m8 l6">
+                        <label for="">Header</label>
+                        <input formControlName="header" id="fieldHeader" type="text">
                       </div>
-                      <ol>
-                        <li class="list-number" *ngFor="let row of item.controls.rows.controls; let rowIndex = index">
-                          <div formArrayName="rows">
-                            <form [formGroup]="row" novalidate>
-                              <input type="text" formControlName="value" class="col s10 m8 l12">
-                              <a (click)="removeListRow(i, rowIndex)" class="btn-floating red lighten-1 remove-btn-list"><i class="small material-icons white-text">remove</i></a>
-                            </form>
-                          </div>
-                        </li>
-                        <div>
-                          <a (click)="addListRow(i)" class="btn-floating btn-small waves-effect waves-light"><i class="small material-icons">add</i></a>
+                      <div class="row">
+                        <div class="input-field">
+                          <ol>
+                            <li class="list-number" *ngFor="let row of item.controls.rows.controls; let rowIndex = index">
+                              <div formArrayName="rows">
+                                <form [formGroup]="row" novalidate>
+                                  <input type="text" formControlName="value" class="col s10 m8 l12">
+                                  <a (click)="removeListRow(i, rowIndex)" class="btn-floating red lighten-1 remove-btn-list"><i class="small material-icons white-text">remove</i></a>
+                                </form>
+                              </div>
+                            </li>
+                            <div>
+                              <a (click)="addListRow(i)" class="btn-floating btn-small waves-effect waves-light"><i class="small material-icons">add</i></a>
+                            </div>
+                          </ol>
                         </div>
-                      </ol>
+                      </div>
                     </div>
                   </div>
                   <!-- Checkboxes -->
@@ -144,7 +149,6 @@
                     <div class="inputElement">
                       <a (click)="removeItem(i)" class="btn-floating red lighten-1 remove-btn-top"><i class="small material-icons white-text">remove</i></a>
                       <div class="col">
-                        <hr>col
                         <input formControlName="header" placeholder="Header" id="fieldHeader" type="text" class="validate">
                         <ul>
                           <li *ngFor="let box of item.controls.boxes.controls; index as y">

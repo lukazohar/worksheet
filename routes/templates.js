@@ -22,7 +22,7 @@ router.route('/template')
         newTemplateFromBody.templateModified = moment().format('YYYY-MM-DDTHH:mm:ss');
         const userID = req.user._id;
 
-        Template.addTemplate(template, userID, (err, newTemplate) => {
+        Template.addTemplate(newTemplateFromBody, userID, (err, newTemplate) => {
             if(err) {
                 console.error(err);
                 return res.json({ success: false, msg: 'Server error' }).status(500);
@@ -93,8 +93,6 @@ router.route('/template')
 
 
 router.get('/sortTemplates', passport.authenticate('jwt', {session: false}), (req, res) => {
-    console.log('Here');
-    
     let hasRunAlready = false;
     const userID = req.user._id;
     const type = req.query.type;
@@ -149,9 +147,9 @@ router.get('/queryTemplates', passport.authenticate('jwt', {session: false}), (r
                 success: true,
                 msg: `Found queryed templates, query: ${query()}, limit: ${limit()}, page: ${page()}`,
                 data: {
-                    templates: queryedTemplates[0].template,
-                    noOfTemplates: queryedTemplates[0].noOfTemplates,
-                    templatesTitles: queryedTemplates[0].TemplatesTitles
+                    templates: queryedTemplates.templates,
+                    noOfTemplates: queryedTemplates.noOfTemplates,
+                    templatesTitles: queryedTemplates.templatesTitles
                 }
             });
         } else {

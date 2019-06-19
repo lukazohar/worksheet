@@ -1,11 +1,8 @@
 ﻿Stvari za uredit pr WorkSheet :
 - dodaj checkboxe, liste, tabele,...
-- sidenav
-- komentiraj stvari
 - polep�aj stran, stil, CSS,...
 - retry, error, razne stvari pri PIPE, rxjs funkcije pri http
 - animacije
-- tam ko je podatkovni tip ANY, popravi v primerne
 - ko posodobi� user-ja, je problem z username (�e je druga�en username ne posodobi)
 - pobri�i importe, ki niso v uporabi. V angularju in nodu
 - preveri statuse odgovorov
@@ -22,9 +19,7 @@
 - pri add.template description prva vrstica ostane nevidna �e gre� v novo vrstico
 - validacija pri formah
 - pri zbrisanju sheetov dodaj ko�, kjer se hranijo zbrisani sheeti. Tam daj da zbri�e� za zmeraj
-- pri sheetih naredi razvr��anje
 - ko vra�a� sheet, vrni samo id. Isto pri template
-- vse toaste daj �isto na konc funkcije
 - daj primerne ikone
 - spi�i primere http requestov na backend
 - pri po�iljanju maila daj mail na novi domeni (worksheet.com al kaj)
@@ -35,7 +30,6 @@
 - validacija pri node-u
 - pri prijavi je odziv iz strežnika napačen
 - pri urejanju profile dodaj enake validatorje kot pri registraciji
-- password iz npm namesto patterna
 - firewall pri mongodb na strežniku
 - userji na strežniku
 - userji na bazi

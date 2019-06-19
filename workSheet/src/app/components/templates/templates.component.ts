@@ -11,25 +11,27 @@ import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
 })
 export class TemplatesComponent implements OnInit {
 
-    // Gets all templates from local storage
-    templates: Array<ITemplate> = JSON.parse(localStorage.getItem('userData')).templates;
+  // Gets all templates from local storage
+  templates: Array<ITemplate>;
 
-    loading = false;
+  loading = false;
 
-    // Current sort type
-    type = 'date';
-    order = 'ascending';
-    page = 1;
-    limit = 4;
-    query = '';
-    queryTitles: Array<number>;
-    noOfSheets = 10;
+  // Current sort type
+  type = 'date';
+  order = 'descending';
+  page = 1;
+  limit = 4;
+  query = '';
+  queryTitles: Array<number>;
+  noOfTemplates: number;
+  lastSortType = 'order';
 
-    lastSortType = 'order';
-/*
-    pageCounter = () => {
-      const noOfPages: number = Math.round(this.noOfTemplates / this.limit);
-      const pageArr = [];
+  pageCounter = () => {
+    const noOfPages: number = Math.ceil(this.noOfTemplates / this.limit);
+    const pageArr = [];
+    if (this.limit === 0) {
+      pageArr.push(1);
+    } else {
       if (this.page > 4) {
         if (this.page + 4 <= noOfPages) {
           for (let i = this.page - 4; i < this.page + 5; i++) {
@@ -51,33 +53,38 @@ export class TemplatesComponent implements OnInit {
           }
         }
       }
-      return pageArr;
     }
- */
+    return pageArr;
+  }
+
     constructor(
       private templateService: TemplateService,
       private toast: ToastService
     ) { }
 
     ngOnInit() {
+      this.sortTemplates(this.type, this.order, this.page, this.limit);
     }
 
     removeQuery() {
       this.query = '';
+      this.sortTemplates(this.type, this.order, this.page, this.limit);
+      this.lastSortType = 'order';
     }
-/*
+
     sortTemplates(type: string, order: string, page?: number, limit?: number): boolean {
       this.loading = true;
       let hasBeenUpdated = false;
       if (this.lastSortType === 'query') {
         this.page = 1;
         this.lastSortType = 'order';
+        this.query = '';
       }
-      this.templateService.getTemplates(type, order, this.limit, this.page).subscribe(
+      this.templateService.getTemplates(type, order, limit, page).subscribe(
         (res: ISuccessMsgResponse) => {
           if (res.success) {
-            // @ts-ignore
-            this.sheets = res.data;
+            this.templates = res.data[0].templates;
+            this.noOfTemplates = res.data[0].noOfTemplates;
             this.type = type;
             this.order = order;
             this.page = page;
@@ -96,7 +103,7 @@ export class TemplatesComponent implements OnInit {
       return hasBeenUpdated;
     }
 
-    async querySheets(query: string, page: number, limit: number) {
+    async queryTemplates(query: string, page: number, limit: number) {
       this.loading = true;
       let hasBeenUpdated = false;
       if (this.lastSortType === 'order') {
@@ -105,15 +112,12 @@ export class TemplatesComponent implements OnInit {
       }
       setTimeout(() => {
         this.loading = true;
-        this.sheetService.getQueryedShets(query, page, limit).subscribe(
+        this.templateService.getQueryedTemplates(query, page, limit).subscribe(
           (res: ISuccessMsgResponse) => {
             if (res.success) {
-              // @ts-ignore
-              this.sheets = res.data.sheets;
-              // @ts-ignore
-              this.noOfSheets = res.data.noOfSheets;
-              // @ts-ignore
-              this.queryTitles = res.data.sheetsTitles;
+              this.templates = res.data.templates;
+              this.noOfTemplates = res.data.noOfTemplates;
+              this.queryTitles = res.data.templatesTitles;
               this.query = query;
               hasBeenUpdated = true;
             }
@@ -128,33 +132,36 @@ export class TemplatesComponent implements OnInit {
 
     changeType(newType: string): void {
       this.page = 1;
-      if (this.sortSheets(newType, 'ascending', this.page, this.limit)) {
+      if (this.sortTemplates(newType, 'ascending', this.page, this.limit)) {
         this.type = newType;
       }
     }
     changeOrder(newOrder: string): void {
-      if (this.sortSheets(this.type, newOrder, this.page, this.limit)) {
+      this.page = 1;
+      if (this.sortTemplates(this.type, newOrder, this.page, this.limit)) {
         this.order = newOrder;
       }
     }
-    changePageSortSheets(newPage: number): void {
-      if (this.sortSheets(this.type, this.order, newPage, this.limit)) {
-        this.page = newPage;
-      }
-    }
-    async changePageQuerySheets(newPage: number) {
-      const hasBeenUpdated = this.querySheets(this.query, newPage, this.limit);
-      if (hasBeenUpdated) {
-        this.page = newPage;
-      }
-    }
-    async changeLimit(newLimit: number) {
-      let hasBeenUpdated: Promise<boolean>;
+    changePage(newPage: number): void {
       if (this.lastSortType === 'order') {
-        // hasBeenUpdated = this.sortSheets(this.type, this.order, this.page, newLimit);
+        if (this.sortTemplates(this.type, this.order, newPage, this.limit)) {
+          this.page = newPage;
+        }
       } else {
-        hasBeenUpdated = this.querySheets(this.query, this.page, newLimit);
+        if (this.queryTemplates(this.query, newPage, this.limit)) {
+          this.page = newPage;
+        }
       }
-      if (hasBeenUpdated) { this.limit = newLimit; }
-    } */
+    }
+    changeLimit(newLimit: number) {
+      this.page = 1;
+      this.loading = true;
+      if (this.lastSortType === 'order') {
+        this.sortTemplates(this.type, this.order, this.page, newLimit);
+      } else {
+        this.queryTemplates(this.query, this.page, newLimit);
+      }
+      this.limit = newLimit;
+      this.loading = false;
+    }
 }

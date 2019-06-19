@@ -1,15 +1,14 @@
 <div class="row">
   <h1>My Templates</h1>
-  <a routerLink="/add-template" class="btn btn-small waves-effect waves-light blue lighten-2 left">Add new template</a>
 </div>
 <div class="row">
   <nav class="search-bar">
     <div class="nav-wrapper blue lighten-4">
       <form>
         <div class="input-field">
-          <input id="search" type="search">
+          <input id="search" type="search" [(ngModel)]="query" name="query" (keyup)="queryTemplates(query, page, limit)">
           <label class="label-icon search-icon" for="search"><i class="material-icons">search</i></label>
-          <i class="material-icons">close</i>
+          <i class="material-icons" (click)="removeQuery()">close</i>
         </div>
       </form>
     </div>
@@ -48,15 +47,13 @@
     </div>
   </ul>
 </div>
-
-
 <div class="row">
-  <ul *ngIf="!loading; else loadingSheets">
+  <ul *ngIf="!loading; else loadingTemplates">
     <li class="row" *ngFor="let template of templates" class="template light-blue lighten-5 z-depth-2">
       <app-template class="col s12 m12 l12" class="template" [template]="template"></app-template>
     </li>
   </ul>
-  <ng-template #loadingSheets class="col s12 m12 l12">
+  <ng-template #loadingTemplates class="col s12 m12 l12">
     <div class="row center-align loader">
       <div class="preloader-wrapper big active">
           <div class="spinner-layer spinner-blue">
@@ -103,8 +100,13 @@
   <ul class="col s12 m12 l12">
     <div class="row center-align">
       <li *ngFor="let pgNum of pageCounter()">
-        <div *ngIf="query == ''" (click)="changePage(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
+        <div (click)="changePage(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
       </li>
     </div>
   </ul>
 </div>
+
+
+<div class="fixed-action-btn">
+    <a routerLink="/add-template" class="btn-floating btn-large blue"><i class="large material-icons">add</i></a>
+  </div>

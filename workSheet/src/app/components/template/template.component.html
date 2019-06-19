@@ -18,7 +18,7 @@
       </div>
     </div>
   </div>
-  <form [formGroup]="expandedTemplateForm" (ngSubmit)="updateTemplate()" novalidate>
+  <form [formGroup]="templateForm" (ngSubmit)="updateTemplate()" novalidate>
     <ul>
       <li class="row">
         <div class="col s12 m12 l12">
@@ -27,8 +27,8 @@
       </li>
       <li class="row">
        <div class="col s12 m12 l12 dates">
-        <p class="modified date">Modified: {{ getDateFromNow(template.modified) }} </p>
-        <p class="modified date">Created: {{ getDateFromNow(template.created) }} </p>
+        <p class="modified date">Modified: {{ getDateFromNowModified(template.modified) }} </p>
+        <p class="modified date">Created: {{ getDateFromNowCreated(template.created) }} </p>
        </div>
       </li>
       <li class="row">
@@ -36,7 +36,7 @@
           <textarea formControlName="description" placeholder="Description" id="descriptionTextarea" class="materialize-textarea"></textarea>
         </div>
       </li>
-      <li *ngFor="let item of expandedTemplateForm.get('items').controls; index as i" class="row items">
+      <li *ngFor="let item of templateForm.get('items').controls; index as i" class="row items">
         <div formArrayName="items">
           <div [formGroup]="item">
             <div [ngSwitch]="item.value.type" class="col s12 m12 l12">
@@ -87,7 +87,7 @@
         </div>
        </li>
        <li class="row center-align">
-          <div class="col s12 m12 l12 btn blue waves-effect waves-light" (click)="updateTemplate()">Update Template</div>
+          <div class="col s10 m6 l4 push-s1 push-m3 push-l4 btn blue waves-effect waves-light" (click)="updateTemplate()">Update Template</div>
        </li>
      </ul>
     </form>
@@ -103,11 +103,11 @@
           <div class="col s12 m12 l12">
             <p class="title"> {{ template.title }} </p>
           </div>
-          </li>
+        </li>
           <li class="row">
             <div class="col s12 m12 l12">
-              <p class="modified">Modified: {{  getDateFromNow(template.modified) }} </p>
-              <p class="modified">Created: {{ getDateFromNow(template.created) }} </p>
+              <p class="modified"><b>Modified:</b> {{  getDateFromNowModified(template.modified) }} </p>
+              <p class="modified"><b>Created:</b> {{ getDateFromNowCreated(template.created) }} </p>
             </div>
           </li>
           <li class="row">

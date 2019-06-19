@@ -100,18 +100,11 @@ export class ProfileComponent implements OnInit {
   // Checks for availability of username given in first parameter every second that input has been changed last time
   checkForUsernameAvailable(username: string): void {
     this.usernameAvailable = this.credentialsAvailabilityService.checkForUsernameAvailability(username);
-    console.log(this.usernameAvailable);
-    console.log(this.emailAvailable);
   }
 
   // Checks for availability of email given in first parameter every second that input has been changed last time
   checkForEmailUsername(email: string): void {
     this.emailAvailable = this.credentialsAvailabilityService.checkForEmailAvailability(email);
-  }
-
-  test() {
-    console.log('Username availbale ' + this.usernameAvailable);
-    console.log('Email available ' + this.emailAvailable);
   }
 
 }

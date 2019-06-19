@@ -1,4 +1,3 @@
-import { SheetService } from 'src/app/services/sheet/sheet.service';
 import { FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, Input } from '@angular/core';
 import { ITemplate } from 'src/app/models/template/template';
@@ -17,38 +16,39 @@ export class TemplateComponent implements OnInit {
 
   @Input() template: ITemplate;
 
-  // Types of sort
-  sortTypes: Array<string> = ['Date of adding', 'Priority', 'Date of last change'];
-  // Current sort
-  sortType = 'Sort by';
-  // Returns items from expanded form
-  get items(): FormArray { return this.expandedTemplateForm.get('items') as FormArray; }
-  // Sets items form array to expanded form
-  set items(test: FormArray) { this.expandedTemplateForm.setControl('items', test); }
+  templateForm: FormGroup;
 
-  expandedTemplateForm: FormGroup;
+  // Status types
+  statusTypes: Array<string> = ['Not started yet', 'On hold', 'Progress', 'Finished'];
 
-  // Returns inputs array from expanded form
+  // Gets items array from expanded template form
+  get items(): FormArray { return this.templateForm.get('items') as FormArray; }
+  // Sets items array to expanded template form
+  set items(test: FormArray) { this.templateForm.setControl('items', test); }
+
+  // Returns inputs from items at index
   inputs(index: number): FormArray {
-    return this.expandedTemplateForm.controls.items[index];
+    return this.templateForm.controls.items[index];
   }
 
   constructor(
     private templateService: TemplateService,
     private toast: ToastService,
-    private sheetService: SheetService
   ) { }
 
   ngOnInit() {
   }
 
-  getDateFromNow(dateString: string): string {
+  getDateFromNowCreated(dateString: string): string {
+    return moment(dateString).fromNow();
+  }
+  getDateFromNowModified(dateString: string): string {
     return moment(dateString).fromNow();
   }
 
   // Sets up tempalte form with data from expanded form
   setupTemplate(): void {
-    this.expandedTemplateForm = new FormGroup({
+    this.templateForm = new FormGroup({
       _id: new FormControl(),
       modified: new FormControl(),
       created: new FormControl(),
@@ -56,13 +56,13 @@ export class TemplateComponent implements OnInit {
       description: new FormControl( [ Validators.maxLength(1000) ] ),
       items: new FormArray([])
     });
-    this.expandedTemplateForm.reset();
+    this.templateForm.reset();
     // Setting values to form from selected template
-    this.expandedTemplateForm.controls._id.setValue(this.template._id);
-    this.expandedTemplateForm.controls.modified.setValue(this.template.modified);
-    this.expandedTemplateForm.controls.created.setValue(this.template.created);
-    this.expandedTemplateForm.controls.title.setValue(this.template.title);
-    this.expandedTemplateForm.controls.description.setValue(this.template.description);
+    this.templateForm.controls._id.setValue(this.template._id);
+    this.templateForm.controls.modified.setValue(this.template.modified);
+    this.templateForm.controls.created.setValue(this.template.created);
+    this.templateForm.controls.title.setValue(this.template.title);
+    this.templateForm.controls.description.setValue(this.template.description);
     // Loops through items array
     for (let i = 0; i < this.template.items.length; i++) {
       const type = this.template.items[i].type;
@@ -125,28 +125,27 @@ export class TemplateComponent implements OnInit {
   }
   // Sets index and form of template to null
   closeTemplate(): void {
-    this.expandedTemplateForm = null;
+    this.templateForm = null;
   }
 
   // Returns true if index of template in ngFor loop is equal to expanded template index
   isTemplateExpanded(): boolean {
-    return this.expandedTemplateForm ? true : false;
+    return this.templateForm ? true : false;
   }
 
   updateTemplate(): void {
-    if (this.expandedTemplateForm.valid) {
+    if (this.templateForm.valid) {
       // If template is valid, it checks if expanded template is changed by comparing stringified values of both tempaltes
       // Continues if so, otherwise it informs user about it
-      if (JSON.stringify(this.expandedTemplateForm.value) !== JSON.stringify(this.template)) {
+      if (JSON.stringify(this.templateForm.value) !== JSON.stringify(this.template)) {
         // Calls template service for updating template
-        this.templateService.updateTemplate(this.expandedTemplateForm.value).subscribe(
+        this.templateService.updateTemplate(this.templateForm.value).subscribe(
           (res: ISuccessMsgResponse) => {
             if (res.success) {
               // Informs user
-              // @ts-ignore
-              this.toast.success(this.templates[this.expandedTemplateFormIndex].title + ' updated');
+              this.toast.success(this.template.title + ' updated');
               // Updates value in local storage
-              this.template = this.expandedTemplateForm.value;
+              this.template = this.templateForm.value;
               const user: IUserModel = JSON.parse(localStorage.getItem('userData'));
               localStorage.setItem('userData', JSON.stringify(user));
               this.setupTemplate();
@@ -157,7 +156,7 @@ export class TemplateComponent implements OnInit {
         );
       } else {
         // Infroms user that updating failed
-        this.toast.warning(`Template isn't changed`);
+        this.toast.warning(`Template hasn't changed`);
       }
     } else {
       // Informs user form is not valid

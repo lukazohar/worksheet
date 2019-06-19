@@ -65,7 +65,6 @@ export class AddworksheetComponent implements OnInit {
       } else
       // If type of input is inputFields, it calls addInputFields
       if (type === 'inputFields') {
-        // @ts-ignore
         this.items = this.sheetService.addInputFields(this.items, template.items[i], i);
       }
     }

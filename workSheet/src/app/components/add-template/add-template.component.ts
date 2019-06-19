@@ -61,10 +61,6 @@ export class AddTemplateComponent implements OnInit {
     this.items = this.templateService.removeInputField(this.items, index1, index2);
   }
 
-  test() {
-    console.log(this.items);
-  }
-
   // Adds table
   addTable(): void {
     this.items = this.templateService.addTable(this.items);
@@ -83,9 +79,7 @@ export class AddTemplateComponent implements OnInit {
   }
   getValuesFromTableRow(itemIndex: number, rowIndex: number) {
     // @ts-ignore
-    return this.items.controls[itemIndex].get('rows').controls[rowIndex].get('values').controls; /*
-    const row = item.get('rows')[rowIndex];
-    return item.get('values'); */
+    return this.items.controls[itemIndex].get('rows').controls[rowIndex].get('values').controls;
   }
 
   // Adds list

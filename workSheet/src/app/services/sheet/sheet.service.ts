@@ -36,7 +36,7 @@ export class SheetService {
     });
   }
 
-  getQueryedShets(query: string, page?: number, limit?: number): Observable<ISuccessMsgResponse> {
+  getQueryedSheets(query: string, page?: number, limit?: number): Observable<ISuccessMsgResponse> {
     return this.http.get<ISuccessMsgResponse>(`${this.URL}/querySheets?query=${query}&limit=${limit}&page=${page}`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()

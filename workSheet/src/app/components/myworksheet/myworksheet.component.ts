@@ -82,9 +82,7 @@ export class MyworksheetComponent implements OnInit {
     this.sheetService.getSheets(type, order, limit, page).subscribe(
       (res: ISuccessMsgResponse) => {
         if (res.success) {
-          // @ts-ignore
           this.sheets = res.data[0].sheets;
-          // @ts-ignore
           this.noOfSheets = res.data[0].noOfSheets;
           this.type = type;
           this.order = order;
@@ -113,14 +111,11 @@ export class MyworksheetComponent implements OnInit {
     }
     setTimeout(() => {
       this.loading = true;
-      this.sheetService.getQueryedShets(query, page, limit).subscribe(
+      this.sheetService.getQueryedSheets(query, page, limit).subscribe(
         (res: ISuccessMsgResponse) => {
           if (res.success) {
-            // @ts-ignore
             this.sheets = res.data.sheets;
-            // @ts-ignore
             this.noOfSheets = res.data.noOfSheets;
-            // @ts-ignore
             this.queryTitles = res.data.sheetsTitles;
             this.query = query;
             hasBeenUpdated = true;

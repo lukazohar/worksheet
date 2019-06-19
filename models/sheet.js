@@ -95,17 +95,14 @@ module.exports.getSortedSheets = function(userID, sortType, order, limit, page, 
     .exec((err, result) => {
         if(err) throw err;
         if(result[0]) {
-            console.log(sortType);
             switch(sortType) {
                 case 'date' : {
                     if(order == 'ascending') {
-                        console.log('date asc');
                         sortModule.orderSheetsByDateAscending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
                             result[0].sheets = orderedSheets;
                         });
                     } else {
-                        console.log('date desc');
                         sortModule.orderSheetsByDateDescending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
                             result[0].sheets = orderedSheets;
@@ -115,13 +112,11 @@ module.exports.getSortedSheets = function(userID, sortType, order, limit, page, 
                 };
                 case 'priority' : {
                     if(order == 'ascending') {
-                        console.log('priority asc');
                         sortModule.orderSheetsByPriorityAscending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
                             result[0].sheets = orderedSheets;
                         });
                     } else {
-                        console.log('priority desc');
                         sortModule.orderSheetsByPriorityDescending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
                             result[0].sheets = orderedSheets;
@@ -131,13 +126,11 @@ module.exports.getSortedSheets = function(userID, sortType, order, limit, page, 
                 }
                 case 'status' : {
                     if(order == 'ascending') {
-                        console.log('status asc');
                         sortModule.orderSheetsByStatusAscending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
                             result[0].sheets = orderedSheets;
                         });
                     } else {
-                        console.log('status desc');
                         sortModule.orderSheetsByStatusDescending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
                             result[0].sheets = orderedSheets;

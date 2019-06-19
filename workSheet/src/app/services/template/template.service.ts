@@ -20,7 +20,7 @@ export class TemplateService {
     private token: TokenService
   ) { }
 
-  // Returns all sheets from backend
+  // Returns all templates from backend
   getTemplate(sortType?: string, order?: string, limit?: number, page?: number): Observable<ISuccessMsgResponse> {
     return this.http.get<ISuccessMsgResponse>(`${this.URL}/queryTemplates?type=${sortType}&order=${order}&limit=${limit}&page=${page}`, {
       headers: new HttpHeaders({
@@ -29,9 +29,17 @@ export class TemplateService {
     });
   }
 
-  // Returns observable of all templates of user
-  getTemplates(): Observable<ITemplate[]> {
-    return this.http.get<ITemplate[]>(`${this.URL}template`, {
+  // Returns all templates from backend
+  getTemplates(sortType?: string, order?: string, limit?: number, page?: number): Observable<ISuccessMsgResponse> {
+    return this.http.get<ISuccessMsgResponse>(`${this.URL}/sortTemplates?type=${sortType}&order=${order}&limit=${limit}&page=${page}`, {
+      headers: new HttpHeaders({
+        'Authorization': this.token.getToken()
+      })
+    });
+  }
+
+  getQueryedTemplates(query: string, page?: number, limit?: number): Observable<ISuccessMsgResponse> {
+    return this.http.get<ISuccessMsgResponse>(`${this.URL}/queryTemplates?query=${query}&limit=${limit}&page=${page}`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
