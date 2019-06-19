@@ -93,8 +93,8 @@ export class SheetComponent implements OnInit {
     this.expandedSheetForm.reset();
     // Sets values
     this.expandedSheetForm.controls._id.setValue(this.sheet._id);
-    this.expandedSheetForm.controls.modified.setValue(this.sheet.modified);
-    this.expandedSheetForm.controls.created.setValue(this.sheet.created);
+    this.expandedSheetForm.controls.modified.setValue(this.sheet.sheetModified);
+    this.expandedSheetForm.controls.created.setValue(this.sheet.sheetCreated);
     this.expandedSheetForm.controls.title.setValue(this.sheet.title);
     this.expandedSheetForm.controls.description.setValue(this.sheet.description);
     this.expandedSheetForm.controls.status.setValue(this.sheet.status);

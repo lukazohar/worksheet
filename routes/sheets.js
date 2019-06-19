@@ -137,7 +137,7 @@ router.route('/sheet')
 router.put('/setStatus', passport.authenticate('jwt', {session: false}), (req, res) => {
     const userID = req.user._id;
     const sheetID = req.body.sheetID;
-    const newStatus = req.body.status;    
+    const newStatus = req.body.status;
     Sheet.setStatus(userID, sheetID, newStatus, (err, modifiedStatus) => {
         if(err) throw err;
         if(( modifiedStatus.n === 1 && modifiedStatus.nModified === 1 ) || ( modifiedStatus.n === 1 && modifiedStatus.nModified === 0 )) {
@@ -222,7 +222,6 @@ router.get('/querySheets', passport.authenticate('jwt', {session: false}), (req,
         if(req.query.limit) { return req.query.limit; }
         else { return 0; }
     }
-    console.log(query(), '', limit(), '', page());
     Sheet.getQueryedSheets(userID, query(), limit(), page(), (err, queryedSheets) => {
         if(err) throw err;
         if(queryedSheets) {

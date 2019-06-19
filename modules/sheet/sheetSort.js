@@ -1,6 +1,6 @@
 const moment = require('moment');
 
-module.exports.orderSheetsByDateAscending = function(sheets, limit, page, callback) {
+module.exports.orderSheetsByDateAscending = function(sheets, callback) {
     // [Older -> Younger]
     // Older = bigger
     // Yonger = smaller
@@ -17,7 +17,7 @@ module.exports.orderSheetsByDateAscending = function(sheets, limit, page, callba
     callback(null, sheetsArr);
 }
 
-module.exports.orderSheetsByDateDescending = function(sheets, limit, page, callback) {
+module.exports.orderSheetsByDateDescending = function(sheets, callback) {
     // [ Younger -> Older ]
     // Older = bigger
     // Yonger = smaller
@@ -32,7 +32,7 @@ module.exports.orderSheetsByDateDescending = function(sheets, limit, page, callb
     callback(null, sheetsArr);
 }
 
-module.exports.orderSheetsByPriorityAscending = function(sheets, limit, page, callback) {
+module.exports.orderSheetsByPriorityAscending = function(sheets, callback) {
     let sortedSheetsLow = [];
     let sortedSheetsMedium = [];
     let sortedSheetsHigh = [];
@@ -60,17 +60,17 @@ module.exports.orderSheetsByPriorityAscending = function(sheets, limit, page, ca
         }
     });
     // Orders sheets is sortedSheetsHigh ascending
-    exports.orderSheetsByDateAscending(sortedSheetsHigh, 0, 0, (err, orderedHighSheets) => {
+    exports.orderSheetsByDateAscending(sortedSheetsHigh, (err, orderedHighSheets) => {
         if(err) throw err;
         sortedSheetsHigh = orderedHighSheets;
     });
     // Orders sheets is sortedSheetsMedium ascending
-    exports.orderSheetsByDateAscending(sortedSheetsMedium, 0, 0, (err, orderedMediumSheets) => {
+    exports.orderSheetsByDateAscending(sortedSheetsMedium, (err, orderedMediumSheets) => {
         if(err) throw err;
         sortedSheetsMedium = orderedMediumSheets;
     });
     // Orders sheets is sortedSheetsLow ascending
-    exports.orderSheetsByDateAscending(sortedSheetsLow, 0, 0, (err, orderedLowSheets) => {
+    exports.orderSheetsByDateAscending(sortedSheetsLow, (err, orderedLowSheets) => {
         if(err) throw err;
         sortedSheetsLow = orderedLowSheets;
     });
@@ -80,7 +80,7 @@ module.exports.orderSheetsByPriorityAscending = function(sheets, limit, page, ca
     callback(null, allSheetsSorted);
 }
 
-module.exports.orderSheetsByPriorityDescending = function(sheets, limit, page, callback) {
+module.exports.orderSheetsByPriorityDescending = function(sheets, callback) {
     let sortedSheetsHigh = [];
     let sortedSheetsMedium = [];
     let sortedSheetsLow = [];
@@ -105,17 +105,17 @@ module.exports.orderSheetsByPriorityDescending = function(sheets, limit, page, c
         }
     });
     // Orders sheets is sortedSheetsHigh descending
-    exports.orderSheetsByDateDescending(sortedSheetsHigh, 0, 0, (err, orderedHighSheets) => {
+    exports.orderSheetsByDateDescending(sortedSheetsHigh, (err, orderedHighSheets) => {
         if(err) throw err;
         sortedSheetsHigh = orderedHighSheets;
     });
     // Orders sheets is sortedSheetsMedium descending
-    exports.orderSheetsByDateDescending(sortedSheetsMedium, 0, 0, (err, orderedMediumSheets) => {
+    exports.orderSheetsByDateDescending(sortedSheetsMedium, (err, orderedMediumSheets) => {
         if(err) throw err;
         sortedSheetsMedium = orderedMediumSheets;
     });
     // Orders sheets is sortedSheetsLow descending
-    exports.orderSheetsByDateDescending(sortedSheetsLow, 0, 0, (err, orderedLowSheets) => {
+    exports.orderSheetsByDateDescending(sortedSheetsLow, (err, orderedLowSheets) => {
         if(err) throw err;
         sortedSheetsLow = orderedLowSheets;
     });
@@ -125,7 +125,7 @@ module.exports.orderSheetsByPriorityDescending = function(sheets, limit, page, c
     callback(null, allSheetsSorted);
 }
 
-module.exports.orderSheetsByStatusAscending = function(sheets, limit, page, callback) {
+module.exports.orderSheetsByStatusAscending = function(sheets, callback) {
     let sortedSheetsNotStartedYet = [];
     let sortedSheetsOnHold = [];
     let sortedSheetsInProgress = [];
@@ -156,22 +156,22 @@ module.exports.orderSheetsByStatusAscending = function(sheets, limit, page, call
         }
     });
     // Orders sheets is sortedSheetsFinished ascending
-    exports.orderSheetsByDateAscending(sortedSheetsFinished, 0, 0, (err, orderedHighSheets) => {
+    exports.orderSheetsByDateAscending(sortedSheetsFinished, (err, orderedHighSheets) => {
         if(err) throw err;
         sortedSheetsFinished = orderedHighSheets;
     });
     // Orders sheets is sortedSheetsInProgress ascending
-    exports.orderSheetsByDateAscending(sortedSheetsInProgress, 0, 0, (err, orderedMediumSheets) => {
+    exports.orderSheetsByDateAscending(sortedSheetsInProgress, (err, orderedMediumSheets) => {
         if(err) throw err;
         sortedSheetsInProgress = orderedMediumSheets;
     });
     // Orders sheets is sortedSheetsOnHold ascending
-    exports.orderSheetsByDateAscending(sortedSheetsOnHold, 0, 0, (err, orderedLowSheets) => {
+    exports.orderSheetsByDateAscending(sortedSheetsOnHold, (err, orderedLowSheets) => {
         if(err) throw err;
         sortedSheetsOnHold = orderedLowSheets;
     });
     // Orders sheets is sortedSheetsNotStartedYet ascending
-    exports.orderSheetsByDateAscending(sortedSheetsNotStartedYet, 0, 0, (err, orderedLowSheets) => {
+    exports.orderSheetsByDateAscending(sortedSheetsNotStartedYet, (err, orderedLowSheets) => {
         if(err) throw err;
         sortedSheetsNotStartedYet = orderedLowSheets;
     });
@@ -181,7 +181,7 @@ module.exports.orderSheetsByStatusAscending = function(sheets, limit, page, call
     callback(null, allSheetsSorted);
 }
 
-module.exports.orderSheetsByStatusDescending = function(sheets, limit, page, callback) {
+module.exports.orderSheetsByStatusDescending = function(sheets, callback) {
     let sortedSheetsNotStartedYet = [];
     let sortedSheetsOnHold = [];
     let sortedSheetsInProgress = [];
@@ -212,22 +212,22 @@ module.exports.orderSheetsByStatusDescending = function(sheets, limit, page, cal
         }
     });
     // Orders sheets is sortedSheetsFinished ascending
-    exports.orderSheetsByDateDescending(sortedSheetsFinished, 0, 0, (err, orderedHighSheets) => {
+    exports.orderSheetsByDateDescending(sortedSheetsFinished, (err, orderedHighSheets) => {
         if(err) throw err;
         sortedSheetsFinished = orderedHighSheets;
     });
     // Orders sheets is sortedSheetsInProgress ascending
-    exports.orderSheetsByDateDescending(sortedSheetsInProgress, 0, 0, (err, orderedMediumSheets) => {
+    exports.orderSheetsByDateDescending(sortedSheetsInProgress, (err, orderedMediumSheets) => {
         if(err) throw err;
         sortedSheetsInProgress = orderedMediumSheets;
     });
     // Orders sheets is sortedSheetsOnHold ascending
-    exports.orderSheetsByDateDescending(sortedSheetsOnHold, 0, 0, (err, orderedLowSheets) => {
+    exports.orderSheetsByDateDescending(sortedSheetsOnHold, (err, orderedLowSheets) => {
         if(err) throw err;
         sortedSheetsOnHold = orderedLowSheets;
     });
     // Orders sheets is sortedSheetsNotStartedYet ascending
-    exports.orderSheetsByDateDescending(sortedSheetsNotStartedYet, 0, 0, (err, orderedLowSheets) => {
+    exports.orderSheetsByDateDescending(sortedSheetsNotStartedYet, (err, orderedLowSheets) => {
         if(err) throw err;
         sortedSheetsNotStartedYet = orderedLowSheets;
     });
@@ -237,9 +237,33 @@ module.exports.orderSheetsByStatusDescending = function(sheets, limit, page, cal
     callback(null, allSheetsSorted);
 }
 
-module.exports.orderSheetsBySheetmodifiedAscending = function(sheets, limit, page, callback) {
+module.exports.orderSheetsBySheetmodifiedAscending = function(sheets, callback) {// [Older -> Younger]
+    // Older = bigger
+    // Yonger = smaller
+    // Array.sort function
+    let sheetsArr = [];
+    sheets.forEach(sheet => {
+        sheetsArr.push(sheet);
+    });
+    sheetsArr.sort((a, b) => {
+        return moment(b.sheetModified) - moment(a.sheetModified);
+    });
+    // Reverses array, so dates are ascending
+    sheetsArr.reverse();
+    callback(null, sheetsArr);
 }
 
-module.exports.orderSheetsBySheetmodifiedDescending = function(sheets, limit, page, callback) {
+module.exports.orderSheetsBySheetmodifiedDescending = function(sheets, callback) {// [ Younger -> Older ]
+    // Older = bigger
+    // Yonger = smaller
+    // Array.sort function
+    sheets.sort((a, b) => {
+        return moment(b.sheetModified) - moment(a.sheetModified);
+    });
+    let sheetsArr = [];
+    sheets.forEach(sheet => {
+        sheetsArr.push(sheet);
+    });
+    callback(null, sheetsArr);
 
 }

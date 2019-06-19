@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const UserSchema = require('../schemas/userSchema');
 const ObjectId = mongoose.Types.ObjectId;
 const moment = require('moment');
-const sortModule = require('../modules/sheetSort');
-const sheetTrim = require('../modules/sheetTrim');
+const sortModule = require('../modules/sheet/sheetSort');
+const sheetTrim = require('../modules/sheet/sheetTrim');
 
 const User = mongoose.model('User', UserSchema.UserSchema);
 
@@ -79,75 +79,101 @@ module.exports.setPriority = function(userID, sheetID, priority, callback) {
 }
 
 module.exports.getSortedSheets = function(userID, sortType, order, limit, page, callback) {
-    User.findById(userID, (err, user) => {
+    User.aggregate()
+    .unwind("$sheets")
+    .match({_id: ObjectId(userID)})
+    .group({
+        "_id": null,
+        "sheets": { $push: "$sheets" },
+        "noOfSheets": { $sum: 1 }
+    })
+    .project({
+        _id: false,
+        sheets: true,
+        noOfSheets: true
+    })
+    .exec((err, result) => {
         if(err) throw err;
-        if(!user) {
-            callback(null, undefined);
-        } else {
+        if(result[0]) {
+            console.log(sortType);
             switch(sortType) {
                 case 'date' : {
                     if(order == 'ascending') {
-                        sortModule.orderSheetsByDateAscending(user.sheets, limit, page, (err, orderedSheets) => {
+                        console.log('date asc');
+                        sortModule.orderSheetsByDateAscending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
-                            callback(null, orderedSheets);
+                            result[0].sheets = orderedSheets;
                         });
                     } else {
-                        sortModule.orderSheetsByDateDescending(user.sheets, limit, page, (err, orderedSheets) => {
+                        console.log('date desc');
+                        sortModule.orderSheetsByDateDescending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
-                            callback(null, orderedSheets);
+                            result[0].sheets = orderedSheets;
                         });
                     }
+                    break;
                 };
                 case 'priority' : {
                     if(order == 'ascending') {
-                        sortModule.orderSheetsByPriorityAscending(user.sheets, limit, page, (err, orderedSheets) => {
-                            console.log(orderedSheets);
+                        console.log('priority asc');
+                        sortModule.orderSheetsByPriorityAscending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
-                            callback(null, orderedSheets);
+                            result[0].sheets = orderedSheets;
                         });
                     } else {
-                        sortModule.orderSheetsByPriorityDescending(user.sheets, limit, page, (err, orderedSheets) => {
+                        console.log('priority desc');
+                        sortModule.orderSheetsByPriorityDescending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
-                            callback(null, orderedSheets);
+                            result[0].sheets = orderedSheets;
                         });
                     }
+                    break;
                 }
                 case 'status' : {
                     if(order == 'ascending') {
-                        sortModule.orderSheetsByStatusAscending(user.sheets, limit, page, (err, orderedSheets) => {
+                        console.log('status asc');
+                        sortModule.orderSheetsByStatusAscending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
-                            callback(null, orderedSheets);
+                            result[0].sheets = orderedSheets;
                         });
                     } else {
-                        sortModule.orderSheetsByStatusDescending(user.sheets, limit, page, (err, orderedSheets) => {
+                        console.log('status desc');
+                        sortModule.orderSheetsByStatusDescending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
-                            callback(null, orderedSheets);
+                            result[0].sheets = orderedSheets;
                         });
-
                     }
+                    break;
                 }
                 case 'modified' : {
                     if(order == 'ascending') {
-                        sortModule.orderSheetsBySheetmodifiedAscending(user.sheets, limit, page, (err, orderedSheets) => {
+                        sortModule.orderSheetsBySheetmodifiedAscending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
-                            callback(null, orderedSheets);
+                            result[0].sheets = orderedSheets;
                         });
                     } else {
-                        sortModule.orderSheetsBySheetmodifiedDescending(user.sheets, limit, page, (err, orderedSheets) => {
+                        sortModule.orderSheetsBySheetmodifiedDescending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
-                            callback(null, orderedSheets);
+                            result[0].sheets = orderedSheets;
                         });
                     }
+                    break;
                 }
-                default : {
-                    sortModule.orderSheetsByDateDescending(user.sheets, limit, page, (err, orderedSheets) => {
+                default: {
+                    sortModule.orderSheetsByDateDescending(result[0].sheets, (err, orderedSheets) => {
                         if(err) throw err;
-                        callback(null, orderedSheets);
+                        result[0].sheets = orderedSheets;
                     });
                 }
             }
+            sheetTrim.trimSheets(result[0].sheets, limit, page, (err, trimmedSheets) => {
+                if(err) throw err;
+                result[0].sheets = trimmedSheets;
+            });
+            callback(null, result);
+        } else {
+            callback(null, [{sheets: null, noOfSheets: 0, sheetsTitles: 0}])
         }
-
     });
 }
 

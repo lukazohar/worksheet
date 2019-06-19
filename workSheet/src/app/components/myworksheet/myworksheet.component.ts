@@ -12,42 +12,46 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 export class MyworksheetComponent implements OnInit {
 
   // Gets all sheets from local storage
-  sheets: Array<ISheet> = JSON.parse(localStorage.getItem('userData')).sheets;
+  sheets: Array<ISheet>;
 
   loading = false;
 
   // Current sort type
   type = 'date';
-  order = 'ascending';
+  order = 'descending';
   page = 1;
   limit = 4;
   query = '';
   queryTitles: Array<number>;
-  noOfSheets = 10;
+  noOfSheets: number;
 
   lastSortType = 'order';
 
   pageCounter = () => {
-    const noOfPages: number = Math.round(this.noOfSheets / this.limit);
+    const noOfPages: number = Math.ceil(this.noOfSheets / this.limit);
     const pageArr = [];
-    if (this.page > 4) {
-      if (this.page + 4 <= noOfPages) {
-        for (let i = this.page - 4; i < this.page + 5; i++) {
-          pageArr.push(i);
-        }
-      } else {
-        for (let i = noOfPages - 8; i <= noOfPages; i++) {
-          pageArr.push(i);
-        }
-      }
+    if (this.limit === 0) {
+      pageArr.push(1);
     } else {
-      if (noOfPages > 9) {
-        for (let i = 1; i <= 9; i++) {
-          pageArr.push(i);
+      if (this.page > 4) {
+        if (this.page + 4 <= noOfPages) {
+          for (let i = this.page - 4; i < this.page + 5; i++) {
+            pageArr.push(i);
+          }
+        } else {
+          for (let i = noOfPages - 8; i <= noOfPages; i++) {
+            pageArr.push(i);
+          }
         }
       } else {
-        for (let i = 1; i <= noOfPages; i++) {
-          pageArr.push(i);
+        if (noOfPages > 9) {
+          for (let i = 1; i <= 9; i++) {
+            pageArr.push(i);
+          }
+        } else {
+          for (let i = 1; i <= noOfPages; i++) {
+            pageArr.push(i);
+          }
         }
       }
     }
@@ -60,6 +64,7 @@ export class MyworksheetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.sortSheets(this.type, this.order, this.page, this.limit);
   }
 
   removeQuery() {
@@ -72,12 +77,15 @@ export class MyworksheetComponent implements OnInit {
     if (this.lastSortType === 'query') {
       this.page = 1;
       this.lastSortType = 'order';
+      this.query = '';
     }
-    this.sheetService.getSheets(type, order, this.limit, this.page).subscribe(
+    this.sheetService.getSheets(type, order, limit, page).subscribe(
       (res: ISuccessMsgResponse) => {
         if (res.success) {
           // @ts-ignore
-          this.sheets = res.data;
+          this.sheets = res.data[0].sheets;
+          // @ts-ignore
+          this.noOfSheets = res.data[0].noOfSheets;
           this.type = type;
           this.order = order;
           this.page = page;
@@ -133,28 +141,31 @@ export class MyworksheetComponent implements OnInit {
     }
   }
   changeOrder(newOrder: string): void {
+    this.page = 1;
     if (this.sortSheets(this.type, newOrder, this.page, this.limit)) {
       this.order = newOrder;
     }
   }
-  changePageSortSheets(newPage: number): void {
-    if (this.sortSheets(this.type, this.order, newPage, this.limit)) {
-      this.page = newPage;
-    }
-  }
-  async changePageQuerySheets(newPage: number) {
-    const hasBeenUpdated = this.querySheets(this.query, newPage, this.limit);
-    if (hasBeenUpdated) {
-      this.page = newPage;
-    }
-  }
-  async changeLimit(newLimit: number) {
-    let hasBeenUpdated: Promise<boolean>;
+  changePage(newPage: number): void {
     if (this.lastSortType === 'order') {
-      // hasBeenUpdated = this.sortSheets(this.type, this.order, this.page, newLimit);
+      if (this.sortSheets(this.type, this.order, newPage, this.limit)) {
+        this.page = newPage;
+      }
     } else {
-      hasBeenUpdated = this.querySheets(this.query, this.page, newLimit);
+      if (this.querySheets(this.query, newPage, this.limit)) {
+        this.page = newPage;
+      }
     }
-    if (hasBeenUpdated) { this.limit = newLimit; }
+  }
+  changeLimit(newLimit: number) {
+    this.page = 1;
+    this.loading = true;
+    if (this.lastSortType === 'order') {
+      this.sortSheets(this.type, this.order, this.page, newLimit);
+    } else {
+      this.querySheets(this.query, this.page, newLimit);
+    }
+    this.limit = newLimit;
+    this.loading = false;
   }
 }

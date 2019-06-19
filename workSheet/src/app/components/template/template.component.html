@@ -36,7 +36,7 @@
           <textarea formControlName="description" placeholder="Description" id="descriptionTextarea" class="materialize-textarea"></textarea>
         </div>
       </li>
-      <li *ngFor="let item of expandedTemplateForm.controls.items.controls; index as i" class="row items">
+      <li *ngFor="let item of expandedTemplateForm.get('items').controls; index as i" class="row items">
         <div formArrayName="items">
           <div [formGroup]="item">
             <div [ngSwitch]="item.value.type" class="col s12 m12 l12">
@@ -54,14 +54,14 @@
                   <div class="inputElement">
                     <div class="input-field">
                       <div class="row">
-                        <b class="col s12 m12 l12"> {{ item.value.header }} </b>
+                        <input type="text" class="col s12 m8 l6 header push-m2 push-l3 center" formControlName="header">
                       </div>
                       <ul>
                         <li class="row" *ngFor="let inputField of item.controls.inputs.controls; index as y">
                           <div class="input-group" formArrayName="inputs">
                             <form [formGroup]="inputField">
                               <hr>
-                              <b class="col s6 m6 l6"> {{ inputField.value.header }} : </b>
+                              <input type="text" class="col s6 m6 l6" formControlName="header">
                               <input class="col s6 m6 l6 field-value" formControlName="value" placeholder="Value" id="fieldHeader" type="text">
                             </form>
                           </div>
@@ -115,7 +115,7 @@
               <p class="description"> {{ template.description }} </p>
             </div>
           </li>
-          <li *ngFor="let item of template.items; index as i" class="col s12 m6 l6 items">
+          <li *ngFor="let item of template.items; index as i" class="col s12 m12 l12 items">
             <div [ngSwitch]="item.type" class="row">
               <!-- Header -->
               <div *ngSwitchCase="'header'">

@@ -39,8 +39,8 @@
             <label for="searchbar">Description</label>
           </div>
         </li>
-        <ul *ngIf="templateForm.controls.items">
-          <li class="row" *ngFor="let item of templateForm.controls.items.controls; index as i">
+        <ul *ngIf="templateForm.get('items')">
+          <li class="row" *ngFor="let item of templateForm.get('items').controls; index as i">
             <div formArrayName="items">
               <form [formGroup]="item" novalidate>
                 <div [ngSwitch]="item.value.type">
@@ -82,7 +82,10 @@
                   </div>
                   <!-- Table -->
                   <div *ngSwitchCase="'table'">
-                    <table>
+                    <div class="row">
+                      <input formControlName="header" placeholder="Group header" id="fieldHeader" type="text" class="col s10 m8 l6">
+                    </div>
+                    <table class="row">
                       <thead>
                         <tr class="row">
                           <th class="col s2 m2 l2" *ngFor="let row of item.controls.rows.controls; index as rowIndex">
@@ -106,11 +109,9 @@
                       </thead>
                       <tbody>
                         <tr class="row" *ngFor="let column of item.controls.rows.controls[0].controls.values.controls; index as y">
-                          <div class="col s2 m2 l2" *ngFor="let row of item.controls.rows.controls">
-                            <div *ngFor="let value of row.controls.values.controls; let valI = index">
-                              <div formArrayName="values" >
-                                <input type="text" [formControl]="valI">
-                              </div>
+                          <div class="col s2 m2 l2" *ngFor="let row of item.controls.rows.controls; index as rowIndex">
+                            <div formArrayName="values">
+                              <td *ngFor="let valueGroup of row.controls[rowIndex].controls.values.controls"></td>
                             </div>
                           </div>
                         </tr>
@@ -120,15 +121,20 @@
                   <!-- List -->
                   <div *ngSwitchCase="'list'">
                     <div class="row">
+                      <div class="row">
+                        <input type="text" formControlName="header" class="col s6 m8 l10 offset-s6">
+                      </div>
                       <ol>
-                        <div formArrayName="rows">
-                          <li class="row" class="row" *ngFor="let row of item.controls.rows.controls; let rIdx = index">
-                            <input class="col s6 m6 l6" type="text" [formControlName]="rIdx">
-                            <a (click)="removeListRow()" class="btn-floating red lighten-1 red"><i class="small material-icons white-text">remove</i></a>
-                          </li>
-                          <li>
-                            <a (click)="addListRow()" class="btn-floating red lighten-1 blue lighten-1 list-row-add-btn"><i class="small material-icons white-text">add</i></a>
-                          </li>
+                        <li class="list-number" *ngFor="let row of item.controls.rows.controls; let rowIndex = index">
+                          <div formArrayName="rows">
+                            <form [formGroup]="row" novalidate>
+                              <input type="text" formControlName="value" class="col s10 m8 l12">
+                              <a (click)="removeListRow(i, rowIndex)" class="btn-floating red lighten-1 remove-btn-list"><i class="small material-icons white-text">remove</i></a>
+                            </form>
+                          </div>
+                        </li>
+                        <div>
+                          <a (click)="addListRow(i)" class="btn-floating btn-small waves-effect waves-light"><i class="small material-icons">add</i></a>
                         </div>
                       </ol>
                     </div>

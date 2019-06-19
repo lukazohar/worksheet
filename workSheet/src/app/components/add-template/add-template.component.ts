@@ -81,10 +81,22 @@ export class AddTemplateComponent implements OnInit {
   removeTableColumn(itemIndex: number, columnIndex: number) {
     this.items = this.templateService.removeTableColumn(this.items, itemIndex, columnIndex);
   }
+  getValuesFromTableRow(itemIndex: number, rowIndex: number) {
+    // @ts-ignore
+    return this.items.controls[itemIndex].get('rows').controls[rowIndex].get('values').controls; /*
+    const row = item.get('rows')[rowIndex];
+    return item.get('values'); */
+  }
 
   // Adds list
   addList(): void {
     this.items = this.templateService.addList(this.items);
+  }
+  addListRow(itemIndex: number): void {
+    this.items = this.templateService.addListRow(this.items, itemIndex);
+  }
+  removeListRow(itemIndex: number, rowIndex: number): void {
+    this.items = this.templateService.removeListRow(this.items, itemIndex, rowIndex);
   }
 
   // Adds checkboxes

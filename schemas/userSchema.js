@@ -31,9 +31,9 @@ const UserSchema = Schema({
         {
             title: { type: String },
             description: { type: String },
+            templateCreated: { type: String, default: moment().format('YYYY-MM-DDTHH:mm:ss') },
+            templateModified: { type: String, default: moment().format('YYYY-MM-DDTHH:mm:ss') },
             items: { type: Array },
-            created: { type: String, default: moment().format('YYYY-MM-DDTHH:mm:ss') },
-            modified: { type: String, default: moment().format('YYYY-MM-DDTHH:mm:ss') }
         }
     ]
 });

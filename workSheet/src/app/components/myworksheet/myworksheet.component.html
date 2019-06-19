@@ -2,29 +2,17 @@
   <h1 class="col s12 center-align">My Sheets</h1>
 </div>
 <div class="row">
-  <div class="col s12 m2 l2">
-    <a routerLink="/add-worksheet" class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">add</i></a>
-  </div>
-  <nav class="search-bar col s12 m8 l8 offset-m2 offset-l2">
+  <nav class="search-bar col s12 m12 l12">
     <div class="nav-wrapper blue lighten-4">
       <form>
         <div class="input-field">
-          <input id="search" type="search" (keyup)="querySheets($event.target.value, page, limit)">
+          <input id="search" type="search" [(ngModel)]="query" name="query" (keyup)="querySheets(query, page, limit)">
           <label class="label-icon search-icon" for="search"><i class="material-icons">search</i></label>
           <i class="material-icons" (click)="removeQuery()">close</i>
         </div>
       </form>
     </div>
   </nav>
-  <div class="col s12 m8 l8 offset-m2 offset-l2">
-    <div class="row">
-      <div class="input-field col s12">
-        <i class="material-icons prefix">search</i>
-        <input type="text" id="autocomplete-input" class="autocomplete" value=''>
-        <label for="autocomplete-input">Search</label>
-      </div>
-    </div>
-  </div>
 </div>
 <div class="row">
   <button (click)="changeType('date')" *ngIf="type != 'date'" class="btn waves-effect waves-light col s6 m2 l2 grey">Date <i class="material-icons">expand_less</i></button>
@@ -43,8 +31,11 @@
   <button (click)="changeOrder('descending')" *ngIf="type == 'modified' && order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Modified <i class="material-icons">expand_less</i></button>
   <button (click)="changeOrder('ascending')" *ngIf="type == 'modified' && order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2">Modified <i class="material-icons">expand_more</i></button>
   <!-- Dropdown Trigger -->
-  <div class="col s12 m3 l2 offset-s2">
-    <a materialize="dropdown" class='dropdown-button btn blue deep-purple lighten-4' href='#' data-activates='dropdownLimit'>No.: {{ limit }} </a>
+  <div class="col s12 m2 l2 offset-m2 offset-l2  page-count">
+    <a materialize="dropdown" class='dropdown-button btn blue deep-purple lighten-4' href='#' data-activates='dropdownLimit'>
+      <div *ngIf="limit == 0">All</div>
+      <div *ngIf="limit != 0"> {{ limit }} </div>
+    </a>
     <!-- Dropdown Structure -->
     <ul id='dropdownLimit' class='dropdown-content'>
       <li (click)="changeLimit(4)"><a>4</a></li>
@@ -59,8 +50,7 @@
   <ul class="col s12 m12 l12">
     <div class="row center-align">
       <li *ngFor="let pgNum of pageCounter()">
-        <div *ngIf="query == ''" (click)="changePageSortSheets(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
-        <div *ngIf="query != ''" (click)="changePageQuerySheets(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
+        <div (click)="changePage(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
       </li>
     </div>
   </ul>
@@ -118,12 +108,12 @@
   <ul class="col s12 m12 l12">
     <div class="row center-align">
       <li *ngFor="let pgNum of pageCounter()">
-        <div *ngIf="query == ''" (click)="changePageSortSheets(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
-        <div *ngIf="query != ''" (click)="changePageQuerySheets(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
+        <div *ngIf="query == ''" (click)="changePage(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
       </li>
     </div>
   </ul>
 </div>
 
-<p> {{ page }} </p>
-<pre> {{ queryTitles | json }} </pre>
+<div class="fixed-action-btn">
+  <a routerLink="/add-worksheet" class="btn-floating btn-large blue"><i class="large material-icons">add</i></a>
+</div>

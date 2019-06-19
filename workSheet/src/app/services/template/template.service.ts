@@ -12,7 +12,7 @@ import { IInputFields } from 'src/app/models/template/templateItems/inputFields/
 })
 export class TemplateService {
 
-  ULR = 'http://localhost:3000/api/templates/';
+  URL = 'http://localhost:3000/api/templates/';
   template: FormArray;
 
   constructor(
@@ -20,17 +20,18 @@ export class TemplateService {
     private token: TokenService
   ) { }
 
-  // Returns observable of template with id in parameters
-  getTemplate(id: number): Observable<ITemplate> {
-    return this.http.get<ITemplate>(`${this.ULR}template?id=${id}`, {
+  // Returns all sheets from backend
+  getTemplate(sortType?: string, order?: string, limit?: number, page?: number): Observable<ISuccessMsgResponse> {
+    return this.http.get<ISuccessMsgResponse>(`${this.URL}/queryTemplates?type=${sortType}&order=${order}&limit=${limit}&page=${page}`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
     });
   }
+
   // Returns observable of all templates of user
   getTemplates(): Observable<ITemplate[]> {
-    return this.http.get<ITemplate[]>(`${this.ULR}template`, {
+    return this.http.get<ITemplate[]>(`${this.URL}template`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
@@ -39,7 +40,7 @@ export class TemplateService {
 
   // Returns observable of ISuccessMsgResponse
   addTemplate(template: ITemplate): Observable<ISuccessMsgResponse> {
-    return this.http.post<ISuccessMsgResponse>(`${this.ULR}template`, template, {
+    return this.http.post<ISuccessMsgResponse>(`${this.URL}template`, template, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
@@ -48,7 +49,7 @@ export class TemplateService {
 
   // Returns observable of ISuccessMsgResponse
   updateTemplate(updatedTemplate: ITemplate): Observable<ISuccessMsgResponse> {
-    return this.http.put<ISuccessMsgResponse>(`${this.ULR}template`, updatedTemplate, {
+    return this.http.put<ISuccessMsgResponse>(`${this.URL}template`, updatedTemplate, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
@@ -57,7 +58,7 @@ export class TemplateService {
 
   // Returns observable of ISuccessMsgResponse
   deleteTemplate(templateId: string): Observable<ISuccessMsgResponse> {
-    return this.http.delete<ISuccessMsgResponse>(`${this.ULR}template?templateId=${templateId}`, {
+    return this.http.delete<ISuccessMsgResponse>(`${this.URL}template?templateId=${templateId}`, {
       headers: new HttpHeaders({
         'Authorization': this.token.getToken()
       })
@@ -137,7 +138,9 @@ export class TemplateService {
       rows: new FormArray([new FormGroup({
         header: new FormControl(''),
         values: new FormArray([
-          new FormControl('Test')
+          new FormGroup({
+            value: new FormControl('Test')
+          })
         ])
       })])
     }));
@@ -148,9 +151,11 @@ export class TemplateService {
     items.controls[itemIndex].controls.rows.push(
       new FormGroup({
         header: new FormControl(''),
-        values: new FormArray([ new FormGroup({
-          value: new FormControl()
-        }) ])
+        values: new FormArray([
+          new FormGroup({
+            value: new FormControl()
+          })
+        ])
       })
     );
     return items;
@@ -182,9 +187,23 @@ export class TemplateService {
       header: new FormControl(''),
       // Adds 1 starting row
       rows: new FormArray([
-        new FormControl('Test')
+        new FormGroup({
+          value: new FormControl()
+        })
       ])
     }));
+    return items;
+  }
+  addListRow(items: FormArray, itemIndex: number): FormArray {
+    // @ts-ignore
+    items.controls[itemIndex].controls.rows.push(new FormGroup({
+      value: new FormControl('')
+    }));
+    return items;
+  }
+  removeListRow(items: FormArray, itemIndex: number, rowIndex: number): FormArray {
+    // @ts-ignore
+    items.controls[itemIndex].controls.rows.removeAt(rowIndex);
     return items;
   }
 

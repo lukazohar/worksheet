@@ -17,24 +17,34 @@ router.route('/template')
         }).status(501);
     }))
     .post(passport.authenticate('jwt', {session: false}), (req, res) => {
-        let template = req.body;
-        let userID = req.user._id;
-        Template.addTemplate(template, userID, (err, template) => {
+        let newTemplateFromBody = req.body;
+        newTemplateFromBody.templateCreated = moment().format('YYYY-MM-DDTHH:mm:ss');
+        newTemplateFromBody.templateModified = moment().format('YYYY-MM-DDTHH:mm:ss');
+        const userID = req.user._id;
+
+        Template.addTemplate(template, userID, (err, newTemplate) => {
             if(err) {
                 console.error(err);
                 return res.json({ success: false, msg: 'Server error' }).status(500);
             }
-            // Returns with newly created template data with status 201 Created
-            return res.json({
-                success: true,
-                msg: template.title + ' created',
-                data: template
-            }).status(201);
+            if(!newTemplate) {
+                return res.json({
+                    success: false,
+                    msg: 'Failed to add template'
+                }).status(500);   
+            } else {
+                // Returns with newly created template data with status 201 Created
+                return res.json({
+                    success: true,
+                    msg: newTemplate.title + ' created',
+                    data: newTemplate
+                }).status(201);
+            }
         });
     })
     .put(passport.authenticate('jwt', {session: false}), (req, res) => {
         // Sets modified to current time
-        req.body.modified = moment().format('YYYY-MM-DDTHH:mm:ss')
+        req.body.templateModified = moment().format('YYYY-MM-DDTHH:mm:ss')
         Template.updateTemplate(req.user._id, req.body._id, req.body, (err, modifiedStatus) => {
             if(err) {
                 console.error(err);
@@ -80,5 +90,78 @@ router.route('/template')
             }
         });
     })
+
+
+router.get('/sortTemplates', passport.authenticate('jwt', {session: false}), (req, res) => {
+    console.log('Here');
+    
+    let hasRunAlready = false;
+    const userID = req.user._id;
+    const type = req.query.type;
+    const limit = () => {
+        if(req.query.limit) { return req.query.limit; }
+        else { return 16; }
+    }
+    const page = () => {
+        if(req.query.page) { return req.query.page; }
+        else { return 0; }
+    }
+    const order = () => {
+        if(req.query.order) { return req.query.order; }
+        else { return 'descending'; }
+    }
+    Template.getSortedTemplates(userID, type, order(), limit(), page(), (err, templates) => {
+        if(err) throw err;
+        if(!templates) {
+            return res.json({
+                success: false,
+                msg: 'Failed to sort templates by ' + type,
+            }).status(400);
+        } else if(!hasRunAlready) {
+            hasRunAlready = true;
+            return res.json({
+                success: true,
+                msg: 'Found and returned templates, sorted by ' + type + ' ' + order(),
+                data: templates
+            }).status(200);
+        }
+    });
+})
+
+router.get('/queryTemplates', passport.authenticate('jwt', {session: false}), (req, res) => {
+    const userID = req.user._id;
+    const query = () => {
+        if(req.query.query) { return req.query.query; }
+        else { return ''; }
+    }
+    const page = () => {
+        if(req.query.page) { return req.query.page; }
+        else { return 0; }
+    }
+    const limit = () => {
+        if(req.query.limit) { return req.query.limit; }
+        else { return 0; }
+    }
+    Template.getQueryedTemplates(userID, query(), limit(), page(), (err, queryedTemplates) => {
+        if(err) throw err;
+        if(queryedTemplates) {
+            return res.json({
+                success: true,
+                msg: `Found queryed templates, query: ${query()}, limit: ${limit()}, page: ${page()}`,
+                data: {
+                    templates: queryedTemplates[0].template,
+                    noOfTemplates: queryedTemplates[0].noOfTemplates,
+                    templatesTitles: queryedTemplates[0].TemplatesTitles
+                }
+            });
+        } else {
+            return res.json({
+                success: false,
+                msg: 'Failed to query templates',
+                data: undefined
+            });
+        }
+    });
+})
 
 module.exports = router;

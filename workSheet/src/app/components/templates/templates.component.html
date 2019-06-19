@@ -16,12 +16,47 @@
   </nav>
 </div>
 <div class="row">
-  <ul *ngIf="!loading; else loadingTempates">
+  <button (click)="changeType('date')" *ngIf="type != 'date'" class="btn waves-effect waves-light col s6 m2 l2 grey">Date <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('descending')" *ngIf="type == 'date' && order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Date <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('ascending')" *ngIf="type == 'date' && order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2 ">Date <i class="material-icons">expand_more</i></button>
+
+  <button (click)="changeType('modified')" *ngIf="type != 'modified'" class="btn waves-effect waves-light col s6 m2 l2 grey">Modified <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('descending')" *ngIf="type == 'modified' && order == 'ascending'" class="btn waves-effect waves-light col s6 m2 l2">Modified <i class="material-icons">expand_less</i></button>
+  <button (click)="changeOrder('ascending')" *ngIf="type == 'modified' && order == 'descending'"  class="btn waves-effect waves-light col s6 m2 l2">Modified <i class="material-icons">expand_more</i></button>
+  <!-- Dropdown Trigger -->
+  <div class="col s12 m2 l2 offset-m2 offset-l2  page-count">
+    <a materialize="dropdown" class='dropdown-button btn blue deep-purple lighten-4' href='#' data-activates='dropdownLimit'>
+      <div *ngIf="limit == 0">All</div>
+      <div *ngIf="limit != 0"> {{ limit }} </div>
+    </a>
+    <!-- Dropdown Structure -->
+    <ul id='dropdownLimit' class='dropdown-content'>
+      <li (click)="changeLimit(4)"><a>4</a></li>
+      <li (click)="changeLimit(8)"><a>8</a></li>
+      <li (click)="changeLimit(16)"><a>16</a></li>
+      <li (click)="changeLimit(32)"><a>32</a></li>
+      <li (click)="changeLimit(0)"><a>All</a></li>
+    </ul>
+  </div>
+</div>
+<div class="row center-align">
+  <ul class="col s12 m12 l12">
+    <div class="row center-align">
+      <li *ngFor="let pgNum of pageCounter()">
+        <div (click)="changePage(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
+      </li>
+    </div>
+  </ul>
+</div>
+
+
+<div class="row">
+  <ul *ngIf="!loading; else loadingSheets">
     <li class="row" *ngFor="let template of templates" class="template light-blue lighten-5 z-depth-2">
       <app-template class="col s12 m12 l12" class="template" [template]="template"></app-template>
     </li>
   </ul>
-  <ng-template #loadingTempates class="col s12 m12 l12">
+  <ng-template #loadingSheets class="col s12 m12 l12">
     <div class="row center-align loader">
       <div class="preloader-wrapper big active">
           <div class="spinner-layer spinner-blue">
@@ -63,4 +98,13 @@
         </div>
     </div>
   </ng-template>
+</div>
+<div class="row center-align">
+  <ul class="col s12 m12 l12">
+    <div class="row center-align">
+      <li *ngFor="let pgNum of pageCounter()">
+        <div *ngIf="query == ''" (click)="changePage(pgNum)" class="col s1 m1 l1 z-depth-1 btn page-number" [ngClass]="{ 'brown': pgNum === page, 'grey': pgNum !== page }"> {{ pgNum }} </div>
+      </li>
+    </div>
+  </ul>
 </div>
