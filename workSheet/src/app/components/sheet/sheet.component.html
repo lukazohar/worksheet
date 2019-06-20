@@ -15,7 +15,6 @@
 <div *ngIf="isSheetExpanded(); else isNotExpandedSheet" class="sheet" class="row">
   <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow" (click)="closeSheet()"><i class="material-icons left">expand_less</i></a>
   <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow red" (click)="deleteSheet()"><i class="material-icons left">delete</i></a>
-  <!-- <a class="waves-effect waves-light btn-floating right squared extend-template-arrow grey" (click)="downloadPDF()"><i class="material-icons left">picture_as_pdf</i></a> -->
   <form [formGroup]="expandedSheetForm" (ngSubmit)="updateSheet()" novalidate>
     <ul>
       <li class="row">
@@ -25,8 +24,8 @@
       </li>
       <li class="row">
        <div class="col s12 m12 l12">
-        <p class="modified">Modified: {{ getDateFromNow(sheet.sheetModified) }} </p>
-        <p class="modified">Created: {{ getDateFromNow(sheet.sheetCreated) }} </p>
+        <p class="modified">Modified: {{ getDateFromNow(sheet.modified) }} </p>
+        <p class="modified">Created: {{ getDateFromNow(sheet.created) }} </p>
        </div>
       </li>
       <li class="row">
@@ -95,7 +94,6 @@
   <div class="sheet row">
     <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow" (click)="expandSheet()"><i class="material-icons left">expand_more</i></a>
     <a class="waves-effect waves-light btn-floating right squared extend-sheet-arrow red" (click)="deleteSheet()"><i class="material-icons left">delete</i></a>
-    <a class="waves-effect waves-light btn-floating right squared extend-template-arrow grey" (click)="downloadPDF()"><i class="material-icons left">picture_as_pdf</i></a>
     <ul>
       <li class="row">
         <div class="col s12 m12 l12">
@@ -104,8 +102,8 @@
         </li>
         <li class="row">
           <div class="col s12 m12 l12">
-            <p class="modified">Modified: {{ getDateFromNow(sheet.sheetModified) }} </p>
-            <p class="modified">Created: {{ getDateFromNow(sheet.sheetCreated) }} </p>
+            <p class="modified">Modified: {{ getDateFromNow(sheet.modified) }} </p>
+            <p class="modified">Created: {{ getDateFromNow(sheet.created) }} </p>
           </div>
         </li>
         <li class="row">
@@ -149,7 +147,20 @@
             </div>
             <!-- List -->
             <div *ngSwitchCase="'list'">
-          
+              <div class="inputElement">
+                <div class="input-field">
+                  <div class="row">
+                    <b class="col s12 m12 l12 item-title center-align"> {{ item.header }} </b>
+                  </div>
+                  <ol>
+                    <li class="row" *ngFor="let row of sheet.items[i].rows; index as y">
+                      <div class="input-group">
+                        <b class="col s12 m6 l6"> {{ row.header }} : </b>
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+              </div>
             </div>
             <!-- Checkboxes -->
             <div *ngSwitchCase="'checkboxes'">

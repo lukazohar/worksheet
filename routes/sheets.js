@@ -55,8 +55,8 @@ router.route('/sheet')
     .post(passport.authenticate('jwt', {session: false}), (req, res) => {
         // Extracts sheet object from HTTP body and userID
         let newSheetFromBody = req.body;
-        newSheetFromBody.sheetCreated = moment().format('YYYY-MM-DDTHH:mm:ss');
-        newSheetFromBody.sheetModified = moment().format('YYYY-MM-DDTHH:mm:ss');
+        newSheetFromBody.created = moment().format('YYYY-MM-DDTHH:mm:ss');
+        newSheetFromBody.modified = moment().format('YYYY-MM-DDTHH:mm:ss');
         const userID = req.user._id;
         Sheet.addSheet(userID, newSheetFromBody, (err, newsheet) => {
             if(err) {

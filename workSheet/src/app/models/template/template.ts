@@ -1,5 +1,6 @@
 import { IHeader } from './templateItems/header/header';
 import { IInputFields } from './templateItems/inputFields/input-fields';
+import { IList } from './templateItems/list/list';
 
 export interface ITemplate {
     _id: string;
@@ -7,5 +8,5 @@ export interface ITemplate {
     modified: Date;
     title: string;
     description: string;
-    items: Array < IHeader | IInputFields > ;
+    items: Array < any > ;
 }

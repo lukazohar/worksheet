@@ -2,7 +2,6 @@
   <div class="row">
     <a class="waves-effect waves-light btn-floating right squared" (click)="closeTemplate()"><i class="material-icons left">expand_less</i></a>
     <a class="waves-effect waves-light btn-floating right squared red" (click)="deleteTemplate()"><i class="material-icons left">delete</i></a>
-    <a class="waves-effect waves-light btn-floating right squared extend-template-arrow grey" (click)="downloadPDF()"><i class="material-icons left">picture_as_pdf</i></a>
     <div class="">
       <div class="">
         <!-- Dropdown Trigger -->
@@ -11,9 +10,9 @@
         <ul id='dropdown2' class='dropdown-content'>
           <li (click)="addHeader()"><a><i class="material-icons">remove</i>Header</a></li>
           <li (click)="addInputFields()"><a><i class="material-icons"></i>Input fields</a></li>
-          <li (click)="addTable()"><a><i class="material-icons">grid_on</i>Table</a></li>
+          <li><a class="grey-text"><i class="material-icons">grid_on</i>Table</a></li>
           <li (click)="addList()"><a><i class="material-icons">format_list_bulleted</i>List</a></li>
-          <li (click)="addCheckboxes()"><a><i class="material-icons">check_box</i>Checkboxes</a></li>
+          <li><a class="grey-text"><i class="material-icons">check_box</i>Checkbox</a></li>
         </ul>
       </div>
     </div>
@@ -27,16 +26,16 @@
       </li>
       <li class="row">
        <div class="col s12 m12 l12 dates">
-        <p class="modified date">Modified: {{ getDateFromNowModified(template.modified) }} </p>
-        <p class="modified date">Created: {{ getDateFromNowCreated(template.created) }} </p>
+        <p class="modified date"><b>Modified :</b> {{ getDateFromNowModified(template.modified) }} </p>
+        <p class="modified date"><b>Created :</b> {{ getDateFromNowCreated(template.created) }} </p>
        </div>
       </li>
       <li class="row">
         <div class="col s12 m12 l12">
-          <textarea formControlName="description" placeholder="Description" id="descriptionTextarea" class="materialize-textarea"></textarea>
+          <b>Description :</b><textarea formControlName="description" placeholder="Description" id="descriptionTextarea" class="materialize-textarea"></textarea>
         </div>
       </li>
-      <li *ngFor="let item of templateForm.get('items').controls; index as i" class="row items">
+      <li *ngFor="let item of templateForm.get('items').controls; index as i" class="row items items2">
         <div formArrayName="items">
           <div [formGroup]="item">
             <div [ngSwitch]="item.value.type" class="col s12 m12 l12">
@@ -54,15 +53,14 @@
                   <div class="inputElement">
                     <div class="input-field">
                       <div class="row">
-                        <input type="text" class="col s12 m8 l6 header push-m2 push-l3 center" formControlName="header">
+                        <input type="text" class="col s12 m8 l6 header push-m2 push-l3 center-align" style="font-size: 20px; font-weight: bold" formControlName="header">
                       </div>
                       <ul>
                         <li class="row" *ngFor="let inputField of item.controls.inputs.controls; index as y">
                           <div class="input-group" formArrayName="inputs">
                             <form [formGroup]="inputField">
-                              <hr>
-                              <input type="text" class="col s6 m6 l6" formControlName="header">
-                              <input class="col s6 m6 l6 field-value" formControlName="value" placeholder="Value" id="fieldHeader" type="text">
+                              <input type="text" class="col s12 m6 l6" style="font-size: 15px; font-weight: bold" formControlName="header">
+                              <input class="col s12 m6 l6 field-value" formControlName="value" placeholder="Value" id="fieldHeader" type="text">
                             </form>
                           </div>
                         </li>
@@ -76,11 +74,25 @@
                 </div>
                 <!-- List -->
                 <div *ngSwitchCase="'list'">
-                
+                  <div class="inputElement">
+                    <div class="input-field">
+                      <div class="row">
+                        <input type="text" class="col s12 m8 l6 header push-m2 push-l3 center-align" style="font-size: 20px; font-weight: bold" formControlName="header">
+                      </div>
+                      <ol>
+                        <li class="row" *ngFor="let row of item.controls.rows.controls; index as y">
+                          <div class="input-group" formArrayName="rows">
+                            <form [formGroup]="row">
+                              <input type="text" class="col s12 m6 l6" style="font-size: 15px; font-weight: bold" formControlName="header">
+                            </form>
+                          </div>
+                        </li>
+                      </ol>
+                    </div>
+                  </div>
                 </div>
                 <!-- Checkboxes -->
                 <div *ngSwitchCase="'checkboxes'">
-                  <p> {{ item.value | json }} </p>
                 </div>
              </div>
             </div>
@@ -94,71 +106,83 @@
 </div>
 
 <ng-template #isNotExpandedTemplate>
-    <div class="template row">
-      <a class="waves-effect waves-light btn-floating right squared" (click)="expandTemplate()"><i class="material-icons left">expand_more</i></a>
-      <a class="waves-effect waves-light btn-floating right squared red" (click)="deleteTemplate()"><i class="material-icons left">delete</i></a>
-      <a class="waves-effect waves-light btn-floating right squared grey" (click)="downloadPDF()"><i class="material-icons left">picture_as_pdf</i></a>
-      <ul>
-        <li class="row">
-          <div class="col s12 m12 l12">
-            <p class="title"> {{ template.title }} </p>
+  <div class="template row">
+    <a class="waves-effect waves-light btn-floating right squared" (click)="expandTemplate()"><i class="material-icons left">expand_more</i></a>
+    <a class="waves-effect waves-light btn-floating right squared red" (click)="deleteTemplate()"><i class="material-icons left">delete</i></a>
+    <ul>
+      <li class="row">
+        <div class="col s12 m12 l12">
+          <p class="title"> {{ template.title }} </p>
+        </div>
+      </li>
+      <li class="row description">
+        <p class="modified"><b>Modified:</b> {{  getDateFromNowModified(template.modified) }} </p>
+      </li>
+      <li class="row description">
+        <p class="modified"><b>Created:</b> {{ getDateFromNowCreated(template.created) }} </p>
+      </li>
+      <li class="row move-up">
+        <div class="col s12 m12 l12">
+          <pre class="description"><b>Description :</b> {{ template.description }} </pre>
+        </div>
+      </li>
+      <li *ngFor="let item of template.items; index as i" class="col s12 m12 l12 items">
+        <div [ngSwitch]="item.type" class="row">
+          <!-- Header -->
+          <div *ngSwitchCase="'header'">
+            <div class="inputElement">
+              <div class="input-field">
+                <label for="">Header</label>
+                <p class="col s12 m12 l12"> {{ item.value.value }} </p>
+              </div>
+            </div>
           </div>
-        </li>
-          <li class="row">
-            <div class="col s12 m12 l12">
-              <p class="modified"><b>Modified:</b> {{  getDateFromNowModified(template.modified) }} </p>
-              <p class="modified"><b>Created:</b> {{ getDateFromNowCreated(template.created) }} </p>
-            </div>
-          </li>
-          <li class="row">
-            <div class="col s12 m12 l12">
-              <p class="description"> {{ template.description }} </p>
-            </div>
-          </li>
-          <li *ngFor="let item of template.items; index as i" class="col s12 m12 l12 items">
-            <div [ngSwitch]="item.type" class="row">
-              <!-- Header -->
-              <div *ngSwitchCase="'header'">
-                <div class="inputElement">
-                  <div class="input-field">
-                    <label for="">Header</label>
-                    <p class="col s12 m12 l12"> {{ item.value.value }} </p>
-                  </div>
+          <!-- Field inputs -->
+          <div *ngSwitchCase="'inputFields'">
+            <div class="inputElement">
+              <div class="input-field">
+                <div class="row">
+                  <pre> {{ item.value }} </pre>
+                  <b class="col s12 m12 l12 item-title center-align"> {{ item.header }} </b>
                 </div>
-              </div>
-              <!-- Field inputs -->
-              <div *ngSwitchCase="'inputFields'">
-                <div class="inputElement">
-                  <div class="input-field">
-                    <div class="row">
-                      <b class="col s12 m12 l12"> {{ item.header }} </b>
+                <ul>
+                  <li class="row" *ngFor="let inputField of template.items[i].inputs; index as y">
+                    <div class="input-group">
+                      <b class="col s12 m6 l6"> {{ inputField.header }} : </b>
+                      <p class="col s12 m6 l6 field-value"> Value </p>
                     </div>
-                    <ul>
-                      <li class="row" *ngFor="let inputField of template.items[i].inputs; index as y">
-                        <div class="input-group">
-                          <hr>
-                          <b class="col s6 m6 l6"> {{ inputField.header }} : </b>
-                          <p class="col s6 m6 l6 field-value"> {{ inputField.value }} </p>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <!-- Table -->
-              <div *ngSwitchCase="'table'">
-            
-              </div>
-              <!-- List -->
-              <div *ngSwitchCase="'list'">
-            
-              </div>
-              <!-- Checkboxes -->
-              <div *ngSwitchCase="'checkboxes'">
-            
+                  </li>
+                </ul>
               </div>
             </div>
-          </li>
-        </ul>
-      </div>
+          </div>
+          <!-- Table -->
+          <div *ngSwitchCase="'table'">
+        
+          </div>
+          <!-- List -->
+          <div *ngSwitchCase="'list'">
+            <div class="inputElement">
+              <div class="input-field">
+                <div class="row">
+                  <b class="col s12 m12 l12 item-title center-align"> {{ item.header }} </b>
+                </div>
+                <ol>
+                  <li class="row" *ngFor="let row of template.items[i].rows; index as y">
+                    <div class="input-group">
+                      <b class="col s12 m6 l6"> {{ row.header }} : </b>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <!-- Checkboxes -->
+          <div *ngSwitchCase="'checkboxes'">
+        
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </ng-template>

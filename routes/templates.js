@@ -18,8 +18,8 @@ router.route('/template')
     }))
     .post(passport.authenticate('jwt', {session: false}), (req, res) => {
         let newTemplateFromBody = req.body;
-        newTemplateFromBody.templateCreated = moment().format('YYYY-MM-DDTHH:mm:ss');
-        newTemplateFromBody.templateModified = moment().format('YYYY-MM-DDTHH:mm:ss');
+        newTemplateFromBody.created = moment().format('YYYY-MM-DDTHH:mm:ss');
+        newTemplateFromBody.modified = moment().format('YYYY-MM-DDTHH:mm:ss');
         const userID = req.user._id;
 
         Template.addTemplate(newTemplateFromBody, userID, (err, newTemplate) => {
@@ -44,7 +44,7 @@ router.route('/template')
     })
     .put(passport.authenticate('jwt', {session: false}), (req, res) => {
         // Sets modified to current time
-        req.body.templateModified = moment().format('YYYY-MM-DDTHH:mm:ss')
+        req.body.modified = moment().format('YYYY-MM-DDTHH:mm:ss')
         Template.updateTemplate(req.user._id, req.body._id, req.body, (err, modifiedStatus) => {
             if(err) {
                 console.error(err);
@@ -60,10 +60,15 @@ router.route('/template')
             }
             // If template is found and is modified OR is found and not modified, it returns status 200
             if(( modifiedStatus.n === 1 && modifiedStatus.nModified === 1 ) || ( modifiedStatus.n === 1 && modifiedStatus.nModified === 0 )) {
-                return res.json({
-                    success: true,
-                    msg: templateTitle + ' updated'
-                }).status(200);
+                Template.getTemplate(req.user._id, req.body._id, (err, updatedTemplate) => {
+                    if(err) throw err;
+                    console.log(updatedTemplate[0].template[0]);
+                    return res.json({
+                        success: true,
+                        msg: templateTitle + ' updated',
+                        data: updatedTemplate[0].template[0]
+                    }).status(200);
+                })
             }
         })
     })

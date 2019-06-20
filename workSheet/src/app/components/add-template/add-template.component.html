@@ -1,5 +1,3 @@
-<pre> {{ templateForm.value | json }} </pre>
-
 <div class="row">
   <div class="col">
     <h1>Add Template</h1>
@@ -26,7 +24,7 @@
         <li class="row">
           <div class="input-field col s12 m10 l8">
             <label for="">Title</label>
-            <input formControlName="title" id="fieldHeader" type="text" class="validate">
+            <input formControlName="title" id="fieldHeader" type="text" class="validate" style="font-size: 25px; font-weight: bold;">
           </div>
         </li>
         <li class="row">
@@ -57,7 +55,7 @@
                       <a (click)="removeItem(i)" class="btn-floating red lighten-1 remove-btn-top"><i class="small material-icons white-text">remove</i></a>
                       <div class="input-field col s10 m8 l6">
                         <label for="">Header</label>
-                        <input formControlName="header" id="fieldHeader" type="text">
+                        <input formControlName="header" id="fieldHeader" type="text" style="font-size: 18px; font-weight: bold;">
                       </div>
                       <div class="row">
                         <div class="input-field">
@@ -66,7 +64,7 @@
                               <div formArrayName="inputs">
                                 <form [formGroup]="inputField" novalidate>
                                   <div class="">
-                                    <input formControlName="header" placeholder="Header" id="fieldHeader" type="text" class="col s4 m4 l4">
+                                    <input formControlName="header" placeholder="Header" id="fieldHeader" type="text" class="col s4 m4 l4" style="font-size: 15px; font-weight: bold;">
                                     <input disabled placeholder="Value" id="fieldHeader" type="text" class="input-value col s4 m4 l4">
                                     <a *ngIf="y > 0" (click)="removeInputField(i, y)" class="btn-floating red lighten-1 remove-btn"><i class="small material-icons white-text input-value">remove</i></a>
                                     <a *ngIf="y == 0" (click)="addInputField(i)" class="btn-floating btn-small waves-effect waves-light"><i class="small material-icons input-value">add</i></a>
@@ -131,7 +129,7 @@
                             <li class="list-number" *ngFor="let row of item.controls.rows.controls; let rowIndex = index">
                               <div formArrayName="rows">
                                 <form [formGroup]="row" novalidate>
-                                  <input type="text" formControlName="value" class="col s10 m8 l12">
+                                  <input type="text" formControlName="header" class="col s10 m8 l12">
                                   <a (click)="removeListRow(i, rowIndex)" class="btn-floating red lighten-1 remove-btn-list"><i class="small material-icons white-text">remove</i></a>
                                 </form>
                               </div>

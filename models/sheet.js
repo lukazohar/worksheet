@@ -140,12 +140,12 @@ module.exports.getSortedSheets = function(userID, sortType, order, limit, page, 
                 }
                 case 'modified' : {
                     if(order == 'ascending') {
-                        sortModule.orderSheetsBySheetmodifiedAscending(result[0].sheets, (err, orderedSheets) => {
+                        sortModule.orderSheetsByModifiedAscending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
                             result[0].sheets = orderedSheets;
                         });
                     } else {
-                        sortModule.orderSheetsBySheetmodifiedDescending(result[0].sheets, (err, orderedSheets) => {
+                        sortModule.orderSheetsByModifiedDescending(result[0].sheets, (err, orderedSheets) => {
                             if(err) throw err;
                             result[0].sheets = orderedSheets;
                         });

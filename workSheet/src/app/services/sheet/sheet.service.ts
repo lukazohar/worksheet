@@ -6,6 +6,7 @@ import { ISheet } from 'src/app/models/sheet/sheet';
 import { Observable } from 'rxjs';
 import { FormArray, FormGroup, FormControl } from '@angular/forms';
 import { IInputFields } from 'src/app/models/template/templateItems/inputFields/input-fields';
+import { IList } from 'src/app/models/template/templateItems/list/list';
 
 @Injectable({
   providedIn: 'root'
@@ -152,12 +153,44 @@ export class SheetService {
   addTableCell(): void {
   }
 
-  addList(items: FormArray): FormArray {
+  addList(items: FormArray, list?: IList, index?: number): FormArray {
+    if (list !== undefined) {
+      items.push(new FormGroup({
+        type: new FormControl('list'),
+        header: new FormControl(list.header),
+        // Adds 1 starting row
+        rows: new FormArray([])
+      }));
+      // Loops through array of rows and sets values
+      for (let i = 0; i < list.rows.length; i++) {
+        // @ts-ignore
+        items.controls[index].controls.rows.push(new FormGroup({
+          header: new FormControl(list.rows[i].header),
+        }));
+      }
+    } else {
+      items.push(new FormGroup({
+        type: new FormControl('list'),
+        header: new FormControl(),
+        rows: new FormArray([
+          new FormGroup({
+            header: new FormControl('')
+          })
+        ])
+      }));
+    }
+    return items;
+  }
+  addListRow(items: FormArray, itemIndex: number): FormArray {
     // @ts-ignore
-    items.push(new FormGroup({
-      type: new FormControl('list'),
-      header: new FormControl('')
+    items.controls[itemIndex].controls.rows.push(new FormGroup({
+      header: new FormControl(''),
     }));
+    return items;
+  }
+  removeListRow(items: FormArray, itemIndex: number, rowIndex: number): FormArray {
+    // @ts-ignore
+    items.controls[itemIndex].controls.rows.removeAt(rowIndex - 1);
     return items;
   }
 

@@ -10,7 +10,7 @@ module.exports.orderSheetsByDateAscending = function(sheets, callback) {
         sheetsArr.push(sheet);
     });
     sheetsArr.sort((a, b) => {
-        return moment(b.sheetCreated) - moment(a.sheetCreated);
+        return moment(b.created) - moment(a.created);
     });
     // Reverses array, so dates are ascending
     sheetsArr.reverse();
@@ -23,7 +23,7 @@ module.exports.orderSheetsByDateDescending = function(sheets, callback) {
     // Yonger = smaller
     // Array.sort function
     sheets.sort((a, b) => {
-        return moment(b.sheetCreated) - moment(a.sheetCreated);
+        return moment(b.created) - moment(a.created);
     });
     let sheetsArr = [];
     sheets.forEach(sheet => {
@@ -237,7 +237,7 @@ module.exports.orderSheetsByStatusDescending = function(sheets, callback) {
     callback(null, allSheetsSorted);
 }
 
-module.exports.orderSheetsBySheetmodifiedAscending = function(sheets, callback) {// [Older -> Younger]
+module.exports.orderSheetsByModifiedAscending = function(sheets, callback) {// [Older -> Younger]
     // Older = bigger
     // Yonger = smaller
     // Array.sort function
@@ -246,19 +246,19 @@ module.exports.orderSheetsBySheetmodifiedAscending = function(sheets, callback) 
         sheetsArr.push(sheet);
     });
     sheetsArr.sort((a, b) => {
-        return moment(b.sheetModified) - moment(a.sheetModified);
+        return moment(b.modified) - moment(a.modified);
     });
     // Reverses array, so dates are ascending
     sheetsArr.reverse();
     callback(null, sheetsArr);
 }
 
-module.exports.orderSheetsBySheetmodifiedDescending = function(sheets, callback) {// [ Younger -> Older ]
+module.exports.orderSheetsByModifiedDescending = function(sheets, callback) {// [ Younger -> Older ]
     // Older = bigger
     // Yonger = smaller
     // Array.sort function
     sheets.sort((a, b) => {
-        return moment(b.sheetModified) - moment(a.sheetModified);
+        return moment(b.modified) - moment(a.modified);
     });
     let sheetsArr = [];
     sheets.forEach(sheet => {

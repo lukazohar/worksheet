@@ -6,6 +6,8 @@ import { ISuccessMsgResponse } from 'src/app/models/success-msg-response';
 import { ITemplate } from 'src/app/models/template/template';
 import { TokenService } from '../token/token.service';
 import { IInputFields } from 'src/app/models/template/templateItems/inputFields/input-fields';
+import { IListRow } from 'src/app/models/template/templateItems/list/list-row';
+import { IList } from 'src/app/models/template/templateItems/list/list';
 
 @Injectable({
   providedIn: 'root'
@@ -189,23 +191,37 @@ export class TemplateService {
   }
 
   // Adds list to array of items
-  addList(items: FormArray): FormArray {
-    items.push(new FormGroup({
-      type: new FormControl('list'),
-      header: new FormControl(''),
-      // Adds 1 starting row
-      rows: new FormArray([
-        new FormGroup({
-          value: new FormControl()
-        })
-      ])
-    }));
+  addList(items: FormArray, list?: IList, index?: number): FormArray {
+    if (list !== undefined) {
+      items.push(new FormGroup({
+        type: new FormControl('list'),
+        header: new FormControl(list.header),
+        // Adds 1 starting row
+        rows: new FormArray([])
+      }));
+      for (let i = 0; i < list.rows.length; i++) {
+        // @ts-ignore
+        items.controls[index].controls.rows.push(new FormGroup({
+          header: new FormControl(list.rows[i].header)
+        }));
+      }
+    } else {
+      items.push(new FormGroup({
+        type: new FormControl('list'),
+        header: new FormControl(),
+        rows: new FormArray([
+          new FormGroup({
+            header: new FormControl('')
+          })
+        ])
+      }));
+    }
     return items;
   }
   addListRow(items: FormArray, itemIndex: number): FormArray {
     // @ts-ignore
     items.controls[itemIndex].controls.rows.push(new FormGroup({
-      value: new FormControl('')
+      header: new FormControl('')
     }));
     return items;
   }

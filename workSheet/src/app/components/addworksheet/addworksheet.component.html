@@ -7,7 +7,7 @@
     <a materialize="dropdown" class='dropdown-button btn blue lighten-2' href='#' data-activates='dropdown1'>Template</a>
     <!-- Dropdown Structure -->
     <ul id='dropdown1' class='dropdown-content'>
-      <li><a routerLink="/add-template">Add new template</a></li>
+      <li class="blue lighten-5"><a routerLink="/add-template">Add new template</a></li>
       <li *ngFor="let title of templateTitles; let i=index" (click)="setupSheetWithTemplate(i)">
         <a> {{ title }} </a>
       </li>
@@ -16,7 +16,7 @@
 </div>
 
 <div class="row" *ngIf="sheetInitialized; else noTemplateSelected">
-  <h2> <b>Template:</b>  {{ templateTitle }} </h2>
+  <p><b>Template: </b>  {{ templateTitle }} </p>
   <div class="col center">
     <form [formGroup]="sheetForm" (ngSubmit)="addSheet()">
       <ul>
@@ -33,6 +33,7 @@
           </div>
         </li>
         <li *ngFor="let item of sheetForm.controls.items.controls; index as i">
+          <hr>
           <div formArrayName="items">
             <form [formGroup]="item">
               <div [ngSwitch]="item.value.type">
@@ -40,7 +41,6 @@
                 <div *ngSwitchCase="'header'">
                   <div class="inputElement">
                     <div class="input-field col s12">
-                      <hr>
                       <label for="">Header</label>
                       <input formControlName="value" placeholder="Header" id="fieldHeader" type="text" class="validate">
                     </div>
@@ -49,11 +49,12 @@
                 <!-- Multiple inputs -->
                 <div *ngSwitchCase="'inputFields'">
                   <div class="inputElement">
-                    <div class="input-field col">
-                      <hr>
-                      <input formControlName="header" placeholder="Group header" id="fieldHeader" type="text" class="validate">
-                      <ul>
-                        <li *ngFor="let inputField of sheetForm.controls.items.controls[i].controls.inputs.controls; index as y">
+                    <div class="input-field">
+                      <div class="row">
+                        <input formControlName="header" placeholder="Group header" id="fieldHeader" type="text" class="validate">
+                      </div>
+                      <ul class="row">
+                        <li *ngFor="let inputField of item.controls.inputs.controls; index as y">
                           <div formArrayName="inputs">
                             <form [formGroup]="inputField">
                               <div class="input-group">
@@ -73,7 +74,29 @@
                 </div>
                 <!-- List -->
                 <div *ngSwitchCase="'list'">
-
+                  <div class="inputElement"><!-- 
+                    <div class="input-field col s10 m8 l6">
+                      <label for="">Header</label>
+                      <input formControlName="header" id="fieldHeader" type="text">
+                    </div> -->
+                    <div class="row">
+                      <div class="input-field">
+                        <ol class="row">
+                          <li class="list-number" *ngFor="let row of item.controls.rows.controls; let rowIndex = index">
+                            <div formArrayName="rows">
+                              <form [formGroup]="row" novalidate>
+                                <input type="text" formControlName="header" class="col s10 m8 l12">
+                                <a (click)="removeListRow(i, rowIndex)" class="btn-floating red lighten-1 remove-btn-list"><i class="small material-icons white-text">remove</i></a>
+                              </form>
+                            </div>
+                          </li>
+                          <div>
+                            <a (click)="addListRow(i)" class="btn-floating btn-small waves-effect waves-light"><i class="small material-icons">add</i></a>
+                          </div>
+                        </ol>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <!-- Checkboxes -->
                 <div *ngSwitchCase="'checkboxes'">

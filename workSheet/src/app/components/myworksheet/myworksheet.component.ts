@@ -69,6 +69,8 @@ export class MyworksheetComponent implements OnInit {
 
   removeQuery() {
     this.query = '';
+    this.sortSheets(this.type, this.order, this.page, this.limit);
+    this.lastSortType = 'order';
   }
 
   sortSheets(type: string, order: string, page?: number, limit?: number): boolean {

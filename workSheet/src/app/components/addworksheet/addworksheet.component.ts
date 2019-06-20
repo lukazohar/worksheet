@@ -66,6 +66,8 @@ export class AddworksheetComponent implements OnInit {
       // If type of input is inputFields, it calls addInputFields
       if (type === 'inputFields') {
         this.items = this.sheetService.addInputFields(this.items, template.items[i], i);
+      } else if (type === 'list') {
+        this.items = this.sheetService.addList(this.items, template.items[i], i);
       }
     }
     this.sheetInitialized = true;
@@ -95,6 +97,13 @@ export class AddworksheetComponent implements OnInit {
     } else {
       this.toast.warning('Sheet is invalid');
     }
+  }
+
+  addListRow(itemIndex: number) {
+    this.items = this.sheetService.addListRow(this.items, itemIndex);
+  }
+  removeListRow(itemIndex: number, rowIndex: number) {
+    this.items = this.sheetService.removeListRow(this.items, itemIndex, rowIndex);
   }
 
 }

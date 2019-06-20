@@ -10,7 +10,7 @@ module.exports.orderTemplatesByDateAscending = function(templates, callback) {
         templatesArr.push(template);
     });
     templatesArr.sort((a, b) => {
-        return moment(b.templateCreated) - moment(a.templateCreated);
+        return moment(b.created) - moment(a.created);
     });
     // Reverses array, so dates are ascending
     templatesArr.reverse();
@@ -23,7 +23,7 @@ module.exports.orderTemplatesByDateDescending = function(templates, callback) {
     // Yonger = smaller
     // Array.sort function
     templates.sort((a, b) => {
-        return moment(b.templateCreated) - moment(a.templateCreated);
+        return moment(b.created) - moment(a.created);
     });
     let templatesArr = [];
     templates.forEach(template => {
@@ -32,7 +32,7 @@ module.exports.orderTemplatesByDateDescending = function(templates, callback) {
     callback(null, templatesArr);
 }
 
-module.exports.orderTemplatesByTemplatemodifiedAscending = function(templates, callback) {// [Older -> Younger]
+module.exports.orderTemplatesByModifiedAscending = function(templates, callback) {// [Older -> Younger]
     // Older = bigger
     // Yonger = smaller
     // Array.sort function
@@ -41,19 +41,19 @@ module.exports.orderTemplatesByTemplatemodifiedAscending = function(templates, c
         templatesArr.push(template);
     });
     templatesArr.sort((a, b) => {
-        return moment(b.templateModified) - moment(a.templateModified);
+        return moment(b.modified) - moment(a.modified);
     });
     // Reverses array, so dates are ascending
     templatesArr.reverse();
     callback(null, templatesArr);
 }
 
-module.exports.orderTemplatesByTemplatemodifiedDescending = function(templates, callback) {// [ Younger -> Older ]
+module.exports.orderTemplatesByModifiedDescending = function(templates, callback) {// [ Younger -> Older ]
     // Older = bigger
     // Yonger = smaller
     // Array.sort function
     templates.sort((a, b) => {
-        return moment(b.templateModified) - moment(a.templateModified);
+        return moment(b.modified) - moment(a.modified);
     });
     let templatesArr = [];
     templates.forEach(template => {

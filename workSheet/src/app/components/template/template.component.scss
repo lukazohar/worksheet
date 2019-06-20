@@ -2,7 +2,7 @@ b {
     font-size: 15px;
 }
 
-p {
+p, pre {
     font-size: 15px;
 }
 
@@ -24,7 +24,8 @@ hr {
 
 .description {
     font-size: 15px;
-    margin-top: -20px;
+    margin-top: -30px;
+    margin-left: 5px;
 }
 
 #descriptionTextarea {
@@ -37,11 +38,15 @@ hr {
 }
 
 .items {
-    border: 1px solid black;
-    border-radius: 10px;
+    border: 1px dotted black;
+    border-radius: 5px;
     padding-left: 30px;
+    margin-bottom: 10px;
 }
 
+.items2 {
+    margin: 5px;
+}
 .dates {
     margin-top: 30px;
 }
@@ -53,4 +58,8 @@ hr {
 .header {
     font-size: 40px;
     font-weight: bold;
+}
+
+.item-title {
+    font-size: 20px;
 }

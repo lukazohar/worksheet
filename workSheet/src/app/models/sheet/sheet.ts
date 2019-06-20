@@ -5,8 +5,8 @@ export interface ISheet {
     _id: string;
     title: string;
     description: string;
-    sheetCreated: string;
-    sheetModified: string;
+    created: string;
+    modified: string;
     status: string;
     statusModified: string;
     priority: string;

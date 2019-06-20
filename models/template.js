@@ -6,17 +6,17 @@ const templateTrim = require('../modules/template//templateTrim')
 
 const User = mongoose.model('User', UserSchema.UserSchema);
 
-module.exports.getTemplate = function(userID, templateID) {
+module.exports.getTemplate = function(userID, templateID, callback) {
     User.aggregate()
     .unwind("$templates")
-    .match({_id: ObjectId(userID)})
+    .match({"templates._id": ObjectId(templateID)})
     .group({
         "_id": null,
-        "templates": { $push: "$templates" },
-        "noOfTemplates": { $sum: 1 }
+        "template": { $push: "$templates" }
     })
     .exec((err, template) => {
-
+        if(err) throw err;
+        callback(null, template);
     })
 }
 
@@ -84,12 +84,12 @@ module.exports.getSortedTemplates = function(userID, sortType, order, limit, pag
                 };
                 case 'modified' : {
                     if(order == 'ascending') {
-                        sortModule.orderTemplatesByTemplatemodifiedAscending(result[0].templates, (err, orderedTemplates) => {
+                        sortModule.orderTemplatesByModifiedAscending(result[0].templates, (err, orderedTemplates) => {
                             if(err) throw err;
                             result[0].templates = orderedTemplates;
                         });
                     } else {
-                        sortModule.orderTemplatesByTemplatemodifiedDescending(result[0].templates, (err, orderedTemplates) => {
+                        sortModule.orderTemplatesByModifiedDescending(result[0].templates, (err, orderedTemplates) => {
                             if(err) throw err;
                             result[0].templates = orderedTemplates;
                         });

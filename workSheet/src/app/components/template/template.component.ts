@@ -1,5 +1,5 @@
 import { FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { ITemplate } from 'src/app/models/template/template';
 import * as moment from 'moment';
 import { TemplateService } from 'src/app/services/template/template.service';
@@ -34,6 +34,7 @@ export class TemplateComponent implements OnInit {
   constructor(
     private templateService: TemplateService,
     private toast: ToastService,
+    private elementRef: ElementRef
   ) { }
 
   ngOnInit() {
@@ -74,6 +75,8 @@ export class TemplateComponent implements OnInit {
         // If type of item is input fields, it adds group of input fields
         // @ts-ignore
         this.items = this.templateService.addInputFields(this.items, this.template.items[i], i);
+      } else if (type === 'list') {
+        this.items = this.templateService.addList(this.items, this.template.items[i], i);
       }
     }
   }
@@ -142,16 +145,17 @@ export class TemplateComponent implements OnInit {
         this.templateService.updateTemplate(this.templateForm.value).subscribe(
           (res: ISuccessMsgResponse) => {
             if (res.success) {
+              this.template = res.data;
+              this.templateForm = undefined;
               // Informs user
               this.toast.success(this.template.title + ' updated');
-              // Updates value in local storage
-              this.template = this.templateForm.value;
-              const user: IUserModel = JSON.parse(localStorage.getItem('userData'));
-              localStorage.setItem('userData', JSON.stringify(user));
-              this.setupTemplate();
             } else {
               this.toast.error(res.msg);
             }
+          },
+          err => {
+            this.toast.warning('Error updating template');
+            console.error(err);
           }
         );
       } else {
@@ -164,20 +168,14 @@ export class TemplateComponent implements OnInit {
     }
   }
 
-  deleteTemplate(templateIndex: number): void {
+  deleteTemplate(): void {
     // Calls template service from deleting template
     this.templateService.deleteTemplate(this.template._id).subscribe(
       (res: ISuccessMsgResponse) => {
         if (res.success) {
-          // If deleting succedded, infroms user
+          // If deleting succedded, informs user and destroys component
           this.toast.success(this.template.title + ' deleted');
-          // Updates array of templates in local storage
-          const user: IUserModel = JSON.parse(localStorage.getItem('userData'));
-          // @ts-ignore
-          user.templates = res.data;
-          localStorage.setItem('userData', JSON.stringify(user));
-          // @ts-ignore
-          this.templates = user.templates;
+          this.elementRef.nativeElement.remove();
         } else {
           // Informs user that deleting failed
           this.toast.error(res.msg);
