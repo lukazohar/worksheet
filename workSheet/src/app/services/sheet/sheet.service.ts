@@ -13,7 +13,7 @@ import { IList } from 'src/app/models/template/templateItems/list/list';
 })
 export class SheetService {
 
-  URL = 'http://localhost:3000/api/sheets';
+  URL = '/api/sheets';
 
   constructor(
     private http: HttpClient,

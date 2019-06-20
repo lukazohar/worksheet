@@ -14,7 +14,7 @@ export class CredentialsAvailabilityService {
     private token: TokenService
   ) { }
 
-  URL = 'http://localhost:3000/api/users';
+  URL = '/api/users';
 
   usernameAvailabilityQuery: any;
   emailAvailabilityQuery: any;

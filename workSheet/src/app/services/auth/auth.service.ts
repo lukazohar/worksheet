@@ -16,7 +16,7 @@ import { ILoginResponse } from 'src/app/models/login/login-response';
 export class AuthService {
 
   // API route to manage user
-  URL = 'http://localhost:3000/api/users/';
+  URL = '/api/users/';
 
   constructor(
     private http: HttpClient,

@@ -14,7 +14,7 @@ import { IList } from 'src/app/models/template/templateItems/list/list';
 })
 export class TemplateService {
 
-  URL = 'http://localhost:3000/api/templates/';
+  URL = '/api/templates/';
   template: FormArray;
 
   constructor(
